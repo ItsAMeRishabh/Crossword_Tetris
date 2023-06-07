@@ -20,7 +20,7 @@ public class LetterTile : MonoBehaviour
 
 
     [SerializeField]
-    bool isSelected = true;
+    int selectedIndex = -1;
     [SerializeField]
     bool isEmpty = true;
     [SerializeField]
@@ -28,8 +28,10 @@ public class LetterTile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log(character);
-        Select();
+        if (IsSelected())
+            Deselect();
+        else
+            Select();
     }
 
     public void Start()
@@ -41,12 +43,19 @@ public class LetterTile : MonoBehaviour
 
     public void Select()
     {
-        if (!isEmpty && !isSelected)
+        if (!isEmpty && !IsSelected())
         {
-            isSelected = true;
+            selectedIndex = transform.parent.GetComponent<TileGrid>().AddToOutput(character); ;
             sr.color = selectedColor;
-
-            transform.parent.GetComponent<TileGrid>().AddOutput(character);
+        }
+    }
+    public void Deselect()
+    {
+        if (!isEmpty && IsSelected())
+        {
+            transform.parent.GetComponent<TileGrid>().RemoveFromOutput(selectedIndex);
+            selectedIndex =  -1;
+            sr.color = color;
         }
     }
 
@@ -63,7 +72,7 @@ public class LetterTile : MonoBehaviour
     {
         sr.sprite = emptyTexture;
         isEmpty = true;
-        isSelected = false;
+        selectedIndex = -1;
         character = ' ';
         characterMesh.text = "";
         sr.color = color;
@@ -75,6 +84,16 @@ public class LetterTile : MonoBehaviour
     }
     public bool IsSelected()
     {
-        return isSelected;
+        return selectedIndex != -1;
     }
+
+    public int GetSelectedIndex()
+    {
+        return selectedIndex;
+    }
+    public void SetSelectedIndex(int i)
+    {
+        selectedIndex = i;
+    }
+
 }

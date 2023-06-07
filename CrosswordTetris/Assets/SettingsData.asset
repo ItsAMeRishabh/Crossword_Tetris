@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6bcac9d5da02e7429beb024d5d2e59e, type: 3}
+  m_Name: SettingsData
+  m_EditorClassIdentifier: 
+  LetterPoints:
+  - word: A
+    points: 1
+  - word: B
+    points: 1
+  - word: C
+    points: 1
+  - word: D
+    points: 1
+  - word: E
+    points: 1
+  - word: F
+    points: 1
+  - word: G
+    points: 1
+  - word: H
+    points: 1
+  - word: I
+    points: 1
+  - word: J
+    points: 1
+  - word: K
+    points: 1
+  - word: L
+    points: 1
+  - word: M
+    points: 1
+  - word: N
+    points: 1
+  - word: O
+    points: 1
+  - word: P
+    points: 1
+  - word: Q
+    points: 1
+  - word: R
+    points: 1
+  - word: S
+    points: 1
+  - word: T
+    points: 1
+  - word: U
+    points: 1
+  - word: V
+    points: 1
+  - word: W
+    points: 1
+  - word: X
+    points: 1
+  - word: Y
+    points: 1
+  - word: Z
+    points: 1

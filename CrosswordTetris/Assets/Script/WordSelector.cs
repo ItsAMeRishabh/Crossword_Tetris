@@ -1,12 +1,26 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
+[Serializable]
+public class Word
+{
+    public string word = "";
+    public int points = 0;
+}
 
 public class WordSelector : MonoBehaviour
 {
     [SerializeField]
     string filePath;
-    private HashSet<string> dictionary;
+    HashSet<string> dictionary;
+
+    public List<Word> ObjectiveWords;
+    public List<Word> ActiveWords;
+
 
     private void Start()
     {
@@ -19,6 +33,11 @@ public class WordSelector : MonoBehaviour
             dictionary.Add(line.Trim());
         }
 
+
+        foreach (var item in ObjectiveWords)
+        {
+            item.word = item.word.ToUpper();
+        }
     }
 
     public bool IsWord(string word)

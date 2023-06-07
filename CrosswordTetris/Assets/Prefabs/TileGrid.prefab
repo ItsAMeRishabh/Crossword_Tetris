@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 170047489761353839}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.028385652}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TextParent: {fileID: 0}
-  TextBoxes: []
   Tiles: []
   OutputBox: {fileID: 0}
+  MinUserWordSize: 3
   prefab: {fileID: 3427492216621710294, guid: 367259f556ffc60499ec4ab3f617d4cf, type: 3}
   width: 5
   height: 4
