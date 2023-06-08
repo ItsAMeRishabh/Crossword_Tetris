@@ -32,11 +32,9 @@ public class TileGrid : MonoBehaviour
     [SerializeField]
     float SpawnRateChange = -0.05f;
     [SerializeField]
-    float SpawnRate = 0f;
-    [SerializeField]
     float CapRate = 0f;
 
-
+    float SpawnRate = 0f;
     List<LetterTile> Tiles;
     List<TextMeshProUGUI> TextBoxes;
     WordSelector wordHandler;
@@ -211,6 +209,7 @@ public class TileGrid : MonoBehaviour
 
     internal void GenerateGameObjects()
     {
+        RemoveGameObjects();
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)

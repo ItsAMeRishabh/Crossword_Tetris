@@ -11,7 +11,7 @@ public class GameObjectGeneratorEditor : Editor
 
         TileGrid yourScript = (TileGrid)target;
 
-        if (GUILayout.Button("Generate Grid"))
+        if (GUILayout.Button("Delete and Generate New Grid"))
         {
             yourScript.GenerateGameObjects();
         }
