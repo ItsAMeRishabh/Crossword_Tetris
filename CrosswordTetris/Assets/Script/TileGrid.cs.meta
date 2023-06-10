@@ -5,7 +5,9 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - TextParent: {instanceID: 0}
+  - Settings: {fileID: 11400000, guid: 69c4697156cf8d34284a8eb828fb6061, type: 2}
   - OutputBox: {instanceID: 0}
+  - PointBox: {instanceID: 0}
   - prefab: {fileID: 3427492216621710294, guid: 367259f556ffc60499ec4ab3f617d4cf, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}

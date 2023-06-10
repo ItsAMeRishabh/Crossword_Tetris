@@ -46,9 +46,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TextParent: {fileID: 0}
-  Tiles: []
+  Settings: {fileID: 11400000, guid: 69c4697156cf8d34284a8eb828fb6061, type: 2}
   OutputBox: {fileID: 0}
+  PointBox: {fileID: 0}
   MinUserWordSize: 3
+  InitialTileSpawn: 7
+  InitialSpawnRate: 2
+  SpawnRateChange: -0.05
+  CapRate: 0
   prefab: {fileID: 3427492216621710294, guid: 367259f556ffc60499ec4ab3f617d4cf, type: 3}
   width: 5
   height: 4
@@ -65,3 +70,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   filePath: Assets/Dictionary79.3k.txt
+  ObjectiveWords: []
+  ActiveWords: []

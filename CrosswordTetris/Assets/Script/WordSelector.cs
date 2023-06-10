@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,7 +8,7 @@ using Random = UnityEngine.Random;
 public class Word
 {
     public string word = "";
-    public int points = 0;
+    public float value = 0;
 }
 
 public class WordSelector : MonoBehaviour
@@ -53,13 +52,11 @@ public class WordSelector : MonoBehaviour
 
     private string ReadLineFromFile(string filePath, int lineIndex)
     {
-        using (StreamReader reader = new StreamReader(filePath))
+        using StreamReader reader = new(filePath);
+        for (int i = 0; i < lineIndex; i++)
         {
-            for (int i = 0; i < lineIndex; i++)
-            {
-                reader.ReadLine();
-            }
-            return reader.ReadLine();
+            reader.ReadLine();
         }
+        return reader.ReadLine();
     }
 }

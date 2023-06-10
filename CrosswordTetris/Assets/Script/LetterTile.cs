@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
@@ -13,10 +14,12 @@ public class LetterTile : MonoBehaviour
     [SerializeField]
     Sprite emptyTexture;
 
-    [SerializeField]
-    Color color;
-    [SerializeField]
+
+    Color inactiveColor;
+    Color activeColor;
+    Color activeFontColor;
     Color selectedColor;
+    Color selectedFontColor;
 
 
     [SerializeField]
@@ -26,16 +29,63 @@ public class LetterTile : MonoBehaviour
     [SerializeField]
     char character = ' ';
 
+    TileGrid parent;
+
+
     private void OnMouseDown()
     {
+        if (parent.powerUpInUse&& parent.powerUpAvailible)
+        {
+            HexBoom(2);
+            parent.powerUpInUse = false;
+            parent.powerUpAvailible = false; ;
+
+        }
+
         if (IsSelected())
             Deselect();
         else
+        {
             Select();
+        }
+    }
+
+    public void HexBoom(int rad)
+    {
+        SetInactive();
+        DeathBoomRay(Vector2.up, rad);
+        DeathBoomRay(new Vector2(Mathf.Sqrt(3 / 4f), 0.5f), rad);
+        DeathBoomRay(new Vector2(Mathf.Sqrt(3 / 4f), -0.5f), rad);
+        DeathBoomRay(-Vector2.up, rad);
+        DeathBoomRay(-new Vector2(Mathf.Sqrt(3 / 4f), 0.5f), rad);
+        DeathBoomRay(-new Vector2(Mathf.Sqrt(3 / 4f), -0.5f), rad);
+    }
+
+    public void DeathBoomRay(Vector2 vec, int rad)
+    {
+            RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, vec,rad);
+            for (int i = 0; i < hits.Length; i++)
+            {
+                if (hits[i].collider != null&&i!=0 && i < rad+1)
+                {
+                //yield return new WaitForSeconds(.2f);
+                    hits[i].collider.gameObject.GetComponent<LetterTile>().SetInactive();
+                }
+            }
+
     }
 
     public void Start()
     {
+        parent = transform.parent.GetComponent<TileGrid>();
+        var settings = parent.Settings;
+
+        inactiveColor = settings.inactiveColor;
+        activeColor = settings.activeColor;
+        activeFontColor = settings.activeFontColor;
+        selectedColor = settings.selectedColor;
+        selectedFontColor = settings.selectedFontColor;
+
         sr = GetComponent<SpriteRenderer>();
         characterMesh = GetComponentInChildren<TextMesh>();
         SetInactive();
@@ -45,8 +95,10 @@ public class LetterTile : MonoBehaviour
     {
         if (!isEmpty && !IsSelected())
         {
-            selectedIndex = transform.parent.GetComponent<TileGrid>().AddToOutput(character); ;
+            selectedIndex = parent.AddToOutput(character); ;
             sr.color = selectedColor;
+
+            characterMesh.color = selectedFontColor;
         }
     }
     public void Deselect()
@@ -55,7 +107,8 @@ public class LetterTile : MonoBehaviour
         {
             transform.parent.GetComponent<TileGrid>().RemoveFromOutput(selectedIndex);
             selectedIndex =  -1;
-            sr.color = color;
+            sr.color = activeColor;
+            characterMesh.color = activeFontColor;
         }
     }
 
@@ -64,7 +117,8 @@ public class LetterTile : MonoBehaviour
         sr.sprite = tileTexture;
         isEmpty = false;
         this.character = character;
-        sr.color = color;
+        sr.color = activeColor;
+        characterMesh.color = activeFontColor;
         characterMesh.text = character+"";
     }
 
@@ -75,7 +129,8 @@ public class LetterTile : MonoBehaviour
         selectedIndex = -1;
         character = ' ';
         characterMesh.text = "";
-        sr.color = color;
+        sr.color = inactiveColor;
+
     }
 
     public bool IsEmpty()

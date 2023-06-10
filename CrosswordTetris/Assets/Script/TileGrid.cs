@@ -14,11 +14,17 @@ using Random = UnityEngine.Random;
 
 public class TileGrid : MonoBehaviour
 {
-    public Transform TextParent;
-
     public SettingsData Settings;
+
+
+    public Transform TextParent;
+    public Transform NextUpParent;
     public TextMeshProUGUI OutputBox;
     public TextMeshProUGUI PointBox;
+
+    List<TextMeshProUGUI> TextBoxes = new();
+    List<TextMeshProUGUI> NextUpBoxes = new();
+    List<LetterTile> Tiles;
 
     [SerializeField]
     int MinUserWordSize = 3;
@@ -28,6 +34,8 @@ public class TileGrid : MonoBehaviour
     [Space(10)]
 
     [SerializeField]
+    float ChanceOfRandomWords = 40f;
+    [SerializeField]
     float InitialSpawnRate = 2f;
     [SerializeField]
     float SpawnRateChange = -0.05f;
@@ -35,26 +43,52 @@ public class TileGrid : MonoBehaviour
     float CapRate = 0f;
 
     float SpawnRate = 0f;
-    List<LetterTile> Tiles;
-    List<TextMeshProUGUI> TextBoxes;
+
     WordSelector wordHandler;
     int points = 0;
 
 
+    //[NonSerialized]
+    public bool powerUpAvailible;
+    //[NonSerialized]
+    public bool powerUpInUse;
+
+    public void UsePowerUp()
+    {
+        if (powerUpAvailible)
+        {
+            powerUpInUse = !powerUpInUse;
+
+        }
+        Debug.Log("Boom active : " + powerUpAvailible);
+    }
 
     private void Start()
     {
-        TextBoxes = new();
         Tiles = new();
         wordHandler = GetComponent<WordSelector>();
 
 
         SpawnRate = InitialSpawnRate;
 
-        for (int i = 0; i < TextParent.childCount; i++) { 
+        for (int i = 0; i < TextParent.childCount; i++)
+        {
             TextBoxes.Add(TextParent.GetChild(i).GetComponent<TextMeshProUGUI>());
             TextBoxes[i].text = "";
         }
+
+        SetWords();
+
+        //for (int i = NextUpParent.childCount - 1; i >= 0; i--)
+        //{
+            //}
+            for (int i = 0; i < NextUpParent.childCount; i++)
+            {
+                NextUpBoxes.Add(NextUpParent.GetChild(i).GetComponent<TextMeshProUGUI>());
+            NextUpBoxes[i].text = GetRandomCharacter() + "";
+        }
+
+
         for (int i = 0; i < transform.childCount; i++)
             Tiles.Add(transform.GetChild(i).GetComponent<LetterTile>());
 
@@ -64,7 +98,6 @@ public class TileGrid : MonoBehaviour
     private IEnumerator LetterApplierTimer()
     {
 
-        SetWords();
         for (int i = 0; i < InitialTileSpawn; i++)
         {
             yield return new WaitForSeconds(0.1f);
@@ -97,18 +130,38 @@ public class TileGrid : MonoBehaviour
         return true;
     }
 
+    char GetRandomCharacter()
+    {
+        if (Random.Range(0, 100) < ChanceOfRandomWords)
+        {
+            return Settings.GetAlphabet()[Random.Range(0, 26)];
+        }
+        else
+        {
+            if (wordHandler.ActiveWords.Count == 0)
+                Debug.Log("---WIN SCREEN HERE---");
+
+            string concat = "";
+
+            foreach (var item in TextBoxes)
+                concat += item.text;
+
+            return concat[Random.Range(0, concat.Length)];
+        }
+    }
+
     char GetCharacter()
     {
-        if (wordHandler.ActiveWords.Count == 0)
-            Debug.Log("---WIN SCREEN HERE---");
+        char ret = NextUpBoxes[0].text[0];
 
-        string concat = "";
+        for (int i = 1; i < NextUpBoxes.Count; i++)
+        {
+            NextUpBoxes[i - 1].text = NextUpBoxes[i].text;
+        }
 
-        foreach (var item in TextBoxes)
-            concat += item.text;        
+        NextUpBoxes[NextUpBoxes.Count - 1].text = GetRandomCharacter()+"";
 
-        return concat[Random.Range(0, concat.Length)];
-
+        return ret;
     }
 
     public void SetWords()
@@ -140,22 +193,32 @@ public class TileGrid : MonoBehaviour
         foreach (var tile in Tiles)
             if (tile.GetSelectedIndex() >= i)
                 tile.SetSelectedIndex(tile.GetSelectedIndex() - 1);
-            
+
         OutputBox.text = OutputBox.text.Remove(i,1);
     }
 
 
+
+    public void ResetOutput()
+    {
+        foreach (var tile in Tiles)
+            tile.Deselect();
+    }
     public void CheckWord()
     {
+        string word = OutputBox.text.ToUpper();
         bool b = false;
+        float pointsVal = 0;
+        float mult = 1;
+
+
         foreach (var item in TextBoxes)
-            if(item.text == OutputBox.text && item.text != "")
+            if (item.text == OutputBox.text && item.text != "")
             {
                 Word w = new();
 
                 for (int i = 0; i < wordHandler.ActiveWords.Count; i++)
                 {
-                    Debug.Log(wordHandler.ActiveWords.ElementAt(i).word + item.text);
                     if (wordHandler.ActiveWords.ElementAt(i).word.Equals(item.text))
                     {
                         w = wordHandler.ActiveWords.ElementAt(i);
@@ -165,37 +228,40 @@ public class TileGrid : MonoBehaviour
                 }
 
                 b = true;
-                points+= w.points;
+                mult = w.value;
                 item.text = "";
                 SetWords();
                 break;
             }
 
         if (!b)
-        {
-            string word = OutputBox.text.ToUpper();
             b = (OutputBox.text.Length >= MinUserWordSize && wordHandler.IsWord(word));
-            if (b)
+       
+        foreach (var item in Settings.LetterPoints)
+        {
+            foreach (char c in word)
             {
-                foreach (var item in Settings.LetterPoints)
+                if (item.word.Equals(c + ""))
                 {
-                    foreach (char c in word)
-                    {
-                        if(item.word.Equals(c+""))
-                        {
-                            points += item.points;
-                        }
-                    }
+                    pointsVal += item.value;
                 }
             }
-
         }
-            
-        if(b){
+
+        if (b){
+            if(word.Length > 3)
+            {
+                Debug.Log("BOOM AVAILIBLE");
+                powerUpAvailible = true;
+            }
+
             foreach (var item in Tiles)
                 if (item.IsSelected())
                     item.SetInactive();
 
+            if(mult!=1)
+            Debug.Log("Bonus : " + ((pointsVal*mult) - pointsVal));
+            points += (int)(pointsVal * mult);
             OutputBox.text = "";
             PointBox.text = "Points : " + points;
         }
@@ -214,7 +280,10 @@ public class TileGrid : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                Instantiate(prefab, new Vector3((1.75f * x) * transform.localScale.x, ((2 * y) + (x % 2)) * transform.localScale.x, 5), Quaternion.identity, transform);
+                Instantiate(prefab, new Vector3(
+                    ((1.75f * x) * transform.localScale.x)+transform.position.x,
+                    (((2 * y) + (x % 2)) * transform.localScale.x)+transform.position.y ,
+                    5), Quaternion.identity, transform);
             }
         }
     }
