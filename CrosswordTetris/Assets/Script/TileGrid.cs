@@ -11,6 +11,7 @@ using Random = UnityEngine.Random;
 
 
 [RequireComponent(typeof(WordSelector))]
+[RequireComponent(typeof(BombPowerUp))]
 
 public class TileGrid : MonoBehaviour
 {
@@ -48,21 +49,8 @@ public class TileGrid : MonoBehaviour
     int points = 0;
 
 
-    //[NonSerialized]
-    public bool powerUpAvailible;
-    //[NonSerialized]
-    public bool powerUpInUse;
-
-    public void UsePowerUp()
-    {
-        if (powerUpAvailible)
-        {
-            powerUpInUse = !powerUpInUse;
-
-        }
-        Debug.Log("Boom active : " + powerUpAvailible);
-    }
-
+    
+    
     private void Start()
     {
         Tiles = new();
@@ -204,7 +192,7 @@ public class TileGrid : MonoBehaviour
         foreach (var tile in Tiles)
             tile.Deselect();
     }
-    public void CheckWord()
+    public void CheckTextBoxes()
     {
         string word = OutputBox.text.ToUpper();
         bool b = false;
@@ -249,10 +237,10 @@ public class TileGrid : MonoBehaviour
         }
 
         if (b){
-            if(word.Length > 3)
+
+            if(word.Length >= 4)
             {
-                Debug.Log("BOOM AVAILIBLE");
-                powerUpAvailible = true;
+                GetComponent<BombPowerUp>().CanDo = true;
             }
 
             foreach (var item in Tiles)

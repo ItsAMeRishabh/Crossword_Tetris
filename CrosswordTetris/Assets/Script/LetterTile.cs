@@ -34,13 +34,6 @@ public class LetterTile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (parent.powerUpInUse&& parent.powerUpAvailible)
-        {
-            HexBoom(2);
-            parent.powerUpInUse = false;
-            parent.powerUpAvailible = false; ;
-
-        }
 
         if (IsSelected())
             Deselect();
@@ -50,30 +43,6 @@ public class LetterTile : MonoBehaviour
         }
     }
 
-    public void HexBoom(int rad)
-    {
-        SetInactive();
-        DeathBoomRay(Vector2.up, rad);
-        DeathBoomRay(new Vector2(Mathf.Sqrt(3 / 4f), 0.5f), rad);
-        DeathBoomRay(new Vector2(Mathf.Sqrt(3 / 4f), -0.5f), rad);
-        DeathBoomRay(-Vector2.up, rad);
-        DeathBoomRay(-new Vector2(Mathf.Sqrt(3 / 4f), 0.5f), rad);
-        DeathBoomRay(-new Vector2(Mathf.Sqrt(3 / 4f), -0.5f), rad);
-    }
-
-    public void DeathBoomRay(Vector2 vec, int rad)
-    {
-            RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, vec,rad);
-            for (int i = 0; i < hits.Length; i++)
-            {
-                if (hits[i].collider != null&&i!=0 && i < rad+1)
-                {
-                //yield return new WaitForSeconds(.2f);
-                    hits[i].collider.gameObject.GetComponent<LetterTile>().SetInactive();
-                }
-            }
-
-    }
 
     public void Start()
     {
