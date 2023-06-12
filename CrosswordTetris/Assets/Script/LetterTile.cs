@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -18,6 +19,8 @@ public class LetterTile : MonoBehaviour
     Color inactiveColor;
     Color activeColor;
     Color activeFontColor;
+    Color active2XColor;
+    Color active2XFontColor;
     Color selectedColor;
     Color selectedFontColor;
 
@@ -52,6 +55,8 @@ public class LetterTile : MonoBehaviour
         var settings = parent.Settings;
 
         inactiveColor = settings.inactiveColor;
+        active2XColor = settings.active2XColor;
+        active2XFontColor = settings.active2XFontColor;
         activeColor = settings.activeColor;
         activeFontColor = settings.activeFontColor;
         selectedColor = settings.selectedColor;
@@ -78,18 +83,40 @@ public class LetterTile : MonoBehaviour
         {
             transform.parent.GetComponent<TileGrid>().RemoveFromOutput(selectedIndex);
             selectedIndex =  -1;
-            sr.color = activeColor;
-            characterMesh.color = activeFontColor;
+            if (multiplier == 1)
+            {
+                sr.color = activeColor;
+                characterMesh.color = activeFontColor;
+            }
+            else
+            {
+                sr.color = active2XColor;
+                characterMesh.color = active2XFontColor;
+
+            }
         }
     }
 
-    public void SetActive(char character)
+    public void SetActive(char character, float mult)
     {
+        multiplier = mult;
         sr.sprite = tileTexture;
         isEmpty = false;
         this.character = character;
-        sr.color = activeColor;
-        characterMesh.color = activeFontColor;
+
+        if(multiplier == 1)
+        {
+            sr.color = activeColor;
+            characterMesh.color = activeFontColor;
+        }
+        else
+        {
+            sr.color = active2XColor;
+            characterMesh.color = active2XFontColor;
+
+        }
+
+
         characterMesh.text = character+"";
     }
 
@@ -118,9 +145,12 @@ public class LetterTile : MonoBehaviour
         float RET = 0;
         foreach (var item in parent.Settings.LetterPoints)
         {
-            RET = item.value;
-            
+            if(item.word == character + "")
+            {
+                RET = item.value;
+            }
         }
+
 
         return (int)(RET * multiplier);
     }

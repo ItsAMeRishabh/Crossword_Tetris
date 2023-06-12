@@ -115,8 +115,12 @@ public class TileGrid : MonoBehaviour
             if (item.IsEmpty())
                 inactives.Add(item);
 
+        float mult = 1;
+        if(Random.Range(0,100) < ChanceOf2X)
+            mult = 2;
+        
         if (inactives.Count > 0)
-            inactives[Random.Range(0, inactives.Count)].SetActive(GetCharacter());
+            inactives[Random.Range(0, inactives.Count)].SetActive(GetCharacter(),mult);
         else return false;
         return true;
     }

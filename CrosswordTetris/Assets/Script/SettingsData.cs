@@ -5,8 +5,12 @@ using UnityEngine;
 public class SettingsData : ScriptableObject
 {
     public Color inactiveColor;
+
     public Color activeColor;
     public Color activeFontColor;
+
+    public Color active2XColor;
+    public Color active2XFontColor;
 
     public Color selectedColor;
     public Color selectedFontColor;
