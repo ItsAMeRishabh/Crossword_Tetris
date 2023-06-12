@@ -48,6 +48,7 @@ public class TileGrid : MonoBehaviour
     float SpawnRate = 0f;
 
     WordSelector wordHandler;
+
     int points = 0;
 
 
