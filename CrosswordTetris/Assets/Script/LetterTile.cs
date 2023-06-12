@@ -21,6 +21,8 @@ public class LetterTile : MonoBehaviour
     Color selectedColor;
     Color selectedFontColor;
 
+    [SerializeField]
+    public float multiplier = 1;
 
     [SerializeField]
     int selectedIndex = -1;
@@ -109,6 +111,18 @@ public class LetterTile : MonoBehaviour
     public bool IsSelected()
     {
         return selectedIndex != -1;
+    }
+
+    public int GetPoints()
+    {
+        float RET = 0;
+        foreach (var item in parent.Settings.LetterPoints)
+        {
+            RET = item.value;
+            
+        }
+
+        return (int)(RET * multiplier);
     }
 
     public int GetSelectedIndex()

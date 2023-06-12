@@ -27,15 +27,17 @@ public class TileGrid : MonoBehaviour
     List<TextMeshProUGUI> NextUpBoxes = new();
     List<LetterTile> Tiles;
 
+
+    [Space(10)]
     [SerializeField]
     int MinUserWordSize = 3;
     [SerializeField]
     int InitialTileSpawn = 7;
 
-    [Space(10)]
-
     [SerializeField]
     float ChanceOfRandomWords = 40f;
+    [SerializeField]
+    float ChanceOf2X = 10f;
     [SerializeField]
     float InitialSpawnRate = 2f;
     [SerializeField]
@@ -224,15 +226,13 @@ public class TileGrid : MonoBehaviour
 
         if (!b)
             b = (OutputBox.text.Length >= MinUserWordSize && wordHandler.IsWord(word));
-       
-        foreach (var item in Settings.LetterPoints)
+
+
+        foreach (var tile in Tiles)
         {
-            foreach (char c in word)
+            if (tile.IsSelected())
             {
-                if (item.word.Equals(c + ""))
-                {
-                    pointsVal += item.value;
-                }
+                pointsVal += tile.GetPoints();
             }
         }
 
@@ -245,9 +245,12 @@ public class TileGrid : MonoBehaviour
 
             foreach (var item in Tiles)
                 if (item.IsSelected())
+                {
+                    item.Deselect();
                     item.SetInactive();
+                }
 
-            if(mult!=1)
+            if (mult!=1)
             Debug.Log("Bonus : " + ((pointsVal*mult) - pointsVal));
             points += (int)(pointsVal * mult);
             OutputBox.text = "";
