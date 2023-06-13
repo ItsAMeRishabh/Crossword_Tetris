@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6bcac9d5da02e7429beb024d5d2e59e, type: 3}
   m_Name: SettingsData
   m_EditorClassIdentifier: 
-  inactiveColor: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
-  activeColor: {r: 0.14043403, g: 1, b: 0, a: 1}
-  activeFontColor: {r: 0.32277012, g: 0, b: 1, a: 1}
-  selectedColor: {r: 1, g: 0, b: 0, a: 1}
-  selectedFontColor: {r: 1, g: 0.8154073, b: 0, a: 1}
+  inactiveColor: {r: 0.103773594, g: 0.103773594, b: 0.103773594, a: 0.3137255}
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
+  activeFontColor: {r: 0.125, g: 0.40267175, b: 0.5, a: 1}
+  active2XColor: {r: 1, g: 0.7412394, b: 0, a: 1}
+  active2XFontColor: {r: 0, g: 0, b: 0, a: 1}
+  selectedColor: {r: 0.1254902, g: 0.4039216, b: 0.5019608, a: 1}
+  selectedFontColor: {r: 1, g: 1, b: 1, a: 1}
   LetterPoints:
   - word: A
     value: 100
