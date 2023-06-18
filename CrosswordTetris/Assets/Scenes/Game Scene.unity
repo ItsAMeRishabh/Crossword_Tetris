@@ -1169,12 +1169,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 301968614}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.05, y: -2.82, z: 0}
+  m_LocalPosition: {x: 0.05, y: -1.0899999, z: 0}
   m_LocalScale: {x: 3.955912, y: 0.20831048, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &383769351
 GameObject:
@@ -5902,11 +5902,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 18096846}
-  - {fileID: 606540372}
   - {fileID: 2049570777}
+  - {fileID: 606540372}
   - {fileID: 797410719}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -6469,6 +6469,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
+      propertyPath: InputBox
+      value: 
+      objectReference: {fileID: 2054024332}
+    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: PointBox
       value: 
       objectReference: {fileID: 606540373}
@@ -6485,12 +6489,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
+      propertyPath: ChanceOf2X
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: TextParent
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: NextUpParent
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
+      propertyPath: ObjectivePhrase
+      value: Who let the dogs out
       objectReference: {fileID: 0}
     - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: SpawnRateChange
@@ -6501,8 +6513,20 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
+      propertyPath: InitialSpawns.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: ObjectiveWords.Array.size
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
+      propertyPath: InitialSpawns.Array.data[0]
+      value: abcd
+      objectReference: {fileID: 0}
+    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
+      propertyPath: InitialSpawns.Array.data[1]
+      value: ghefg
       objectReference: {fileID: 0}
     - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: ObjectiveWords.Array.data[0].word
@@ -6558,7 +6582,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 170047489761353837, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.36
+      value: -0.6299999
       objectReference: {fileID: 0}
     - target: {fileID: 170047489761353837, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6768,12 +6792,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1879382472}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.73, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1955030509
 GameObject:
@@ -7336,7 +7360,7 @@ RectTransform:
   m_Children:
   - {fileID: 387727181}
   m_Father: {fileID: 1698929383}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7437,6 +7461,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2049570776}
   m_CullTransparentMesh: 1
+--- !u!114 &2054024332 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7522651117548307299, guid: 1033736e2cd326248a3f609bf7ffc282, type: 3}
+  m_PrefabInstance: {fileID: 797410718}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2080870711
 GameObject:
   m_ObjectHideFlags: 0
