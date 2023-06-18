@@ -8,7 +8,7 @@ public class BombPowerUp : PowerUp
     const float c = 15.004f;
 
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (IsActive&&CanDo)
         {

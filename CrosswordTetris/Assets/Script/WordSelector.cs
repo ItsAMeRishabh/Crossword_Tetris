@@ -17,9 +17,6 @@ public class WordSelector : MonoBehaviour
     string filePath;
     HashSet<string> dictionary;
 
-    public List<Word> ObjectiveWords;
-    public List<Word> ActiveWords;
-
 
     private void Start()
     {
@@ -32,11 +29,6 @@ public class WordSelector : MonoBehaviour
             dictionary.Add(line.Trim());
         }
 
-
-        foreach (var item in ObjectiveWords)
-        {
-            item.word = item.word.ToUpper();
-        }
     }
 
     public bool IsWord(string word)

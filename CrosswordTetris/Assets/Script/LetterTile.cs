@@ -32,7 +32,7 @@ public class LetterTile : MonoBehaviour
     [SerializeField]
     bool isEmpty = true;
     [SerializeField]
-    char character = ' ';
+    public char character = ' ';
 
     TileGrid parent;
 
@@ -51,6 +51,7 @@ public class LetterTile : MonoBehaviour
 
     public void Start()
     {
+        sr = GetComponent<SpriteRenderer>();
         parent = transform.parent.GetComponent<TileGrid>();
         var settings = parent.Settings;
 
@@ -62,7 +63,6 @@ public class LetterTile : MonoBehaviour
         selectedColor = settings.selectedColor;
         selectedFontColor = settings.selectedFontColor;
 
-        sr = GetComponent<SpriteRenderer>();
         characterMesh = GetComponentInChildren<TextMesh>();
         SetInactive();
     }
@@ -118,6 +118,7 @@ public class LetterTile : MonoBehaviour
 
 
         characterMesh.text = character+"";
+        transform.position += Vector3.up * 8;
     }
 
     public void SetInactive()
@@ -128,7 +129,6 @@ public class LetterTile : MonoBehaviour
         character = ' ';
         characterMesh.text = "";
         sr.color = inactiveColor;
-
     }
 
     public bool IsEmpty()
