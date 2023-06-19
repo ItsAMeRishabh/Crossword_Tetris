@@ -42,6 +42,7 @@ public class TileGrid : MonoBehaviour
     WordSelector wordHandler;
 
     int points = 0;
+    bool Initial = true;
 
     private void CheckFor3LetterWords()
     {
@@ -75,6 +76,8 @@ public class TileGrid : MonoBehaviour
     {
         ObjectivePhrase = ObjectivePhrase.ToUpper();
 
+        Array.Reverse(InitialSpawns);
+
         for (int i = 0; i < ObjectivePhrase.Length; i++)
         {
             if (ObjectivePhrase[i] == ' ')            
@@ -85,6 +88,7 @@ public class TileGrid : MonoBehaviour
 
         InputBox.text = DisplayPhrase;
 
+        InputBox.text = DisplayPhrase.Replace('#', '_');
 
         Tiles = new();
         wordHandler = GetComponent<WordSelector>();
@@ -92,23 +96,13 @@ public class TileGrid : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++)
             Tiles.Add(transform.GetChild(i).GetComponent<LetterTile>());
 
-        SpawnInitial();
 
         StartCoroutine(nameof(Spawn));
     }
-    void SpawnInitial()
-    {
-        for (int x = 0; x < InitialSpawns.Length; x++)
-        {
-            for (int y = 0; y < InitialSpawns[x].Length; y++)
-            {
-                int i = x % width + ((int)Math.Floor((decimal)y / width) * width);
-                Tiles[i].SetActive(InitialSpawns[x][y],1);
-            }
-        }
-    }
+
     void _Spawn()
     {
+        int i = 0;
         foreach (var tile in Tiles)
         {
             if (tile.IsEmpty())
@@ -117,9 +111,19 @@ public class TileGrid : MonoBehaviour
                 if (Random.Range(0, 100) < ChanceOf2X)
                     mult = 2;
 
-                tile.SetActive(GetCharacter(), mult);
+                int x = (int)Mathf.Floor(i / width);
+                int y = (i % width);
+                if (Initial && (InitialSpawns.Length >y && InitialSpawns[y].Length > x))
+                {
+                    tile.SetActive(InitialSpawns[y][x].ToString().ToUpper()[0], mult);
+                }
+                else
+                    tile.SetActive(GetCharacter(), mult);
             }
+            i++;
         }
+        Initial = false;
+        //SpawnInitial();
         CheckFor3LetterWords();
     }
     IEnumerator Spawn()
