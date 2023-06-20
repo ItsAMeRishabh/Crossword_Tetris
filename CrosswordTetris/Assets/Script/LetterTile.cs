@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
@@ -16,22 +14,12 @@ public class LetterTile : MonoBehaviour
     Sprite emptyTexture;
 
 
-    Color inactiveColor;
-    Color activeColor;
-    Color activeFontColor;
-    Color active2XColor;
-    Color active2XFontColor;
-    Color selectedColor;
-    Color selectedFontColor;
-
-    [SerializeField]
     public float multiplier = 1;
 
     [SerializeField]
     int selectedIndex = -1;
     [SerializeField]
     bool isEmpty = true;
-    [SerializeField]
     public char character = ' ';
 
     TileGrid parent;
@@ -39,7 +27,7 @@ public class LetterTile : MonoBehaviour
 
     private void OnMouseDown()
     {
-
+        
         if (IsSelected())
             Deselect();
         else
@@ -52,17 +40,7 @@ public class LetterTile : MonoBehaviour
     public void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        parent = transform.parent.GetComponent<TileGrid>();
-        var settings = parent.Settings;
-
-        inactiveColor = settings.inactiveColor;
-        active2XColor = settings.active2XColor;
-        active2XFontColor = settings.active2XFontColor;
-        activeColor = settings.activeColor;
-        activeFontColor = settings.activeFontColor;
-        selectedColor = settings.selectedColor;
-        selectedFontColor = settings.selectedFontColor;
-
+        parent = transform.parent.GetComponent<TileGrid>();      
         characterMesh = GetComponentInChildren<TextMesh>();
         SetInactive();
     }
@@ -72,9 +50,9 @@ public class LetterTile : MonoBehaviour
         if (!isEmpty && !IsSelected())
         {
             selectedIndex = parent.AddToOutput(character); ;
-            sr.color = selectedColor;
+            sr.color = parent.Settings.selectedColor;
 
-            characterMesh.color = selectedFontColor;
+            characterMesh.color = parent.Settings.selectedFontColor;
         }
     }
     public void Deselect()
@@ -85,13 +63,13 @@ public class LetterTile : MonoBehaviour
             selectedIndex =  -1;
             if (multiplier == 1)
             {
-                sr.color = activeColor;
-                characterMesh.color = activeFontColor;
+                sr.color = parent.Settings.activeColor;
+                characterMesh.color = parent.Settings.activeFontColor;
             }
             else
             {
-                sr.color = active2XColor;
-                characterMesh.color = active2XFontColor;
+                sr.color = parent.Settings.active2XColor;
+                characterMesh.color = parent.Settings.active2XFontColor;
 
             }
         }
@@ -106,13 +84,13 @@ public class LetterTile : MonoBehaviour
 
         if(multiplier == 1)
         {
-            sr.color = activeColor;
-            characterMesh.color = activeFontColor;
+            sr.color = parent.Settings.activeColor;
+            characterMesh.color = parent.Settings.activeFontColor;
         }
         else
         {
-            sr.color = active2XColor;
-            characterMesh.color = active2XFontColor;
+            sr.color = parent.Settings.active2XColor;
+            characterMesh.color = parent.Settings.active2XFontColor;
 
         }
 
@@ -128,7 +106,7 @@ public class LetterTile : MonoBehaviour
         selectedIndex = -1;
         character = ' ';
         characterMesh.text = "";
-        sr.color = inactiveColor;
+        sr.color = parent.Settings.inactiveColor;
     }
 
     public bool IsEmpty()

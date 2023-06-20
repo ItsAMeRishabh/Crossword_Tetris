@@ -1,33 +1,28 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Progress;
 using Random = UnityEngine.Random;
 
 
 
 [RequireComponent(typeof(WordSelector))]
-[RequireComponent(typeof(BombPowerUp))]
 
 public class TileGrid : MonoBehaviour
 {
     public SettingsData Settings;
 
 
-    public TextMeshProUGUI OutputBox;
-    public TextMeshProUGUI InputBox;
-    public TextMeshProUGUI PointBox;
+    public UIManager UIManager;
 
     List<LetterTile> Tiles;
 
     public string[] InitialSpawns;
+    public int[] StarWordRequires;
 
     public string ObjectivePhrase;
-    public string DisplayPhrase;
+    string DisplayPhrase;
+    int WordsUsed = 0;
 
 
     [Space(10)]
@@ -43,6 +38,7 @@ public class TileGrid : MonoBehaviour
 
     int points = 0;
     bool Initial = true;
+
 
     private void CheckFor3LetterWords()
     {
@@ -68,7 +64,7 @@ public class TileGrid : MonoBehaviour
         foreach (var Tile in Tiles){
             Tile.SetInactive();
         }
-        _Spawn();
+        Spawn();
     }
     
     
@@ -86,9 +82,9 @@ public class TileGrid : MonoBehaviour
                 DisplayPhrase += "_";
         }
 
-        InputBox.text = DisplayPhrase;
+        UIManager.InputBox.text = DisplayPhrase;
 
-        InputBox.text = DisplayPhrase.Replace('#', '_');
+        UIManager.InputBox.text = DisplayPhrase.Replace('#', '_');
 
         Tiles = new();
         wordHandler = GetComponent<WordSelector>();
@@ -97,10 +93,10 @@ public class TileGrid : MonoBehaviour
             Tiles.Add(transform.GetChild(i).GetComponent<LetterTile>());
 
 
-        StartCoroutine(nameof(Spawn));
+        StartCoroutine(nameof(SpawnCour));
     }
 
-    void _Spawn()
+    void Spawn()
     {
         int i = 0;
         foreach (var tile in Tiles)
@@ -126,15 +122,15 @@ public class TileGrid : MonoBehaviour
         //SpawnInitial();
         CheckFor3LetterWords();
     }
-    IEnumerator Spawn()
+    IEnumerator SpawnCour()
     {
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSecondsRealtime(0.3f);
 
-        _Spawn();
+        Spawn();
     }
 
-    char GetRandomCharacter()
+    char GetCharacter()
     {
         if (Random.Range(0, 100) < ChanceOfRandomWords)
         {
@@ -151,15 +147,12 @@ public class TileGrid : MonoBehaviour
         }
     }
 
-    char GetCharacter()
-    {
-        return GetRandomCharacter();
-    }
+
 
     public int AddToOutput(char c)
     {
-        OutputBox.text += c;
-        return OutputBox.text.Length - 1;
+        UIManager.OutputBox.text += c;
+        return UIManager.OutputBox.text.Length - 1;
     }
     public void RemoveFromOutput(int i)
     {
@@ -167,8 +160,9 @@ public class TileGrid : MonoBehaviour
             if (tile.GetSelectedIndex() >= i)
                 tile.SetSelectedIndex(tile.GetSelectedIndex() - 1);
 
-        OutputBox.text = OutputBox.text.Remove(i,1);
+        UIManager.OutputBox.text = UIManager.OutputBox.text.Remove(i,1);
     }
+
 
 
 
@@ -179,61 +173,66 @@ public class TileGrid : MonoBehaviour
     }
     public void CheckTextBoxes()
     {
-        string word = OutputBox.text.ToUpper();
+        string word = UIManager.OutputBox.text.ToUpper();
         
         float pointsVal = 0;
         
 
         
         foreach (var tile in Tiles)
-        {
             if (tile.IsSelected())
-            {
                 pointsVal += tile.GetPoints();
-            }
-        }
-
-        if (OutputBox.text.Length >= MinUserWordSize && wordHandler.IsWord(word))
-        {
-
-            if(word.Length >= 4)
-            {
-                GetComponent<BombPowerUp>().CanDo = true;
-            }
-
-            foreach (var item in Tiles)
-                if (item.IsSelected())
-                {
-                    item.Deselect();
-                    item.SetInactive();
-                }
-
-            points += (int)pointsVal;
-            OutputBox.text = "";
-            PointBox.text = "Points : " + points;
-
-
-            for (int i = 0; i < ObjectivePhrase.Length; i++)
-            {
-                for (int j = 0; j < word.Length; j++)
-                {
-                    if (ObjectivePhrase[i].Equals(word[j]))
-                    {
-                        DisplayPhrase = DisplayPhrase.Remove(i, 1).Insert(i, ObjectivePhrase[i] + "");
-                        ObjectivePhrase = ObjectivePhrase.Remove(i, 1).Insert(i, " ");
-                    }
-                }
-            }
-
-            InputBox.text = DisplayPhrase.Replace('#', '_');
-            if(ObjectivePhrase.Trim() == "")
-                Debug.Log("---WINNING SCREEN---");
-            StartCoroutine(nameof(Spawn));
-        }
-
-
+        
+        if (UIManager.OutputBox.text.Length >= MinUserWordSize && wordHandler.IsWord(word))
+            MakeWord(pointsVal,word);
     }
 
+    public void MakeWord(float pointsVal, string word)
+    {
+        WordsUsed++;
+
+        foreach (var item in Tiles)
+            if (item.IsSelected())
+            {
+                item.Deselect();
+                item.SetInactive();
+            }
+
+        points += (int)pointsVal;
+        UIManager.OutputBox.text = "";
+        UIManager.PointBox.text = "Points : " + points;
+
+
+        for (int i = 0; i < ObjectivePhrase.Length; i++)
+        {
+            for (int j = 0; j < word.Length; j++)
+            {
+                if (ObjectivePhrase[i].Equals(word[j]))
+                {
+                    DisplayPhrase = DisplayPhrase.Remove(i, 1).Insert(i, ObjectivePhrase[i] + "");
+                    ObjectivePhrase = ObjectivePhrase.Remove(i, 1).Insert(i, " ");
+                }
+            }
+        }
+
+        UIManager.InputBox.text = DisplayPhrase.Replace('#', '_');
+        if (ObjectivePhrase.Trim() == "")
+            Debug.Log("---WINNING SCREEN---");
+    
+        int stars =0;
+        foreach (var item in StarWordRequires)
+        {
+            if(WordsUsed <= item)
+            {
+                stars++;
+            }
+        }
+
+        Debug.Log(stars + " stars");
+        UIManager.WordsUsedBox.text = WordsUsed + " Words";
+
+        StartCoroutine(nameof(SpawnCour));
+    }
 
     [Space(50)]
     public GameObject prefab;
