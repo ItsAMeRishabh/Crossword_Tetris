@@ -17,8 +17,7 @@ public class WordSelector : MonoBehaviour
     string filePath;
     HashSet<string> dictionary;
 
-
-    private void Start()
+    private void Awake()
     {
         dictionary = new HashSet<string>();
 
@@ -28,7 +27,6 @@ public class WordSelector : MonoBehaviour
         {
             dictionary.Add(line.Trim());
         }
-
     }
 
     public bool IsWord(string word)

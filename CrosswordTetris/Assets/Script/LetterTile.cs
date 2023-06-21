@@ -4,9 +4,9 @@ using UnityEngine;
 public class LetterTile : MonoBehaviour
 {
 
-    SpriteRenderer sr;
+    public SpriteRenderer sr;
 
-    TextMesh characterMesh;
+    public TextMesh characterMesh;
 
     [SerializeField]
     Sprite tileTexture;
@@ -27,7 +27,6 @@ public class LetterTile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        
         if (IsSelected())
             Deselect();
         else
@@ -36,20 +35,24 @@ public class LetterTile : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        sr = GetComponent<SpriteRenderer>();
+        characterMesh = GetComponentInChildren<TextMesh>();
+        parent = transform.parent.GetComponent<TileGrid>();      
+        SetInactive();
+    }
 
     public void Start()
     {
-        sr = GetComponent<SpriteRenderer>();
-        parent = transform.parent.GetComponent<TileGrid>();      
-        characterMesh = GetComponentInChildren<TextMesh>();
-        SetInactive();
+        Debug.Log("Start Letter Tile");
     }
 
     public void Select()
     {
         if (!isEmpty && !IsSelected())
         {
-            selectedIndex = parent.AddToOutput(character); ;
+            selectedIndex = parent.AddToOutput(character);
             sr.color = parent.Settings.selectedColor;
 
             characterMesh.color = parent.Settings.selectedFontColor;

@@ -100,6 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38099395cb01e374da2b0d372982bd01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sr: {fileID: 3427492216621710288}
+  characterMesh: {fileID: 3427492216649234423}
   tileTexture: {fileID: 21300000, guid: e9b9872615ca41b4db7ca67db7dcd13b, type: 3}
   emptyTexture: {fileID: 21300000, guid: 8470be0c13fb171499197220f8e5f320, type: 3}
   multiplier: 1

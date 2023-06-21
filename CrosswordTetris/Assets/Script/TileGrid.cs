@@ -93,11 +93,14 @@ public class TileGrid : MonoBehaviour
             Tiles.Add(transform.GetChild(i).GetComponent<LetterTile>());
 
 
-        StartCoroutine(nameof(SpawnCour));
+        //StartCoroutine(nameof(SpawnCour));
+        Debug.Log("Tile Grid Start");
+        Spawn();
     }
 
     void Spawn()
     {
+        UIManager.DebugText.text = "Spawn Invoked!";
         int i = 0;
         foreach (var tile in Tiles)
         {
@@ -122,13 +125,14 @@ public class TileGrid : MonoBehaviour
         //SpawnInitial();
         CheckFor3LetterWords();
     }
-    IEnumerator SpawnCour()
-    {
 
-        yield return new WaitForSecondsRealtime(0.3f);
+    // IEnumerator SpawnCour()
+    // {
 
-        Spawn();
-    }
+    //     yield return new WaitForSecondsRealtime(0.3f);
+
+    //     Spawn();
+    // }
 
     char GetCharacter()
     {
@@ -231,7 +235,8 @@ public class TileGrid : MonoBehaviour
         Debug.Log(stars + " stars");
         UIManager.WordsUsedBox.text = WordsUsed + " Words";
 
-        StartCoroutine(nameof(SpawnCour));
+        //StartCoroutine(nameof(SpawnCour));
+        Spawn();
     }
 
     [Space(50)]
