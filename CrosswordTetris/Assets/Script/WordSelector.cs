@@ -17,7 +17,7 @@ public class WordSelector : MonoBehaviour
     string filePath;
     HashSet<string> dictionary;
 
-    private void Awake()
+    public void GMAwake()
     {
         dictionary = new HashSet<string>();
 

@@ -15,7 +15,7 @@ public class TileGrid : MonoBehaviour
 
     public UIManager UIManager;
 
-    List<LetterTile> Tiles;
+    readonly List<LetterTile> Tiles = new();
 
     public string[] InitialSpawns;
     public int[] StarWordRequires;
@@ -34,7 +34,7 @@ public class TileGrid : MonoBehaviour
     [SerializeField]
     float ChanceOf2X = 10f;
 
-    WordSelector wordHandler;
+    public WordSelector wordHandler;
 
     int points = 0;
     bool Initial = true;
@@ -66,35 +66,36 @@ public class TileGrid : MonoBehaviour
         }
         Spawn();
     }
-    
-    
-    private void Start()
-    {
-        ObjectivePhrase = ObjectivePhrase.ToUpper();
 
+    public void GMAwake()
+    {
+        wordHandler = GetComponent<WordSelector>();
+    }
+
+    public void GMStart()
+    {
+        
         Array.Reverse(InitialSpawns);
 
+        ObjectivePhrase = ObjectivePhrase.ToUpper();
+        
         for (int i = 0; i < ObjectivePhrase.Length; i++)
-        {
             if (ObjectivePhrase[i] == ' ')            
                 DisplayPhrase += " ";
             else
                 DisplayPhrase += "_";
-        }
+        
 
         UIManager.InputBox.text = DisplayPhrase;
 
-        UIManager.InputBox.text = DisplayPhrase.Replace('#', '_');
 
-        Tiles = new();
-        wordHandler = GetComponent<WordSelector>();
 
         for (int i = 0; i < transform.childCount; i++)
             Tiles.Add(transform.GetChild(i).GetComponent<LetterTile>());
 
 
-        //StartCoroutine(nameof(SpawnCour));
         Debug.Log("Tile Grid Start");
+        //StartCoroutine(nameof(SpawnCour));
         Spawn();
     }
 
@@ -219,7 +220,7 @@ public class TileGrid : MonoBehaviour
             }
         }
 
-        UIManager.InputBox.text = DisplayPhrase.Replace('#', '_');
+        UIManager.InputBox.text = DisplayPhrase;
         if (ObjectivePhrase.Trim() == "")
             Debug.Log("---WINNING SCREEN---");
     

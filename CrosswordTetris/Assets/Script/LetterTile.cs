@@ -35,17 +35,12 @@ public class LetterTile : MonoBehaviour
         }
     }
 
-    private void Awake()
+    public void GMAwake()
     {
         sr = GetComponent<SpriteRenderer>();
         characterMesh = GetComponentInChildren<TextMesh>();
         parent = transform.parent.GetComponent<TileGrid>();      
         SetInactive();
-    }
-
-    public void Start()
-    {
-        Debug.Log("Start Letter Tile");
     }
 
     public void Select()
