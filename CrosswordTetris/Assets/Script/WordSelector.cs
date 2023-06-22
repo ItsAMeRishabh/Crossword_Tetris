@@ -17,8 +17,10 @@ public class WordSelector : MonoBehaviour
     string filePath;
     HashSet<string> dictionary;
 
+
     public void GMAwake()
     {
+
         dictionary = new HashSet<string>();
 
         string[] lines = File.ReadAllLines(filePath);
@@ -27,6 +29,8 @@ public class WordSelector : MonoBehaviour
         {
             dictionary.Add(line.Trim());
         }
+
+        
     }
 
     public bool IsWord(string word)

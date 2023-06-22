@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
         Grid = GetComponent<TileGrid>();
         Grid.GMAwake();
         Grid.wordHandler.GMAwake();
+        FindObjectOfType<TileGrid>().UIManager.DebugText.text = "Yo";
 
         for (int i = 0; i < transform.childCount; i++) { 
             transform.GetChild(i).GetComponent<LetterTile>().GMAwake();

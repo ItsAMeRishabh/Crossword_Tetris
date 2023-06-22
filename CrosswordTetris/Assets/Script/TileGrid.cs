@@ -74,7 +74,6 @@ public class TileGrid : MonoBehaviour
 
     public void GMStart()
     {
-        
         Array.Reverse(InitialSpawns);
 
         ObjectivePhrase = ObjectivePhrase.ToUpper();
@@ -94,19 +93,21 @@ public class TileGrid : MonoBehaviour
             Tiles.Add(transform.GetChild(i).GetComponent<LetterTile>());
 
 
-        Debug.Log("Tile Grid Start");
         //StartCoroutine(nameof(SpawnCour));
+        
         Spawn();
     }
 
     void Spawn()
     {
-        UIManager.DebugText.text = "Spawn Invoked!";
+        //UIManager.DebugText.text = "Spawn Invoked!";
         int i = 0;
+        int j = 0;
         foreach (var tile in Tiles)
         {
             if (tile.IsEmpty())
             {
+                j++;
                 float mult = 1;
                 if (Random.Range(0, 100) < ChanceOf2X)
                     mult = 2;
