@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -16,21 +17,21 @@ public class WordSelector : MonoBehaviour
     [SerializeField]
     string filePath;
     HashSet<string> dictionary;
-
+    public TMP_Text debugText;
 
     public void GMAwake()
     {
 
         dictionary = new HashSet<string>();
 
-        string[] lines = File.ReadAllLines(filePath);
+        TextAsset textAsset = Resources.Load<TextAsset>("Dictionary79.3k");
+        string fileContent = textAsset.text;
+        string[] lines = fileContent.Split('\n');
 
         foreach (string line in lines)
         {
             dictionary.Add(line.Trim());
         }
-
-        
     }
 
     public bool IsWord(string word)

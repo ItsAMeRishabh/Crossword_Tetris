@@ -189,7 +189,12 @@ public class TileGrid : MonoBehaviour
         foreach (var tile in Tiles)
             if (tile.IsSelected())
                 pointsVal += tile.GetPoints();
-        
+
+        if(!wordHandler.IsWord(word))
+        {
+            Debug.LogError(word + " is not a word!");
+        }
+
         if (UIManager.OutputBox.text.Length >= MinUserWordSize && wordHandler.IsWord(word))
             MakeWord(pointsVal,word);
     }

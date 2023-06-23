@@ -1,20 +1,22 @@
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     TileGrid Grid;
+    
 
     void Awake()
     {
         Grid = GetComponent<TileGrid>();
         Grid.GMAwake();
         Grid.wordHandler.GMAwake();
-        FindObjectOfType<TileGrid>().UIManager.DebugText.text = "Yo";
+        FindObjectOfType<UIManager>().DebugText.text = "Yo";
 
-        for (int i = 0; i < transform.childCount; i++) { 
+        for (int i = 0; i < transform.childCount; i++)
+        {
             transform.GetChild(i).GetComponent<LetterTile>().GMAwake();
         }
-
     }
     void Start()
     {
