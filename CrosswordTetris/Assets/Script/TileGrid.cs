@@ -179,7 +179,7 @@ public class TileGrid : MonoBehaviour
     }
     public void CheckTextBoxes()
     {
-        Debug.Log("WoRRD");
+
         string word = UIManager.OutputBox.text.ToUpper();
         
         float pointsVal = 0;

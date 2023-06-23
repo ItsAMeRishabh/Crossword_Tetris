@@ -1,8 +1,9 @@
+using UnityEngine.Pool;
+using UnityEngine;
+using Random = UnityEngine.Random;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
-using Random = UnityEngine.Random;
 
 [Serializable]
 public class Word
@@ -21,11 +22,10 @@ public class WordSelector : MonoBehaviour
     public void GMAwake()
     {
 
-        dictionary = new HashSet<string>();
+        dictionary = HashSetPool<string>.Get();
 
-        string[] lines = File.ReadAllLines(filePath);
-
-        foreach (string line in lines)
+        
+        foreach (string line in File.ReadAllLines(filePath))
         {
             dictionary.Add(line.Trim());
         }
