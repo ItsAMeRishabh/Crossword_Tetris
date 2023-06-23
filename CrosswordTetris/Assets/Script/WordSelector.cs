@@ -1,9 +1,9 @@
+using UnityEngine.Pool;
+using UnityEngine;
+using Random = UnityEngine.Random;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using TMPro;
-using UnityEngine;
-using Random = UnityEngine.Random;
 
 [Serializable]
 public class Word
@@ -22,7 +22,7 @@ public class WordSelector : MonoBehaviour
     public void GMAwake()
     {
 
-        dictionary = new HashSet<string>();
+        dictionary = HashSetPool<string>.Get();
 
         TextAsset textAsset = Resources.Load<TextAsset>("Dictionary79.3k");
         string fileContent = textAsset.text;
