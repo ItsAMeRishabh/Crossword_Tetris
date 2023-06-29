@@ -19,7 +19,7 @@ public class FlyTile : Poolable
     }
 
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (Destination != null)
         {

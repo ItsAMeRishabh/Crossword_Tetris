@@ -15,10 +15,12 @@ MonoBehaviour:
   inactiveColor: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 0.7019608}
   activeColor: {r: 0.33333334, g: 0.53333336, b: 1, a: 1}
   activeFontColor: {r: 1, g: 1, b: 1, a: 1}
-  active2XColor: {r: 1, g: 0.81568635, b: 0, a: 1}
+  active2XColor: {r: 1, g: 0, b: 0.45107841, a: 1}
   active2XFontColor: {r: 0, g: 0, b: 0, a: 1}
   selectedColor: {r: 0.49606216, g: 1, b: 0, a: 1}
   selectedFontColor: {r: 0.4811321, g: 0.1009011, b: 0, a: 1}
+  goldenFontColor: {r: 1, g: 0.7727642, b: 0, a: 1}
+  goldenColor: {r: 0.09061737, g: 0.023851898, b: 0.18867922, a: 1}
   LetterPoints:
   - word: A
     value: 100

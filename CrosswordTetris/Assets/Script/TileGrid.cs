@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
+using System.Linq;
 
 
 [RequireComponent(typeof(WordSelector))]
@@ -132,6 +132,27 @@ public class TileGrid : MonoBehaviour
         CheckFor3LetterWords();
     }
 
+    void SpawnGoldenTile()
+    {
+        Dictionary<char, int> tiles = new();
+        foreach (var tile in Tiles)
+        {
+            tiles.TryAdd(tile.character, 0);
+            tiles[tile.character]++;
+        }
+        char m = tiles.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
+        List<TileLetter> list = new ();
+        foreach (var tile in Tiles)
+            if(tile.character == m)
+                list.Add(tile);
+
+
+        list[Random.Range(0, list.Count)].SetGolden();
+        
+
+
+    }
+
     // IEnumerator SpawnCour()
     // {
 
@@ -230,7 +251,7 @@ public class TileGrid : MonoBehaviour
         }
 
         InputBox.Display(DisplayPhrase);
-
+        bool b = false;
         foreach (var item in Tiles)
             if (item.IsSelected())
             {
@@ -241,6 +262,7 @@ public class TileGrid : MonoBehaviour
                         var tile = InputBox.transform.GetChild(i).GetComponent<Tile>();
                         if(tile.character == item.character)
                         {
+                            b = true;
                             var fly = TilePool.Pool.Get();// Instantiate(FlyTile, item.transform.position, Quaternion.identity);
                             fly.transform.SetPositionAndRotation(item.transform.position, Quaternion.identity);
                             fly.GetComponent<FlyTile>().Destination = tile;
@@ -276,6 +298,7 @@ public class TileGrid : MonoBehaviour
 
         }
         Spawn();
+        SpawnGoldenTile();
     }
 
     [Space(50)]

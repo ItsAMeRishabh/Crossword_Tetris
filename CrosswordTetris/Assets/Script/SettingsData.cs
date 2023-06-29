@@ -15,6 +15,9 @@ public class SettingsData : ScriptableObject
     public Color selectedColor;
     public Color selectedFontColor;
 
+    public Color goldenFontColor;
+    public Color goldenColor;
+
 
     public List<Word> LetterPoints = new();
     readonly char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();

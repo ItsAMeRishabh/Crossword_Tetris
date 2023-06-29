@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
@@ -149,4 +150,9 @@ public class TileLetter : MonoBehaviour
         selectedIndex = i;
     }
 
+    public void SetGolden()
+    {
+        sr.color = parent.Settings.goldenColor;
+        characterMesh.color = parent.Settings.goldenFontColor;
+    }
 }
