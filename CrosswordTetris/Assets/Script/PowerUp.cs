@@ -25,7 +25,7 @@ public abstract class PowerUp : MonoBehaviour
         {
             if (hits[i].collider != null && i != 0 && i < rad + 1)
             {
-                var a =hits[i].collider.gameObject.GetComponent<LetterTile>();
+                var a =hits[i].collider.gameObject.GetComponent<TileLetter>();
                 a.Deselect();
                 a.SetInactive();
             }

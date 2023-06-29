@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -15,13 +16,13 @@ public class TileGrid : MonoBehaviour
 
     public UIManager UIManager;
 
-    readonly List<LetterTile> Tiles = new();
+    readonly List<TileLetter> Tiles = new();
 
     public string[] InitialSpawns;
     public int[] StarWordRequires;
 
     public string ObjectivePhrase;
-    string DisplayPhrase;
+    public string DisplayPhrase;
     int WordsUsed = 0;
 
 
@@ -34,10 +35,13 @@ public class TileGrid : MonoBehaviour
     [SerializeField]
     float ChanceOf2X = 10f;
 
-    public WordSelector wordHandler;
-
+    [NonSerialized]
+    public WordSelector WordHandler;
+    public TileDisplay InputBox;
+    public GameObjectPool TilePool;
     int points = 0;
     bool Initial = true;
+
 
 
     private void CheckFor3LetterWords()
@@ -51,9 +55,9 @@ public class TileGrid : MonoBehaviour
                     if(x!=y && y!=z && z != x)
                     {
                         string s = Tiles[x].character + "" + Tiles[y].character + "" + Tiles[z].character;
-                        if (wordHandler.IsWord(s))
+                        if (WordHandler.IsWord(s))
                         {
-                            Debug.Log(s);
+                            Debug.LogWarning(s);
                             return;
                         }
                     }
@@ -69,7 +73,7 @@ public class TileGrid : MonoBehaviour
 
     public void GMAwake()
     {
-        wordHandler = GetComponent<WordSelector>();
+        WordHandler = GetComponent<WordSelector>();
     }
 
     public void GMStart()
@@ -85,12 +89,12 @@ public class TileGrid : MonoBehaviour
                 DisplayPhrase += "_";
         
 
-        UIManager.InputBox.text = DisplayPhrase;
+        InputBox.Display(DisplayPhrase);
 
 
 
         for (int i = 0; i < transform.childCount; i++)
-            Tiles.Add(transform.GetChild(i).GetComponent<LetterTile>());
+            Tiles.Add(transform.GetChild(i).GetComponent<TileLetter>());
 
 
         //StartCoroutine(nameof(SpawnCour));
@@ -190,30 +194,27 @@ public class TileGrid : MonoBehaviour
             if (tile.IsSelected())
                 pointsVal += tile.GetPoints();
 
-        if(!wordHandler.IsWord(word))
+        if(!WordHandler.IsWord(word))
         {
             Debug.LogError(word + " is not a word!");
         }
 
-        if (UIManager.OutputBox.text.Length >= MinUserWordSize && wordHandler.IsWord(word))
+        if (UIManager.OutputBox.text.Length >= MinUserWordSize && WordHandler.IsWord(word))
             MakeWord(pointsVal,word);
     }
 
     public void MakeWord(float pointsVal, string word)
     {
         WordsUsed++;
-
-        foreach (var item in Tiles)
-            if (item.IsSelected())
-            {
-                item.Deselect();
-                item.SetInactive();
-            }
-
         points += (int)pointsVal;
-        UIManager.OutputBox.text = "";
-        UIManager.PointBox.text = "Points : " + points;
+        
 
+        HashSet<char> chars = new();
+        //if (chars.Contains(item.character))
+        //{
+            //var t = Instantiate(FlyTile, item.transform.position, Quaternion.identity);
+            //t.GetComponent<FlyTile>().Destination = InputBox.transform.GetChild(0).GetComponent<Tile>();
+        //}
 
         for (int i = 0; i < ObjectivePhrase.Length; i++)
         {
@@ -221,29 +222,59 @@ public class TileGrid : MonoBehaviour
             {
                 if (ObjectivePhrase[i].Equals(word[j]))
                 {
+                    chars.Add(word[j]);
                     DisplayPhrase = DisplayPhrase.Remove(i, 1).Insert(i, ObjectivePhrase[i] + "");
                     ObjectivePhrase = ObjectivePhrase.Remove(i, 1).Insert(i, " ");
                 }
             }
         }
 
-        UIManager.InputBox.text = DisplayPhrase;
-        if (ObjectivePhrase.Trim() == "")
-            Debug.Log("---WINNING SCREEN---");
-    
-        int stars =0;
-        foreach (var item in StarWordRequires)
-        {
-            if(WordsUsed <= item)
-            {
-                stars++;
-            }
-        }
+        InputBox.Display(DisplayPhrase);
 
-        Debug.Log(stars + " stars");
+        foreach (var item in Tiles)
+            if (item.IsSelected())
+            {
+                if(chars.Contains(item.character))
+                {
+                    for (int i = 0; i < InputBox.transform.childCount; i++)
+                    {
+                        var tile = InputBox.transform.GetChild(i).GetComponent<Tile>();
+                        if(tile.character == item.character)
+                        {
+                            var fly = TilePool.Pool.Get();// Instantiate(FlyTile, item.transform.position, Quaternion.identity);
+                            fly.transform.SetPositionAndRotation(item.transform.position, Quaternion.identity);
+                            fly.GetComponent<FlyTile>().Destination = tile;
+                            fly.GetComponent<Tile>().SetCharacter(item.character);
+                            fly.GetComponent<Tile>().Activate();
+                        }
+                    }
+                }
+                //Debug.Log(item.GetSelectedIndex());
+                item.Deselect();
+                item.SetInactive();
+            }
+
+        UIManager.OutputBox.text = "";
+        UIManager.PointBox.text = "Points : " + points;
         UIManager.WordsUsedBox.text = WordsUsed + " Words";
 
         //StartCoroutine(nameof(SpawnCour));
+        if (ObjectivePhrase.Trim() == "")
+        {
+            Debug.Log("---WINNING SCREEN---");
+
+            int stars = 0;
+            foreach (var item in StarWordRequires)
+            {
+                if (WordsUsed <= item)
+                {
+                    stars++;
+                }
+            }
+
+            Debug.Log(stars + " stars");
+
+        }
         Spawn();
     }
 

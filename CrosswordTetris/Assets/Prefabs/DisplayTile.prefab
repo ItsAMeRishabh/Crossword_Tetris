@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3427492216621710291}
   - component: {fileID: 3427492216621710288}
-  - component: {fileID: 3427492216621710289}
-  - component: {fileID: 8234292674494769600}
+  - component: {fileID: 2099544965156392191}
   m_Layer: 0
-  m_Name: HexTile
+  m_Name: DisplayTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 3427492216621710294}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3427492216649234420}
   m_Father: {fileID: 0}
@@ -76,8 +75,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 239b12052e0d64749aa6927aebbd662a, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 8470be0c13fb171499197220f8e5f320, type: 3}
+  m_Color: {r: 0.22745098, g: 0.22745098, b: 0.22745098, a: 0.7019608}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -87,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3427492216621710289
+--- !u!114 &2099544965156392191
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,48 +95,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 3427492216621710294}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b59c3fd25df9094cb92f55136c8f49d, type: 3}
+  m_Script: {fileID: 11500000, guid: 0fbb50a45c64daa47b8ceecd12e4950c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sr: {fileID: 3427492216621710288}
   characterMesh: {fileID: 3427492216649234423}
-  tileTexture: {fileID: 21300000, guid: 239b12052e0d64749aa6927aebbd662a, type: 3}
-  emptyTexture: {fileID: 21300000, guid: f99a04783505f7744b664e406a046781, type: 3}
-  multiplier: 1
-  selectedIndex: -1
+  tileTexture: {fileID: 21300000, guid: e9b9872615ca41b4db7ca67db7dcd13b, type: 3}
+  emptyTexture: {fileID: 21300000, guid: 8470be0c13fb171499197220f8e5f320, type: 3}
   isEmpty: 1
   character: 32
---- !u!60 &8234292674494769600
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3427492216621710294}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.142857, y: 2.142857}
-    newSize: {x: 2.92, y: 2.6}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.55266047, y: 0.94103795}
-      - {x: 0.5414083, y: 0.9410385}
-      - {x: 1.0851672, y: 0.023854673}
-      - {x: 0.56106234, y: -0.9326367}
-      - {x: -0.5264549, y: -0.9326365}
-      - {x: -1.0898677, y: 0.030406117}
+  Settings: {fileID: 11400000, guid: 5f0ca2d3efc412e40aeec6263ba7007c, type: 2}
 --- !u!1 &3427492216649234421
 GameObject:
   m_ObjectHideFlags: 0

@@ -31,7 +31,7 @@ public class BombPowerUp : PowerUp
                     IsActive = false;
                     CanDo = false;
                     HexBoom(transform.GetChild(I).transform.position, Radius);
-                    var a = transform.GetChild(I).GetComponent<LetterTile>();
+                    var a = transform.GetChild(I).GetComponent<TileLetter>();
                     a.Deselect();
                     a.SetInactive();
                 }

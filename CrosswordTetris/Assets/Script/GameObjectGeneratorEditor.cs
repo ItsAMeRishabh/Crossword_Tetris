@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-/*[CustomEditor(typeof(TileGrid))]
+[CustomEditor(typeof(TileGrid))]
  public class GameObjectGeneratorEditor : Editor
  {
      public override void OnInspectorGUI()
@@ -19,4 +19,4 @@ using UnityEditor;
              yourScript.RemoveGameObjects();
          }
      }
- }*/
+ }

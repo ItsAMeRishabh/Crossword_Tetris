@@ -17,7 +17,6 @@ public class WordSelector : MonoBehaviour
     [SerializeField]
     string filePath;
     HashSet<string> dictionary;
-    public TMP_Text debugText;
 
     public void GMAwake()
     {

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class LetterTile : MonoBehaviour
+public class TileLetter : MonoBehaviour
 {
 
     public SpriteRenderer sr;
@@ -24,6 +24,15 @@ public class LetterTile : MonoBehaviour
 
     TileGrid parent;
 
+    public void Set(TileLetter comp)
+    {
+        comp.sr.sprite = sr.sprite;
+        comp.sr.color = sr.color;
+
+        comp.characterMesh.text = characterMesh.text;       
+        comp.characterMesh.color = characterMesh.color;
+
+    }
 
     private void OnMouseDown()
     {
