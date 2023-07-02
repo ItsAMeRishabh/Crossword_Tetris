@@ -4350,18 +4350,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1455292763290615237, guid: 6f803946f37e46e4c8486cb50ad15e22, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 222.4502
-      objectReference: {fileID: 0}
-    - target: {fileID: 1839822392988972354, guid: 6f803946f37e46e4c8486cb50ad15e22, type: 3}
-      propertyPath: DebugText
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2719158340107848084, guid: 6f803946f37e46e4c8486cb50ad15e22, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4861321981109336106, guid: 6f803946f37e46e4c8486cb50ad15e22, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -4369,22 +4357,6 @@ PrefabInstance:
     - target: {fileID: 4861321981109336106, guid: 6f803946f37e46e4c8486cb50ad15e22, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ResetOutput
-      objectReference: {fileID: 0}
-    - target: {fileID: 5831137079379151369, guid: 6f803946f37e46e4c8486cb50ad15e22, type: 3}
-      propertyPath: m_Color.b
-      value: 0.627451
-      objectReference: {fileID: 0}
-    - target: {fileID: 5831137079379151369, guid: 6f803946f37e46e4c8486cb50ad15e22, type: 3}
-      propertyPath: m_Color.g
-      value: 0.38823533
-      objectReference: {fileID: 0}
-    - target: {fileID: 5831137079379151369, guid: 6f803946f37e46e4c8486cb50ad15e22, type: 3}
-      propertyPath: m_Color.r
-      value: 0.46274513
-      objectReference: {fileID: 0}
-    - target: {fileID: 6756351020375198518, guid: 6f803946f37e46e4c8486cb50ad15e22, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 181.82422
       objectReference: {fileID: 0}
     - target: {fileID: 7955780872181721572, guid: 6f803946f37e46e4c8486cb50ad15e22, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
