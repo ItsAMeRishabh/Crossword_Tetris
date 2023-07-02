@@ -792,10 +792,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1047841618}
     - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
-      propertyPath: Settings
-      value: 
-      objectReference: {fileID: 11400000, guid: 5f0ca2d3efc412e40aeec6263ba7007c, type: 2}
-    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: TilePool
       value: 
       objectReference: {fileID: 29303170}
@@ -803,10 +799,6 @@ PrefabInstance:
       propertyPath: UIManager
       value: 
       objectReference: {fileID: 321846120}
-    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
-      propertyPath: ObjectivePhrase
-      value: Who let the dogs out
-      objectReference: {fileID: 0}
     - target: {fileID: 170047489761353837, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: m_RootOrder
       value: 3

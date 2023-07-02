@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad827083d69122b449758f95b561944b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Settings: {fileID: 11400000, guid: 69c4697156cf8d34284a8eb828fb6061, type: 2}
+  Settings: {fileID: 11400000, guid: 5f0ca2d3efc412e40aeec6263ba7007c, type: 2}
   UIManager: {fileID: 0}
   InitialSpawns:
   - Hello
@@ -56,10 +56,12 @@ MonoBehaviour:
   - LOL
   StarWordRequires: 05000000080000000f000000
   ObjectivePhrase: Who let the dogs out
+  DisplayPhrase: 
   MinUserWordSize: 3
   ChanceOfRandomWords: 70
   ChanceOf2X: 15
-  wordHandler: {fileID: 0}
+  InputBox: {fileID: 0}
+  TilePool: {fileID: 0}
   prefab: {fileID: 3427492216621710294, guid: 2942b7b0087751c4d9d35a0843546651, type: 3}
   width: 5
   height: 5
@@ -76,7 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66d1516e40ed7a34b9245a40e0937b57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filePath: Assets/Dictionary79.3k.txt
+  txt: {fileID: 4900000, guid: f5ad182090dd69c4090d1b2e42f5a4fa, type: 3}
 --- !u!114 &1876447283
 MonoBehaviour:
   m_ObjectHideFlags: 0

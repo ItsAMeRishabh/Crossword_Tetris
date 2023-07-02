@@ -17,15 +17,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216621710288, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.9921569
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216621710288, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_Color.g
-      value: 0.53333336
+      value: 0.83921576
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216621710288, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_Color.r
-      value: 0.33333334
+      value: 0.49803925
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216621710291, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_RootOrder
@@ -85,7 +85,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216621710294, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_Name
-      value: DisplayTile
+      value: FlyTile
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
@@ -107,7 +107,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Destination: {fileID: 0}
-  time: 25
-  i: 500
+  CurveSeconds: 0.3
   RandomVec: {x: 0, y: 0, z: 0}
-  Speed: 0.15
+  Speed: 9

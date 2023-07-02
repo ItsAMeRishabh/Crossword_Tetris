@@ -1,14 +1,26 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using System.Linq;
+using System.Collections;
 
+public class GoldenTileMeta
+{
+    public Vector3 position;
+    public char character;
+    public int didFunction = 0;
+
+    public GoldenTileMeta(Vector3 position, char character)
+    {
+        this.position = position;
+        this.character = character;
+    }
+
+}
 
 [RequireComponent(typeof(WordSelector))]
-
 public class TileGrid : MonoBehaviour
 {
     public SettingsData Settings;
@@ -98,7 +110,6 @@ public class TileGrid : MonoBehaviour
 
 
         //StartCoroutine(nameof(SpawnCour));
-        
         Spawn();
     }
 
@@ -119,9 +130,7 @@ public class TileGrid : MonoBehaviour
                 int x = (int)Mathf.Floor(i / width);
                 int y = (i % width);
                 if (Initial && (InitialSpawns.Length >y && InitialSpawns[y].Length > x))
-                {
                     tile.SetActive(InitialSpawns[y][x].ToString().ToUpper()[0], mult);
-                }
                 else
                     tile.SetActive(GetCharacter(), mult);
             }
@@ -140,6 +149,7 @@ public class TileGrid : MonoBehaviour
             tiles.TryAdd(tile.character, 0);
             tiles[tile.character]++;
         }
+        //LogDictionary<char>(tiles);
         char m = tiles.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
         List<TileLetter> list = new ();
         foreach (var tile in Tiles)
@@ -153,13 +163,21 @@ public class TileGrid : MonoBehaviour
 
     }
 
-    // IEnumerator SpawnCour()
-    // {
 
-    //     yield return new WaitForSecondsRealtime(0.3f);
+    void LogDictionary<T>(Dictionary<T, int> dictionary)
+    {
+        List<KeyValuePair<T, int>> sortedElements = new (dictionary);
 
-    //     Spawn();
-    // }
+        // Sort the elements based on their counts in descending order
+        sortedElements.Sort((x, y) => y.Value.CompareTo(x.Value));
+
+        // Log the elements and their counts
+        foreach (var kvp in sortedElements)
+        {
+            Debug.Log($"{kvp.Key}: {kvp.Value} times");
+        }
+    }
+
 
     char GetCharacter()
     {
@@ -195,7 +213,14 @@ public class TileGrid : MonoBehaviour
     }
 
 
-
+    public void SpawnFlyTile(char character,Vector3 position, Tile destination )
+    {
+        var fly = TilePool.Pool.Get();// Instantiate(FlyTile, item.transform.position, Quaternion.identity);
+        fly.transform.SetPositionAndRotation(position, Quaternion.identity);
+        fly.GetComponent<FlyTile>().Destination = destination;
+        fly.GetComponent<Tile>().SetCharacter(character);
+        fly.GetComponent<Tile>().Activate();
+    }
 
     public void ResetOutput()
     {
@@ -231,12 +256,6 @@ public class TileGrid : MonoBehaviour
         
 
         HashSet<char> chars = new();
-        //if (chars.Contains(item.character))
-        //{
-            //var t = Instantiate(FlyTile, item.transform.position, Quaternion.identity);
-            //t.GetComponent<FlyTile>().Destination = InputBox.transform.GetChild(0).GetComponent<Tile>();
-        //}
-
         for (int i = 0; i < ObjectivePhrase.Length; i++)
         {
             for (int j = 0; j < word.Length; j++)
@@ -252,29 +271,67 @@ public class TileGrid : MonoBehaviour
 
         InputBox.Display(DisplayPhrase);
         bool b = false;
-        foreach (var item in Tiles)
-            if (item.IsSelected())
+        for (int i = 0; i < InputBox.transform.childCount; i++)
+        {
+            foreach (var item in Tiles)
             {
-                if(chars.Contains(item.character))
+                if (item.IsSelected())
                 {
-                    for (int i = 0; i < InputBox.transform.childCount; i++)
+                    if (chars.Contains(item.character))
                     {
                         var tile = InputBox.transform.GetChild(i).GetComponent<Tile>();
-                        if(tile.character == item.character)
+                        if (tile.character == item.character)
                         {
                             b = true;
-                            var fly = TilePool.Pool.Get();// Instantiate(FlyTile, item.transform.position, Quaternion.identity);
-                            fly.transform.SetPositionAndRotation(item.transform.position, Quaternion.identity);
-                            fly.GetComponent<FlyTile>().Destination = tile;
-                            fly.GetComponent<Tile>().SetCharacter(item.character);
-                            fly.GetComponent<Tile>().Activate();
+                            SpawnFlyTile(item.character, item.transform.position, tile);
+                            break;
                         }
                     }
+
                 }
-                //Debug.Log(item.GetSelectedIndex());
+            }
+        }
+
+        List<GoldenTileMeta> GoldenTiles = new();
+        foreach (var item in Tiles)
+            if (item.IsSelected() && item.IsGolden()) {
+                GoldenTiles.Add(new GoldenTileMeta(item.transform.position, item.character));
+            }
+
+        foreach (var item in Tiles)
+        {
+            foreach (var item1 in GoldenTiles)
+            {
+                if(item.character == item1.character)
+                {
+                    //Debug.Log(item.character);
+                    item1.didFunction++;
+                    item.SetInactive();
+                }
+            }
+
+            if (item.IsSelected())
+            {
                 item.Deselect();
                 item.SetInactive();
             }
+        }
+
+        foreach(var item in GoldenTiles)
+        {
+            if (item.didFunction <= 1)
+            {
+                Debug.Log("Boom");
+                PowerUp.RectBoom(item.position, 1);
+                //StartCoroutine(PowerUp.RectBoomCour(item.position,1));
+
+                //PowerUp.DeathBoomRay(item.transform.position, Vector2.left, 1);
+                //PowerUp.DeathBoomRay(item.transform.position, Vector2.right, 1);
+                //PowerUp.DeathBoomRay(item.transform.position, Vector2.up, 1);
+                //PowerUp.DeathBoomRay(item.transform.position, Vector2.down, 1);
+            }
+        }
+
 
         UIManager.OutputBox.text = "";
         UIManager.PointBox.text = "Points : " + points;
@@ -298,8 +355,9 @@ public class TileGrid : MonoBehaviour
 
         }
         Spawn();
-        SpawnGoldenTile();
+        if(b)SpawnGoldenTile();
     }
+
 
     [Space(50)]
     public GameObject prefab;

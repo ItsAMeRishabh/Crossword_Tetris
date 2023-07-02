@@ -14,8 +14,7 @@ public class Word
 
 public class WordSelector : MonoBehaviour
 {
-    [SerializeField]
-    string filePath;
+    public TextAsset txt;
     HashSet<string> dictionary;
 
     public void GMAwake()
@@ -23,13 +22,13 @@ public class WordSelector : MonoBehaviour
 
         dictionary = HashSetPool<string>.Get();
 
-        TextAsset textAsset = Resources.Load<TextAsset>("Dictionary79.3k");
-        string fileContent = textAsset.text;
+        //TextAsset textAsset = Resources.Load<TextAsset>("Dictionary79.3k");
+        string fileContent = txt.text;
         string[] lines = fileContent.Split('\n');
 
         foreach (string line in lines)
         {
-            dictionary.Add(line.Trim());
+            dictionary.Add(line.Trim().ToUpper());
         }
     }
 
@@ -38,19 +37,4 @@ public class WordSelector : MonoBehaviour
         return dictionary.Contains(word);
     }
 
-    public string GetRandomWord()
-    {
-        return ReadLineFromFile(filePath, Random.Range(0, dictionary.Count)).Trim();
-    }
-
-
-    private string ReadLineFromFile(string filePath, int lineIndex)
-    {
-        using StreamReader reader = new(filePath);
-        for (int i = 0; i < lineIndex; i++)
-        {
-            reader.ReadLine();
-        }
-        return reader.ReadLine();
-    }
 }

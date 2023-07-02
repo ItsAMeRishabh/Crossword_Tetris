@@ -3,8 +3,9 @@ using UnityEngine;
 public class FlyTile : Poolable
 {
     public Tile Destination;
-    public int time = 50;
-    public int i;
+    public float CurveSeconds = 50;
+    public float WaitSeconds = 1;
+    float i;
     public Vector3 RandomVec;
     public float Speed;
     private void Start()
@@ -15,28 +16,34 @@ public class FlyTile : Poolable
         RandomVec = new(x, y, 0);
         RandomVec.Normalize();
 
-        i = time;
+        i = CurveSeconds;
     }
 
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if (Destination != null)
+        if (WaitSeconds < 0)
         {
-            transform.position = Vector3.MoveTowards(transform.position, Destination.gameObject.transform.position, (1 - ((float)i / time)) * Speed);
-            transform.position += (float)i / time * Speed * RandomVec;
-
-            if (i > 0)
+            if (Destination != null)
             {
-                i--;
-            }
+                transform.position = Vector3.MoveTowards(transform.position, Destination.gameObject.transform.position, (1 - ((float)i / CurveSeconds)) * Speed * Time.deltaTime);
+                transform.position += i / CurveSeconds * Speed * RandomVec * Time.deltaTime;
 
-            if (Vector3.Distance(transform.position, Destination.gameObject.transform.position) < 0.1f)
-            {
-                Destination.Activate();
-                ReleaseObject();
+                if (i > 0)
+                {
+                    i -= Time.deltaTime;
+                }
+
+                if (Vector3.Distance(transform.position, Destination.gameObject.transform.position) < 0.1f)
+                {
+                    Destination.Activate();
+                    ReleaseObject();
+                }
             }
         }
-
+               else
+        {
+            WaitSeconds -= Time.deltaTime;
+        }   
     }
 }

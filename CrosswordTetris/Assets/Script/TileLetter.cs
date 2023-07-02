@@ -21,6 +21,7 @@ public class TileLetter : MonoBehaviour
     int selectedIndex = -1;
     [SerializeField]
     bool isEmpty = true;
+    bool isGolden = false;
     public char character = ' ';
 
     TileGrid parent;
@@ -71,14 +72,15 @@ public class TileLetter : MonoBehaviour
             selectedIndex =  -1;
             if (multiplier == 1)
             {
-                sr.color = parent.Settings.activeColor;
-                characterMesh.color = parent.Settings.activeFontColor;
+                SetDefault();
             }
             else
             {
-                sr.color = parent.Settings.active2XColor;
-                characterMesh.color = parent.Settings.active2XFontColor;
+                Set2X();
 
+            }
+            if (isGolden) {
+                SetGolden();
             }
         }
     }
@@ -92,14 +94,11 @@ public class TileLetter : MonoBehaviour
 
         if(multiplier == 1)
         {
-            sr.color = parent.Settings.activeColor;
-            characterMesh.color = parent.Settings.activeFontColor;
+            SetDefault();
         }
         else
         {
-            sr.color = parent.Settings.active2XColor;
-            characterMesh.color = parent.Settings.active2XFontColor;
-
+            Set2X();
         }
 
 
@@ -111,6 +110,7 @@ public class TileLetter : MonoBehaviour
     {
         sr.sprite = emptyTexture;
         isEmpty = true;
+        isGolden = false;
         selectedIndex = -1;
         character = ' ';
         characterMesh.text = "";
@@ -124,6 +124,10 @@ public class TileLetter : MonoBehaviour
     public bool IsSelected()
     {
         return selectedIndex != -1;
+    }
+    public bool IsGolden()
+    {
+        return isGolden;
     }
 
     public int GetPoints()
@@ -150,9 +154,25 @@ public class TileLetter : MonoBehaviour
         selectedIndex = i;
     }
 
+
     public void SetGolden()
     {
         sr.color = parent.Settings.goldenColor;
         characterMesh.color = parent.Settings.goldenFontColor;
+        isGolden = true;
     }
+    public void SetDefault()
+    {
+        sr.color = parent.Settings.activeColor;
+        characterMesh.color = parent.Settings.activeFontColor;
+        isEmpty = false;
+    }
+    public void Set2X()
+    {
+        sr.color = parent.Settings.active2XColor;
+        characterMesh.color = parent.Settings.active2XFontColor;
+        multiplier = 2;
+        isEmpty = false;
+    }
+
 }
