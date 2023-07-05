@@ -108,5 +108,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Destination: {fileID: 0}
   CurveSeconds: 0.3
+  WaitSeconds: 0
   RandomVec: {x: 0, y: 0, z: 0}
   Speed: 9

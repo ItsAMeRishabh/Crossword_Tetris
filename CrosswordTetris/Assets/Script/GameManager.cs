@@ -1,5 +1,4 @@
 using UnityEngine;
-using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,7 +13,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).GetComponent<TileLetter>().GMAwake();
+            transform.GetChild(i).GetComponent<TileLetter>().GMAwake(i, Grid.width);
         }
     }
     void Start()

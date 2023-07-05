@@ -4,7 +4,7 @@ public class FlyTile : Poolable
 {
     public Tile Destination;
     public float CurveSeconds = 50;
-    public float WaitSeconds = 1;
+    public float WaitSeconds = 0;
     float i;
     public Vector3 RandomVec;
     public float Speed;

@@ -44,16 +44,14 @@ public class TileGrid : MonoBehaviour
 
     [SerializeField]
     float ChanceOfRandomWords = 40f;
-    [SerializeField]
-    float ChanceOf2X = 10f;
+    public float ChanceOf2X = 10f;
 
     [NonSerialized]
     public WordSelector WordHandler;
     public TileDisplay InputBox;
     public GameObjectPool TilePool;
     int points = 0;
-    bool Initial = true;
-
+    
 
 
     private void CheckFor3LetterWords()
@@ -77,10 +75,10 @@ public class TileGrid : MonoBehaviour
             }
         }
 
-        foreach (var Tile in Tiles){
-            Tile.SetInactive();
+        foreach (var item in Tiles)
+        {
+            item.StartInactiveCouroutine();
         }
-        Spawn();
     }
 
     public void GMAwake()
@@ -110,35 +108,6 @@ public class TileGrid : MonoBehaviour
 
 
         //StartCoroutine(nameof(SpawnCour));
-        Spawn();
-    }
-
-    void Spawn()
-    {
-        //UIManager.DebugText.text = "Spawn Invoked!";
-        int i = 0;
-        int j = 0;
-        foreach (var tile in Tiles)
-        {
-            if (tile.IsEmpty())
-            {
-                j++;
-                float mult = 1;
-                if (Random.Range(0, 100) < ChanceOf2X)
-                    mult = 2;
-
-                int x = (int)Mathf.Floor(i / width);
-                int y = (i % width);
-                if (Initial && (InitialSpawns.Length >y && InitialSpawns[y].Length > x))
-                    tile.SetActive(InitialSpawns[y][x].ToString().ToUpper()[0], mult);
-                else
-                    tile.SetActive(GetCharacter(), mult);
-            }
-            i++;
-        }
-        Initial = false;
-        //SpawnInitial();
-        CheckFor3LetterWords();
     }
 
     void SpawnGoldenTile()
@@ -146,8 +115,11 @@ public class TileGrid : MonoBehaviour
         Dictionary<char, int> tiles = new();
         foreach (var tile in Tiles)
         {
-            tiles.TryAdd(tile.character, 0);
-            tiles[tile.character]++;
+            if (!tile.IsEmpty())
+            {
+                tiles.TryAdd(tile.character, 0);
+                tiles[tile.character]++;
+            }
         }
         //LogDictionary<char>(tiles);
         char m = tiles.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
@@ -179,7 +151,7 @@ public class TileGrid : MonoBehaviour
     }
 
 
-    char GetCharacter()
+    public char GetCharacter()
     {
         if (Random.Range(0, 100) < ChanceOfRandomWords)
         {
@@ -306,14 +278,14 @@ public class TileGrid : MonoBehaviour
                 {
                     //Debug.Log(item.character);
                     item1.didFunction++;
-                    item.SetInactive();
+                    item.StartInactiveCouroutine();
                 }
             }
 
             if (item.IsSelected())
             {
                 item.Deselect();
-                item.SetInactive();
+                item.StartInactiveCouroutine();
             }
         }
 
@@ -354,7 +326,7 @@ public class TileGrid : MonoBehaviour
             Debug.Log(stars + " stars");
 
         }
-        Spawn();
+
         if(b)SpawnGoldenTile();
     }
 

@@ -1,7 +1,6 @@
-using System;
+using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
 public class TileLetter : MonoBehaviour
 {
 
@@ -24,6 +23,14 @@ public class TileLetter : MonoBehaviour
     bool isGolden = false;
     public char character = ' ';
 
+    public int X;
+    public int Y;
+
+    public float PopScale = .4f;
+    public float ShrinkScale = .1f;
+
+    private bool Initial = true;
+    private float InitialX = 0;
     TileGrid parent;
 
     public void Set(TileLetter comp)
@@ -46,14 +53,18 @@ public class TileLetter : MonoBehaviour
         }
     }
 
-    public void GMAwake()
+    public void GMAwake(int i, int width)
     {
-        sr = GetComponent<SpriteRenderer>();
+        InitialX = transform.position.x;
+        X = (int)Mathf.Floor(i / width);
+        Y = (i % width); 
+        sr = GetComponentInChildren<SpriteRenderer>();
         characterMesh = GetComponentInChildren<TextMesh>();
         parent = transform.parent.GetComponent<TileGrid>();      
-        SetInactive();
+        StartInactiveCouroutine();
     }
-
+    
+    //Setters
     public void Select()
     {
         if (!isEmpty && !IsSelected())
@@ -84,10 +95,10 @@ public class TileLetter : MonoBehaviour
             }
         }
     }
-
-    public void SetActive(char character, float mult)
+    public void SetActive(char character)
     {
-        multiplier = mult;
+
+        multiplier = Random.Range(0, 100) < parent.ChanceOf2X ? 2 : 1;
         sr.sprite = tileTexture;
         isEmpty = false;
         this.character = character;
@@ -104,9 +115,9 @@ public class TileLetter : MonoBehaviour
 
         characterMesh.text = character+"";
         transform.position += Vector3.up * 8;
+        transform.position = new Vector3(InitialX, transform.position.y, transform.position.z);
     }
-
-    public void SetInactive()
+    private void SetInactive()
     {
         sr.sprite = emptyTexture;
         isEmpty = true;
@@ -115,20 +126,42 @@ public class TileLetter : MonoBehaviour
         character = ' ';
         characterMesh.text = "";
         sr.color = parent.Settings.inactiveColor;
+
     }
 
-    public bool IsEmpty()
+
+
+    //Coroutines
+    private IEnumerator InactiveCouroutine()
     {
-        return isEmpty;
+        isEmpty = true;
+
+        sr.gameObject.transform.localScale += Vector3.one * PopScale;
+        yield return new WaitForSeconds(0.2f);
+        while (sr.gameObject.transform.localScale.x > 0.1f)
+        {
+            sr.gameObject.transform.localScale -= Vector3.one * ShrinkScale;
+            characterMesh.gameObject.transform.localScale -= Vector3.one * ShrinkScale;
+            yield return new WaitForSeconds(0.03f);
+        }
+
+        SetInactive();
+
+        if (Initial && (parent.InitialSpawns.Length > Y && parent.InitialSpawns[Y].Length > X))
+            SetActive(parent.InitialSpawns[Y][X].ToString().ToUpper()[0]);
+        else
+            SetActive(parent.GetCharacter());
+
+        Initial = false;
+        sr.gameObject.transform.localScale = Vector3.one;
+        characterMesh.gameObject.transform.localScale = Vector3.one;
     }
-    public bool IsSelected()
+    public void StartInactiveCouroutine()
     {
-        return selectedIndex != -1;
+        StartCoroutine(InactiveCouroutine());
     }
-    public bool IsGolden()
-    {
-        return isGolden;
-    }
+
+    //Getters
 
     public int GetPoints()
     {
@@ -144,7 +177,6 @@ public class TileLetter : MonoBehaviour
 
         return (int)(RET * multiplier);
     }
-
     public int GetSelectedIndex()
     {
         return selectedIndex;
@@ -154,6 +186,10 @@ public class TileLetter : MonoBehaviour
         selectedIndex = i;
     }
 
+
+
+
+    //Prop Edits
 
     public void SetGolden()
     {
@@ -173,6 +209,19 @@ public class TileLetter : MonoBehaviour
         characterMesh.color = parent.Settings.active2XFontColor;
         multiplier = 2;
         isEmpty = false;
+    }
+
+    public bool IsEmpty()
+    {
+        return isEmpty;
+    }
+    public bool IsSelected()
+    {
+        return selectedIndex != -1;
+    }
+    public bool IsGolden()
+    {
+        return isGolden;
     }
 
 }

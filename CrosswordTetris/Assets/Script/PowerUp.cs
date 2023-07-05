@@ -47,11 +47,10 @@ public abstract class PowerUp : MonoBehaviour
         {
             if (hits[i].collider != null && i != 0 && i < rad + 1)
             {
-                var a = hits[i].collider.gameObject.GetComponent<TileLetter>();
-                if (a != null)
+                if (hits[i].collider.gameObject.TryGetComponent<TileLetter>(out var a))
                 {
                     a.Deselect();
-                    a.SetInactive();
+                    a.StartInactiveCouroutine();
                 }
             }
         }
