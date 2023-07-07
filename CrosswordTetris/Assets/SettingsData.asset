@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: SettingsData
   m_EditorClassIdentifier: 
   inactiveColor: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 0.7019608}
-  activeColor: {r: 0.33333334, g: 0.53333336, b: 1, a: 1}
-  activeFontColor: {r: 1, g: 1, b: 1, a: 1}
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
+  activeFontColor: {r: 0.12941177, g: 0.2, b: 0.3019608, a: 1}
   active2XColor: {r: 1, g: 0, b: 0.45107841, a: 1}
   active2XFontColor: {r: 0, g: 0, b: 0, a: 1}
   selectedColor: {r: 0.49606216, g: 1, b: 0, a: 1}
