@@ -24,10 +24,10 @@ public class GoldenTileMeta
 public class TileGrid : MonoBehaviour
 {
     enum SpawnMode { HEX, RECT }
-    SpawnMode spawnMode = SpawnMode.RECT;
+    readonly SpawnMode spawnMode = SpawnMode.RECT;
     readonly List<TileLetter> Tiles = new();
-    int[] StarWordRequires;
 
+    int[] StarWordRequires;
     string ObjectiveQuestion = "Something witty here... idk";
     string ObjectivePhrase;
     
@@ -53,11 +53,10 @@ public class TileGrid : MonoBehaviour
 
     [Space(10)]
     public GameObject prefab;
-    public SettingsData Settings;
     public Level lvl;
     [Space(50)]
     public UIManager UIManager;
-    public TileDisplay DisplayBox;
+    //public TileDisplay UIManager.Display;
     public GameObjectPool TilePool;
     
 
@@ -89,13 +88,13 @@ public class TileGrid : MonoBehaviour
         ObjectivePhrase = ObjectivePhrase.ToUpper();
 
         for (int i = 0; i < ObjectivePhrase.Length; i++)
-            if (!isAlphaNumeric(ObjectivePhrase[i]))
+            if (!IsAlphaNumeric(ObjectivePhrase[i]))
                 DisplayPhrase += ObjectivePhrase[i];
             else
                 DisplayPhrase += "_";
         
 
-        DisplayBox.Display(DisplayPhrase);
+        UIManager.Display.Display(DisplayPhrase);
 
         UIManager.QuestionBox.text = ObjectiveQuestion;
 
@@ -108,7 +107,7 @@ public class TileGrid : MonoBehaviour
         //StartCoroutine(nameof(SpawnCour));
     }
 
-    private bool isAlphaNumeric(char v)
+    private bool IsAlphaNumeric(char v)
     {
         return (v >= 'a' && v <= 'z') || (v >= 'A' && v <= 'Z') || (v >= '0' && v <= '9');
     }
@@ -140,7 +139,7 @@ public class TileGrid : MonoBehaviour
     }
 
 
-    void LogDictionary<T>(Dictionary<T, int> dictionary)
+   public void LogDictionary<T>(Dictionary<T, int> dictionary)
     {
         List<KeyValuePair<T, int>> sortedElements = new (dictionary);
 
@@ -159,14 +158,14 @@ public class TileGrid : MonoBehaviour
     {
         if (Random.Range(0, 100) < ChanceOfRandomWords)
         {
-            return Settings.GetAlphabet()[Random.Range(0, 26)];
+            return lvl.Settings.GetAlphabet()[Random.Range(0, 26)];
         }
         else
         {
             string str = ObjectivePhrase.Replace(" ", "").Replace("#","");
             if(str.Length == 0)
             {
-                return Settings.GetAlphabet()[Random.Range(0, 26)];
+                return lvl.Settings.GetAlphabet()[Random.Range(0, 26)];
             }
             return str[Random.Range(0, str.Length)];
         }
@@ -255,7 +254,7 @@ public class TileGrid : MonoBehaviour
     private bool SpawnFlyTiles(HashSet<char> chars)
     {
         bool b = false;
-        for (int i = 0; i < DisplayBox.transform.childCount; i++)
+        for (int i = 0; i < UIManager.Display.transform.childCount; i++)
         {
             foreach (var item in Tiles)
             {
@@ -263,7 +262,7 @@ public class TileGrid : MonoBehaviour
                 {
                     if (chars.Contains(item.character))
                     {
-                        var tile = DisplayBox.transform.GetChild(i).GetComponent<Tile>();
+                        var tile = UIManager.Display.transform.GetChild(i).GetComponent<Tile>();
                         if (tile.character == item.character)
                         {
                             b = true;
@@ -333,7 +332,7 @@ public class TileGrid : MonoBehaviour
         }
 
 
-        DisplayBox.Display(DisplayPhrase);
+        UIManager.Display.Display(DisplayPhrase);
         bool b = SpawnFlyTiles(chars);
         UseGoldenTiles();
 
@@ -364,8 +363,7 @@ public class TileGrid : MonoBehaviour
     private void InstantiatePrefab(Vector3 position)
     {
         GameObject instantiatedPrefab = Instantiate(prefab,transform);
-        instantiatedPrefab.transform.localPosition = position;
-        instantiatedPrefab.transform.localRotation = Quaternion.identity;
+        instantiatedPrefab.transform.SetLocalPositionAndRotation(position, Quaternion.identity);
         instantiatedPrefab.transform.localScale = Vector3.one;
     }
 

@@ -8,9 +8,8 @@ public class Tile : MonoBehaviour
 
     public TextMesh characterMesh;
 
-    [SerializeField]
     Sprite tileTexture;
-    [SerializeField]
+    Color fontcolor;
     Sprite emptyTexture;
 
 
@@ -24,14 +23,28 @@ public class Tile : MonoBehaviour
     {
         sr = GetComponent<SpriteRenderer>();
         characterMesh = GetComponentInChildren<TextMesh>();
+        if (TryGetComponent(out FlyTile _))
+        {
+            tileTexture = Settings.fly;
+            emptyTexture = Settings.inactive;
+            fontcolor = Settings.flyFontColor;
+            //characterMesh
+        }
+        else
+        {
+            tileTexture = Settings.display;
+            emptyTexture = Settings.displayInactive;
+            fontcolor = Settings.displayFontColor;
+        }
+
         Empty();
     }
 
     public void Activate()
     {
         sr.sprite = tileTexture;
-        sr.sprite = Settings.display;
-        characterMesh.color = Settings.displayFontColor;
+        //sr.sprite = Settings.display;
+        characterMesh.color = fontcolor;// Settings.displayFontColor;
         characterMesh.text = character + "";
     }
 
@@ -47,7 +60,7 @@ public class Tile : MonoBehaviour
         isEmpty = true;
         character = ' ';
         characterMesh.text = "";
-        sr.sprite = Settings.displayInactive;
+        //sr.sprite = Settings.displayInactive;
     }
 
     public bool IsEmpty()

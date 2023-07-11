@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Level : ScriptableObject
 {
+    public SettingsData Settings;
+
     public string ObjectiveQuestion;
     public string ObjectivePhrase;
 

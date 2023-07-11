@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0172d1f8b01fa0e44afd46daed316e79, type: 3}
   m_Name: Level 1
   m_EditorClassIdentifier: 
+  Settings: {fileID: 11400000, guid: 5f0ca2d3efc412e40aeec6263ba7007c, type: 2}
   ObjectiveQuestion: Obamas Last name
   ObjectivePhrase: Who let the#dogs out
   InitialWord:

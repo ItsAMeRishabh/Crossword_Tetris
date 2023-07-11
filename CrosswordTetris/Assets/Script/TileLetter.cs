@@ -70,9 +70,9 @@ public class TileLetter : MonoBehaviour
         if (!isEmpty && !IsSelected())
         {
             selectedIndex = parent.AddToOutput(character);
-            spriteRend.sprite= parent.Settings.selected;
+            spriteRend.sprite= parent.lvl.Settings.selected;
 
-            characterMesh.color = parent.Settings.selectedFontColor;
+            characterMesh.color = parent.lvl.Settings.selectedFontColor;
         }
     }
     public void Deselect()
@@ -125,7 +125,7 @@ public class TileLetter : MonoBehaviour
         selectedIndex = -1;
         character = ' ';
         characterMesh.text = "";
-        spriteRend.sprite= parent.Settings.inactive;
+        spriteRend.sprite= parent.lvl.Settings.inactive;
 
     }
 
@@ -176,7 +176,7 @@ public class TileLetter : MonoBehaviour
     public int GetPoints()
     {
         float RET = 0;
-        foreach (var item in parent.Settings.LetterPoints)
+        foreach (var item in parent.lvl.Settings.LetterPoints)
         {
             if(item.word == character + "")
             {
@@ -203,20 +203,20 @@ public class TileLetter : MonoBehaviour
 
     public void SetGolden()
     {
-        spriteRend.sprite= parent.Settings.golden;
-        characterMesh.color = parent.Settings.goldenFontColor;
+        spriteRend.sprite= parent.lvl.Settings.golden;
+        characterMesh.color = parent.lvl.Settings.goldenFontColor;
         isGolden = true;
     }
     public void SetDefault()
     {
-        spriteRend.sprite = parent.Settings.active;
-        characterMesh.color = parent.Settings.activeFontColor;
+        spriteRend.sprite = parent.lvl.Settings.active;
+        characterMesh.color = parent.lvl.Settings.activeFontColor;
         isEmpty = false;
     }
     public void Set2X()
     {
-        spriteRend.sprite = parent.Settings.active2X;
-        characterMesh.color = parent.Settings.active2XFontColor;
+        spriteRend.sprite = parent.lvl.Settings.active2X;
+        characterMesh.color = parent.lvl.Settings.active2XFontColor;
         multiplier = 2;
         isEmpty = false;
     }

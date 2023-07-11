@@ -87,6 +87,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlyTile
       objectReference: {fileID: 0}
+    - target: {fileID: 3427492216649234423, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+      propertyPath: m_CharacterSize
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
 --- !u!1 &5574963641749200384 stripped

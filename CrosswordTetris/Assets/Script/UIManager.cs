@@ -8,4 +8,5 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI QuestionBox;
     public TextMeshProUGUI PointBox;
     public TextMeshProUGUI WordsUsedBox;
+    public TileDisplay Display;
 }
