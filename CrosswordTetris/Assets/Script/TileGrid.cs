@@ -5,6 +5,8 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using System.Linq;
 using System.Collections;
+using UnityEditor;
+using UnityEngine.UIElements;
 
 public class GoldenTileMeta
 {
@@ -33,7 +35,9 @@ public class TileGrid : MonoBehaviour
     public string[] InitialSpawns;
     public int[] StarWordRequires;
 
+    public string ObjectiveQuestion = "Something witty here... idk";
     public string ObjectivePhrase;
+    [NonSerialized]
     public string DisplayPhrase;
     int WordsUsed = 0;
 
@@ -91,27 +95,35 @@ public class TileGrid : MonoBehaviour
         Array.Reverse(InitialSpawns);
 
         ObjectivePhrase = ObjectivePhrase.ToUpper();
-        
+
         for (int i = 0; i < ObjectivePhrase.Length; i++)
-            if (ObjectivePhrase[i] == ' ')            
-                DisplayPhrase += " ";
+            if (!isAlphaNumeric(ObjectivePhrase[i]))
+                DisplayPhrase += ObjectivePhrase[i];
             else
                 DisplayPhrase += "_";
         
 
         InputBox.Display(DisplayPhrase);
 
-
+        UIManager.QuestionBox.text = ObjectiveQuestion;
 
         for (int i = 0; i < transform.childCount; i++)
             Tiles.Add(transform.GetChild(i).GetComponent<TileLetter>());
 
 
+
+        //CheckFor3LetterWords();
         //StartCoroutine(nameof(SpawnCour));
     }
 
-    void SpawnGoldenTile()
+    private bool isAlphaNumeric(char v)
     {
+        return (v >= 'a' && v <= 'z') || (v >= 'A' && v <= 'Z') || (v >= '0' && v <= '9');
+    }
+
+    IEnumerator SpawnGoldenTile()
+    {
+        yield return new WaitForSeconds(2f);
         Dictionary<char, int> tiles = new();
         foreach (var tile in Tiles)
         {
@@ -159,7 +171,7 @@ public class TileGrid : MonoBehaviour
         }
         else
         {
-            string str = ObjectivePhrase.Replace(" ", "");
+            string str = ObjectivePhrase.Replace(" ", "").Replace("#","");
             if(str.Length == 0)
             {
                 return Settings.GetAlphabet()[Random.Range(0, 26)];
@@ -290,20 +302,8 @@ public class TileGrid : MonoBehaviour
         }
 
         foreach(var item in GoldenTiles)
-        {
             if (item.didFunction <= 1)
-            {
-                Debug.Log("Boom");
                 PowerUp.RectBoom(item.position, 1);
-                //StartCoroutine(PowerUp.RectBoomCour(item.position,1));
-
-                //PowerUp.DeathBoomRay(item.transform.position, Vector2.left, 1);
-                //PowerUp.DeathBoomRay(item.transform.position, Vector2.right, 1);
-                //PowerUp.DeathBoomRay(item.transform.position, Vector2.up, 1);
-                //PowerUp.DeathBoomRay(item.transform.position, Vector2.down, 1);
-            }
-        }
-
 
         UIManager.OutputBox.text = "";
         UIManager.PointBox.text = "Points : " + points;
@@ -316,18 +316,17 @@ public class TileGrid : MonoBehaviour
 
             int stars = 0;
             foreach (var item in StarWordRequires)
-            {
                 if (WordsUsed <= item)
-                {
                     stars++;
-                }
-            }
 
             Debug.Log(stars + " stars");
 
         }
 
-        if(b)SpawnGoldenTile();
+        if(b)
+            StartCoroutine( SpawnGoldenTile());
+
+        CheckFor3LetterWords();
     }
 
 
@@ -338,8 +337,18 @@ public class TileGrid : MonoBehaviour
     public enum SpawnMode { HEX,RECT}
     public SpawnMode spawnMode;
 
+    private void InstantiatePrefab(Vector3 position)
+    {
+        GameObject instantiatedPrefab = PrefabUtility.InstantiatePrefab(prefab,transform) as GameObject;
+        instantiatedPrefab.transform.localPosition = position;
+        instantiatedPrefab.transform.localRotation = Quaternion.identity;
+        instantiatedPrefab.transform.localScale = Vector3.one;
+    }
+
     internal void GenerateGameObjects()
     {
+
+        float scale = 4f;
         RemoveGameObjects();
         for (int x = 0; x < width; x++)
         {
@@ -355,10 +364,14 @@ public class TileGrid : MonoBehaviour
                 }
                 else
                 {
-                    Instantiate(prefab, new Vector3(
-                    (2*x * transform.localScale.x) + transform.position.x,
-                    (2*y * transform.localScale.x) + transform.position.y,
-                    5), Quaternion.identity, transform);
+                    InstantiatePrefab(new Vector3(
+                    (x * transform.localScale.x * scale) + transform.position.x - ((width-1) * transform.localScale.x * scale/ 2),
+                    (y * transform.localScale.y * scale) + transform.position.y,
+                    5));
+                    //Instantiate(prefab, new Vector3(
+                    //(2*x * transform.localScale.x) + transform.position.x -(transform.localScale.x * (width-1)),
+                    //(2*y * transform.localScale.x) + transform.position.y,
+                    //5), Quaternion.identity, transform);
 
                 }
             }

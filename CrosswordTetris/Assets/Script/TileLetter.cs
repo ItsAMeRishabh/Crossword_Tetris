@@ -4,7 +4,7 @@ using UnityEngine;
 public class TileLetter : MonoBehaviour
 {
 
-    public SpriteRenderer sr;
+    public SpriteRenderer spriteRend;
 
     public TextMesh characterMesh;
 
@@ -35,8 +35,8 @@ public class TileLetter : MonoBehaviour
 
     public void Set(TileLetter comp)
     {
-        comp.sr.sprite = sr.sprite;
-        comp.sr.color = sr.color;
+        comp.spriteRend.sprite = spriteRend.sprite;
+        comp.spriteRend.color = spriteRend.color;
 
         comp.characterMesh.text = characterMesh.text;       
         comp.characterMesh.color = characterMesh.color;
@@ -58,10 +58,10 @@ public class TileLetter : MonoBehaviour
         InitialX = transform.position.x;
         X = (int)Mathf.Floor(i / width);
         Y = (i % width); 
-        sr = GetComponentInChildren<SpriteRenderer>();
+        spriteRend = GetComponentInChildren<SpriteRenderer>();
         characterMesh = GetComponentInChildren<TextMesh>();
-        parent = transform.parent.GetComponent<TileGrid>();      
-        StartInactiveCouroutine();
+        parent = transform.parent.GetComponent<TileGrid>();
+        StartCoroutine(InactiveCouroutine(true));
     }
     
     //Setters
@@ -70,7 +70,7 @@ public class TileLetter : MonoBehaviour
         if (!isEmpty && !IsSelected())
         {
             selectedIndex = parent.AddToOutput(character);
-            sr.color = parent.Settings.selectedColor;
+            spriteRend.sprite= parent.Settings.selected;
 
             characterMesh.color = parent.Settings.selectedFontColor;
         }
@@ -99,7 +99,7 @@ public class TileLetter : MonoBehaviour
     {
 
         multiplier = Random.Range(0, 100) < parent.ChanceOf2X ? 2 : 1;
-        sr.sprite = tileTexture;
+        spriteRend.sprite = tileTexture;
         isEmpty = false;
         this.character = character;
 
@@ -119,30 +119,39 @@ public class TileLetter : MonoBehaviour
     }
     private void SetInactive()
     {
-        sr.sprite = emptyTexture;
+        spriteRend.sprite = emptyTexture;
         isEmpty = true;
         isGolden = false;
         selectedIndex = -1;
         character = ' ';
         characterMesh.text = "";
-        sr.color = parent.Settings.inactiveColor;
+        spriteRend.sprite= parent.Settings.inactive;
 
     }
 
 
 
     //Coroutines
-    private IEnumerator InactiveCouroutine()
+    private IEnumerator InactiveCouroutine(bool skip)
     {
         isEmpty = true;
 
-        sr.gameObject.transform.localScale += Vector3.one * PopScale;
-        yield return new WaitForSeconds(0.2f);
-        while (sr.gameObject.transform.localScale.x > 0.1f)
+        yield return new WaitForSeconds(0.0f);
+        if (!skip)
         {
-            sr.gameObject.transform.localScale -= Vector3.one * ShrinkScale;
-            characterMesh.gameObject.transform.localScale -= Vector3.one * ShrinkScale;
-            yield return new WaitForSeconds(0.03f);
+
+            while (spriteRend.gameObject.transform.localScale.x < 1.3f)
+            {
+                spriteRend.gameObject.transform.localScale += Vector3.one * PopScale;
+                characterMesh.gameObject.transform.localScale += Vector3.one * PopScale;
+                yield return new WaitForSeconds(0.04f);
+            }
+            while (spriteRend.gameObject.transform.localScale.x > 0.1f)
+            {
+                spriteRend.gameObject.transform.localScale -= Vector3.one * ShrinkScale;
+                characterMesh.gameObject.transform.localScale -= Vector3.one * ShrinkScale;
+                yield return new WaitForSeconds(0.03f);
+            }
         }
 
         SetInactive();
@@ -153,12 +162,13 @@ public class TileLetter : MonoBehaviour
             SetActive(parent.GetCharacter());
 
         Initial = false;
-        sr.gameObject.transform.localScale = Vector3.one;
+
+        spriteRend.gameObject.transform.localScale = Vector3.one;
         characterMesh.gameObject.transform.localScale = Vector3.one;
     }
     public void StartInactiveCouroutine()
     {
-        StartCoroutine(InactiveCouroutine());
+        StartCoroutine(InactiveCouroutine(false));
     }
 
     //Getters
@@ -193,19 +203,19 @@ public class TileLetter : MonoBehaviour
 
     public void SetGolden()
     {
-        sr.color = parent.Settings.goldenColor;
+        spriteRend.sprite= parent.Settings.golden;
         characterMesh.color = parent.Settings.goldenFontColor;
         isGolden = true;
     }
     public void SetDefault()
     {
-        sr.color = parent.Settings.activeColor;
+        spriteRend.sprite = parent.Settings.active;
         characterMesh.color = parent.Settings.activeFontColor;
         isEmpty = false;
     }
     public void Set2X()
     {
-        sr.color = parent.Settings.active2XColor;
+        spriteRend.sprite = parent.Settings.active2X;
         characterMesh.color = parent.Settings.active2XFontColor;
         multiplier = 2;
         isEmpty = false;

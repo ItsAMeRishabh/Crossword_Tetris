@@ -30,8 +30,8 @@ public class Tile : MonoBehaviour
     public void Activate()
     {
         sr.sprite = tileTexture;
-        sr.color = Settings.activeColor;
-        characterMesh.color = Settings.activeFontColor;
+        sr.sprite = Settings.display;
+        characterMesh.color = Settings.displayFontColor;
         characterMesh.text = character + "";
     }
 
@@ -47,7 +47,7 @@ public class Tile : MonoBehaviour
         isEmpty = true;
         character = ' ';
         characterMesh.text = "";
-        sr.color = Settings.inactiveColor;
+        sr.sprite = Settings.displayInactive;
     }
 
     public bool IsEmpty()

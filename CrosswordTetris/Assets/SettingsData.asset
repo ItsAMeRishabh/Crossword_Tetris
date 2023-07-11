@@ -12,15 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6bcac9d5da02e7429beb024d5d2e59e, type: 3}
   m_Name: SettingsData
   m_EditorClassIdentifier: 
-  inactiveColor: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 0.7019608}
-  activeColor: {r: 1, g: 1, b: 1, a: 1}
+  inactive: {fileID: 21300000, guid: 8470be0c13fb171499197220f8e5f320, type: 3}
+  active: {fileID: 21300000, guid: c5d5a7d24f78a2741be24f8b4c982a9c, type: 3}
   activeFontColor: {r: 0.12941177, g: 0.2, b: 0.3019608, a: 1}
-  active2XColor: {r: 1, g: 0, b: 0.45107841, a: 1}
+  displayInactive: {fileID: 21300000, guid: 517ad1400c6c7d544b1aad7992fbf27a, type: 3}
+  display: {fileID: 21300000, guid: 517ad1400c6c7d544b1aad7992fbf27a, type: 3}
+  displayFontColor: {r: 0, g: 0, b: 0, a: 0}
+  active2X: {fileID: 21300000, guid: c6e8e2745ee32d04d81097ab74a70838, type: 3}
   active2XFontColor: {r: 0, g: 0, b: 0, a: 1}
-  selectedColor: {r: 0.49606216, g: 1, b: 0, a: 1}
+  selected: {fileID: 21300000, guid: 98b27d4d42a737c4ab2a3b6695917271, type: 3}
   selectedFontColor: {r: 0.4811321, g: 0.1009011, b: 0, a: 1}
+  golden: {fileID: 21300000, guid: 109fef926dca18a45ae6de20cfdaade6, type: 3}
   goldenFontColor: {r: 0.1584018, g: 0, b: 0.21698111, a: 1}
-  goldenColor: {r: 1, g: 0.7725491, b: 0, a: 1}
   LetterPoints:
   - word: A
     value: 100

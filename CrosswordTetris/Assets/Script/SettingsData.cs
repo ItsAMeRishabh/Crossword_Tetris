@@ -4,19 +4,24 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SettingsData", menuName = "Config/SettingsData")]
 public class SettingsData : ScriptableObject
 {
-    public Color inactiveColor;
+    public Sprite inactive;
 
-    public Color activeColor;
+    public Sprite active;
     public Color activeFontColor;
 
-    public Color active2XColor;
+    public Sprite displayInactive;
+
+    public Sprite display;
+    public Color displayFontColor;
+
+    public Sprite active2X;
     public Color active2XFontColor;
 
-    public Color selectedColor;
+    public Sprite selected;
     public Color selectedFontColor;
 
+    public Sprite golden;
     public Color goldenFontColor;
-    public Color goldenColor;
 
 
     public List<Word> LetterPoints = new();

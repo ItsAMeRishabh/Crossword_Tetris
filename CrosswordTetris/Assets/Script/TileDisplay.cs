@@ -1,83 +1,79 @@
 using System.Collections.Generic;
+using System.Xml.Serialization;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class TileDisplay : MonoBehaviour
 {
     public GameObject characterTilePrefab;
-    public int maxLineLength = 10;
-    public float spacing = 0.4f;
+    public float lineGap = 0.4f;
     public float gap = .5f;
+    public float space = .4f;
 
 
     public void Display(string sentence)
     {
-        string[] words = sentence.Replace(" ", ". ").Split('.');
-        int currentLine = 0;
-        int currentLineLength = 0;
-        List<GameObject> lineTiles = new();
-
-        if (transform.childCount == 0)
+        string[] lines = sentence.Split('#');
+        for (int i = 0; i < lines.Length; i++)
         {
-            foreach (string word in words)
-            {
-                int wordLength = word.Length;
-
-                if (currentLineLength + wordLength > maxLineLength)
-                {
-                    AdjustLineTilePositions(lineTiles, currentLineLength, currentLine);
-                    lineTiles.Clear();
-
-                    currentLine++;
-                    currentLineLength = 0;
-                }
-
-                foreach (char character in word)
-                {
-                    GameObject tile = Instantiate(characterTilePrefab, transform);
-                    AddCharacter(character, tile.GetComponent<Tile>());
-                    lineTiles.Add(tile);
-
-                    currentLineLength++;
-                }
-
-                if (currentLineLength < maxLineLength)
-                {
-                    currentLineLength++;
-                }
-            }
-
-            AdjustLineTilePositions(lineTiles, currentLineLength, currentLine);
-
+            DisplayLine(lines[i], i);
         }
-        else
-        {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                AddCharacter(sentence[i], transform.GetChild(i).GetComponent<Tile>());
-            }
-
-        }
-
-        //string[] words = sentence.Replace(" "," .").Split('.');
     }
-    private void AddCharacter(char c, Tile t)
+
+    public void DisplayLine(string line, int y)
+    {
+        //string[] words = line.Replace(" ", ". ").Split('.');
+        GameObject[] List = new GameObject[line.Length];
+        float x= 0;
+        for (int i = 0; i < line.Length; i++)
+        {
+            char c = line[i];
+            GameObject cgo = Instantiate(characterTilePrefab, transform);
+
+            cgo.transform.localPosition = new Vector3(x, -y * lineGap, 0);
+
+            if (AddCharacter(c, cgo.GetComponent<Tile>()))
+                x += gap;
+            else
+                x += space;
+
+            List[i] = cgo;
+        }
+
+        AdjustLineTilePositions(List);
+    }
+     
+    private bool AddCharacter(char c, Tile t)
     {
         if (c != '_')
             t.SetCharacter(c);
         if (c == ' ')
             t.gameObject.SetActive(false);
 
+        return c != ' ';
     }
-    private void AdjustLineTilePositions(List<GameObject> lineTiles, int lineLength, int currentLine)
+    private void AdjustLineTilePositions(GameObject[] line)
     {
-        int totalTiles = lineTiles.Count;
-        float halfLineWidth = lineLength / 2f;
-        float startPos = -halfLineWidth + 0.5f;
+        float max = 0;
+        float min = float.MaxValue;
+        
+        foreach (GameObject child in line)
+            if (child.gameObject.activeSelf)
+            {
+                if (child.transform.localPosition.x > max)
+                    max = child.transform.localPosition.x;
+                if (child.transform.localPosition.x < min)
+                    min = child.transform.localPosition.x;
+            }
+        
 
-        for (int i = 0; i < totalTiles; i++)
+        float lineLengthHalf = (-max+min) / 2f;
+        for (int i = 0; i < line.Length; i++)
         {
-            float xPos = startPos + i;
-            lineTiles[i].transform.localPosition = new Vector3(xPos, -currentLine, 0f);
+            line[i].transform.localPosition = new Vector3(line[i].transform.localPosition.x + lineLengthHalf, line[i].transform.localPosition.y, line[i].transform.localPosition.z);
         }
+
     }
+
 }
