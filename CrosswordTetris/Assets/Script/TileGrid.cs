@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using System.Linq;
 using System.Collections;
-using UnityEditor;
-using UnityEngine.UIElements;
-using System.Runtime.InteropServices;
 
 public class GoldenTileMeta
 {
@@ -367,7 +363,7 @@ public class TileGrid : MonoBehaviour
     
     private void InstantiatePrefab(Vector3 position)
     {
-        GameObject instantiatedPrefab = PrefabUtility.InstantiatePrefab(prefab,transform) as GameObject;
+        GameObject instantiatedPrefab = Instantiate(prefab,transform);
         instantiatedPrefab.transform.localPosition = position;
         instantiatedPrefab.transform.localRotation = Quaternion.identity;
         instantiatedPrefab.transform.localScale = Vector3.one;
