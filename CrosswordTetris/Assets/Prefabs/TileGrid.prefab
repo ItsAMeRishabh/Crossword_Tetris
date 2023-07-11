@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 170047489761353839}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -46,25 +46,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad827083d69122b449758f95b561944b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Settings: {fileID: 11400000, guid: 5f0ca2d3efc412e40aeec6263ba7007c, type: 2}
-  UIManager: {fileID: 0}
-  InitialSpawns:
-  - Hello
-  - DEFAU
-  - LT
-  - WORD
-  - LOL
-  StarWordRequires: 05000000080000000f000000
-  ObjectivePhrase: Who let the dogs out
-  DisplayPhrase: 
   MinUserWordSize: 3
-  ChanceOfRandomWords: 70
-  ChanceOf2X: 15
-  InputBox: {fileID: 0}
+  Settings: {fileID: 11400000, guid: 5f0ca2d3efc412e40aeec6263ba7007c, type: 2}
+  lvl: {fileID: 11400000, guid: f717a940e98969c4a8cb2958fdd28bb3, type: 2}
+  UIManager: {fileID: 0}
+  DisplayBox: {fileID: 0}
   TilePool: {fileID: 0}
   prefab: {fileID: 3427492216621710294, guid: 2942b7b0087751c4d9d35a0843546651, type: 3}
-  width: 5
-  height: 5
+  width: 0
+  height: 0
   spawnMode: 1
 --- !u!114 &170047489761353746
 MonoBehaviour:

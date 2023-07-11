@@ -143,8 +143,8 @@ MonoBehaviour:
   character: 32
   X: 0
   Y: 0
-  PopScale: 0.25
-  ShrinkScale: 0.1
+  PopScale: 0.4
+  ShrinkScale: 0.2
 --- !u!60 &8234292674494769600
 PolygonCollider2D:
   m_ObjectHideFlags: 0

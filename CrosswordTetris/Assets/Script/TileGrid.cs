@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections;
 using UnityEditor;
 using UnityEngine.UIElements;
+using System.Runtime.InteropServices;
 
 public class GoldenTileMeta
 {
@@ -23,77 +24,72 @@ public class GoldenTileMeta
 }
 
 [RequireComponent(typeof(WordSelector))]
+[RequireComponent(typeof(GameManager))]
 public class TileGrid : MonoBehaviour
 {
-    public SettingsData Settings;
-
-
-    public UIManager UIManager;
-
+    enum SpawnMode { HEX, RECT }
+    SpawnMode spawnMode = SpawnMode.RECT;
     readonly List<TileLetter> Tiles = new();
+    int[] StarWordRequires;
 
+    string ObjectiveQuestion = "Something witty here... idk";
+    string ObjectivePhrase;
+    
+    int WordsUsed = 0;
+    int points = 0;
+    float ChanceOfRandomWords = 40f;
+
+    [NonSerialized]
     public string[] InitialSpawns;
-    public int[] StarWordRequires;
-
-    public string ObjectiveQuestion = "Something witty here... idk";
-    public string ObjectivePhrase;
     [NonSerialized]
     public string DisplayPhrase;
-    int WordsUsed = 0;
+    [NonSerialized]
+    public float ChanceOf2X = 10f;
+    [NonSerialized]
+    public WordSelector WordHandler;
+    [NonSerialized]
+    public int width;
+    [NonSerialized]
+    public int height;
 
-
-    [Space(10)]
     [SerializeField]
     int MinUserWordSize = 3;
 
-    [SerializeField]
-    float ChanceOfRandomWords = 40f;
-    public float ChanceOf2X = 10f;
-
-    [NonSerialized]
-    public WordSelector WordHandler;
-    public TileDisplay InputBox;
+    [Space(10)]
+    public GameObject prefab;
+    public SettingsData Settings;
+    public Level lvl;
+    [Space(50)]
+    public UIManager UIManager;
+    public TileDisplay DisplayBox;
     public GameObjectPool TilePool;
-    int points = 0;
     
 
-
-    private void CheckFor3LetterWords()
-    {
-        for (int x = 0; x < Tiles.Count; x++)
-        {
-            for (int y = 0; y < Tiles.Count; y++)
-            {
-                for (int z = 0; z < Tiles.Count; z++)
-                {
-                    if(x!=y && y!=z && z != x)
-                    {
-                        string s = Tiles[x].character + "" + Tiles[y].character + "" + Tiles[z].character;
-                        if (WordHandler.IsWord(s))
-                        {
-                            Debug.LogWarning(s);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-
-        foreach (var item in Tiles)
-        {
-            item.StartInactiveCouroutine();
-        }
-    }
 
     public void GMAwake()
     {
         WordHandler = GetComponent<WordSelector>();
+        ObjectiveQuestion = lvl.ObjectiveQuestion;
+        ObjectivePhrase = lvl.ObjectivePhrase;
+
+        int h = lvl.Height - lvl.InitialWord.Count;
+        for (int x = 0; x < h; x++)
+                lvl.InitialWord.Add("");
+
+        InitialSpawns = lvl.InitialWord.ToArray().Reverse().ToArray();
+
+        StarWordRequires = lvl.StarRequired;
+        ChanceOf2X = lvl.ChanceOf2X;
+        ChanceOfRandomWords = lvl.ChanceOfRandomCharacters;
+
+
+        width = lvl.Width;
+        height = lvl.Height;
+        GenerateGameObjects();
     }
 
     public void GMStart()
     {
-        Array.Reverse(InitialSpawns);
-
         ObjectivePhrase = ObjectivePhrase.ToUpper();
 
         for (int i = 0; i < ObjectivePhrase.Length; i++)
@@ -103,7 +99,7 @@ public class TileGrid : MonoBehaviour
                 DisplayPhrase += "_";
         
 
-        InputBox.Display(DisplayPhrase);
+        DisplayBox.Display(DisplayPhrase);
 
         UIManager.QuestionBox.text = ObjectiveQuestion;
 
@@ -233,6 +229,93 @@ public class TileGrid : MonoBehaviour
             MakeWord(pointsVal,word);
     }
 
+    private void CheckFor3LetterWords()
+    {
+        for (int x = 0; x < Tiles.Count; x++)
+        {
+            for (int y = 0; y < Tiles.Count; y++)
+            {
+                for (int z = 0; z < Tiles.Count; z++)
+                {
+                    if (x != y && y != z && z != x)
+                    {
+                        string s = Tiles[x].character + "" + Tiles[y].character + "" + Tiles[z].character;
+                        if (WordHandler.IsWord(s))
+                        {
+                            Debug.LogWarning(s);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach (var item in Tiles)
+        {
+            item.StartInactiveCouroutine();
+        }
+    }
+    
+    private bool SpawnFlyTiles(HashSet<char> chars)
+    {
+        bool b = false;
+        for (int i = 0; i < DisplayBox.transform.childCount; i++)
+        {
+            foreach (var item in Tiles)
+            {
+                if (item.IsSelected())
+                {
+                    if (chars.Contains(item.character))
+                    {
+                        var tile = DisplayBox.transform.GetChild(i).GetComponent<Tile>();
+                        if (tile.character == item.character)
+                        {
+                            b = true;
+                            SpawnFlyTile(item.character, item.transform.position, tile);
+                            break;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return b;
+    }
+
+    private void UseGoldenTiles()
+    {
+        List<GoldenTileMeta> GoldenTiles = new();
+        foreach (var item in Tiles)
+            if (item.IsSelected() && item.IsGolden())
+            {
+                GoldenTiles.Add(new GoldenTileMeta(item.transform.position, item.character));
+            }
+
+        foreach (var item in Tiles)
+        {
+            foreach (var item1 in GoldenTiles)
+            {
+                if (item.character == item1.character)
+                {
+                    //Debug.Log(item.character);
+                    item1.didFunction++;
+                    item.StartInactiveCouroutine();
+                }
+            }
+
+            if (item.IsSelected())
+            {
+                item.Deselect();
+                item.StartInactiveCouroutine();
+            }
+        }
+
+        foreach (var item in GoldenTiles)
+            if (item.didFunction <= 1)
+                PowerUp.RectBoom(item.position, 1);
+    }
+
     public void MakeWord(float pointsVal, string word)
     {
         WordsUsed++;
@@ -253,57 +336,10 @@ public class TileGrid : MonoBehaviour
             }
         }
 
-        InputBox.Display(DisplayPhrase);
-        bool b = false;
-        for (int i = 0; i < InputBox.transform.childCount; i++)
-        {
-            foreach (var item in Tiles)
-            {
-                if (item.IsSelected())
-                {
-                    if (chars.Contains(item.character))
-                    {
-                        var tile = InputBox.transform.GetChild(i).GetComponent<Tile>();
-                        if (tile.character == item.character)
-                        {
-                            b = true;
-                            SpawnFlyTile(item.character, item.transform.position, tile);
-                            break;
-                        }
-                    }
 
-                }
-            }
-        }
-
-        List<GoldenTileMeta> GoldenTiles = new();
-        foreach (var item in Tiles)
-            if (item.IsSelected() && item.IsGolden()) {
-                GoldenTiles.Add(new GoldenTileMeta(item.transform.position, item.character));
-            }
-
-        foreach (var item in Tiles)
-        {
-            foreach (var item1 in GoldenTiles)
-            {
-                if(item.character == item1.character)
-                {
-                    //Debug.Log(item.character);
-                    item1.didFunction++;
-                    item.StartInactiveCouroutine();
-                }
-            }
-
-            if (item.IsSelected())
-            {
-                item.Deselect();
-                item.StartInactiveCouroutine();
-            }
-        }
-
-        foreach(var item in GoldenTiles)
-            if (item.didFunction <= 1)
-                PowerUp.RectBoom(item.position, 1);
+        DisplayBox.Display(DisplayPhrase);
+        bool b = SpawnFlyTiles(chars);
+        UseGoldenTiles();
 
         UIManager.OutputBox.text = "";
         UIManager.PointBox.text = "Points : " + points;
@@ -328,15 +364,7 @@ public class TileGrid : MonoBehaviour
 
         CheckFor3LetterWords();
     }
-
-
-    [Space(50)]
-    public GameObject prefab;
-    public int width;
-    public int height;
-    public enum SpawnMode { HEX,RECT}
-    public SpawnMode spawnMode;
-
+    
     private void InstantiatePrefab(Vector3 position)
     {
         GameObject instantiatedPrefab = PrefabUtility.InstantiatePrefab(prefab,transform) as GameObject;

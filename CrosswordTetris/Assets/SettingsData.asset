@@ -17,7 +17,7 @@ MonoBehaviour:
   activeFontColor: {r: 0.12941177, g: 0.2, b: 0.3019608, a: 1}
   displayInactive: {fileID: 21300000, guid: 517ad1400c6c7d544b1aad7992fbf27a, type: 3}
   display: {fileID: 21300000, guid: 517ad1400c6c7d544b1aad7992fbf27a, type: 3}
-  displayFontColor: {r: 0, g: 0, b: 0, a: 0}
+  displayFontColor: {r: 1, g: 1, b: 0, a: 1}
   active2X: {fileID: 21300000, guid: c6e8e2745ee32d04d81097ab74a70838, type: 3}
   active2XFontColor: {r: 0, g: 0, b: 0, a: 1}
   selected: {fileID: 21300000, guid: 98b27d4d42a737c4ab2a3b6695917271, type: 3}

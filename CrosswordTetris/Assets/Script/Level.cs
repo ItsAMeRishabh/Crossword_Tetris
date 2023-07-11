@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(fileName = "Level", menuName = "Config/Level")]
 
-public class LevelCreator : ScriptableObject
+public class Level : ScriptableObject
 {
+    public string ObjectiveQuestion;
     public string ObjectivePhrase;
-    public string[] InitialWord;
+
+    public List<string> InitialWord;
 
     public int Width;
     public int Height;

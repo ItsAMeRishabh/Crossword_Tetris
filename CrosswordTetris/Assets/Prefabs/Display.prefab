@@ -45,6 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterTilePrefab: {fileID: 3427492216621710294, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
-  maxLineLength: 10
-  spacing: 1
-  gap: 1
+  lineGap: 1
+  gap: 0.87
+  space: 0.4
