@@ -1,20 +1,24 @@
+using UnityEditor.UIElements;
 using UnityEngine;
 
 public class FlyTile : Poolable
 {
-    public Tile Destination;
-    public float CurveSeconds = 50;
-    public float WaitSeconds = 0;
-    float i;
+    public Tile target;
+    public float CurveSeconds = 2;
+    public float i;
     public Vector3 RandomVec;
     public float Speed;
+    float R = 10f;
     private void Start()
     {
+        Init();
+    }
 
-        float x = Random.Range(-1f, 1f);
-        float y = Random.Range(-1f, 1f);
+    private void Init()
+    {
+        float x = Random.Range(-R, R);
+        float y = Random.Range(-R, R);
         RandomVec = new(x, y, 0);
-        RandomVec.Normalize();
 
         i = CurveSeconds;
     }
@@ -22,28 +26,25 @@ public class FlyTile : Poolable
 
     private void Update()
     {
-        if (WaitSeconds < 0)
+        if (target != null)
         {
-            if (Destination != null)
+
+            if (i > 0)
+                i-= Time.deltaTime;
+            else
+                i+= 0;
+
+
+            float t = i / CurveSeconds;
+            transform.position = Vector3.MoveTowards(transform.position, RandomVec, Speed * t * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Speed * R * (1-t) * Time.deltaTime);
+
+            if (Vector3.Distance(transform.position, target.gameObject.transform.position) < 0.1f)
             {
-                transform.position = Vector3.MoveTowards(transform.position, Destination.gameObject.transform.position, (1 - ((float)i / CurveSeconds)) * Speed * Time.deltaTime);
-                transform.position += i / CurveSeconds * Speed * RandomVec * Time.deltaTime;
-
-                if (i > 0)
-                {
-                    i -= Time.deltaTime;
-                }
-
-                if (Vector3.Distance(transform.position, Destination.gameObject.transform.position) < 0.1f)
-                {
-                    Destination.Activate();
-                    ReleaseObject();
-                }
+                target.Activate();
+                ReleaseObject();
+                Init();
             }
         }
-               else
-        {
-            WaitSeconds -= Time.deltaTime;
-        }   
     }
 }

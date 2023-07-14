@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
         Grid = GetComponent<TileGrid>();
         Grid.GMAwake();
         Grid.WordHandler.GMAwake();
+        Grid.PowerUpManager.GMAwake();
 
         for (int i = 0; i < transform.childCount; i++)
         {

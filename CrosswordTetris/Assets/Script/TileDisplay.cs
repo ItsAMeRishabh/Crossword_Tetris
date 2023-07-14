@@ -12,12 +12,26 @@ public class TileDisplay : MonoBehaviour
     public float space = .4f;
 
 
-    public void Display(string sentence)
+    public void Display(string sentence, bool activate)
     {
-        string[] lines = sentence.Split('#');
-        for (int i = 0; i < lines.Length; i++)
+        if (transform.childCount == 0)
         {
-            DisplayLine(lines[i], i);
+            string[] lines = sentence.Split('#');
+            for (int i = 0; i < lines.Length; i++)
+                DisplayLine(lines[i], i);
+        }
+        else
+        {
+            string sentence1 = sentence.Replace("#", "");
+            for (int i = 0; i < sentence1.Length; i++)
+            {
+                Tile t = transform.GetChild(i).GetComponent<Tile>();
+                if (sentence1[i]!= '_')
+                    t.SetCharacter(sentence1[i]);
+
+                if (activate)
+                    t.Activate();
+            }
         }
     }
 

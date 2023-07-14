@@ -38,19 +38,21 @@ public class TileLetter : MonoBehaviour
         comp.spriteRend.sprite = spriteRend.sprite;
         comp.spriteRend.color = spriteRend.color;
 
-        comp.characterMesh.text = characterMesh.text;       
+        comp.characterMesh.text = characterMesh.text;
         comp.characterMesh.color = characterMesh.color;
 
     }
 
     private void OnMouseDown()
     {
-        if (IsSelected())
-            Deselect();
+        if (parent.PowerUpManager.Active == null)
+            if (IsSelected())
+                Deselect();
+            else
+                Select();
         else
-        {
-            Select();
-        }
+            parent.PowerUpManager.Active.Use(this);
+
     }
 
     public void GMAwake(int i, int width)

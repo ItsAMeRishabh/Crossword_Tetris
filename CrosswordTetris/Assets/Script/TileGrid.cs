@@ -20,6 +20,7 @@ public class GoldenTileMeta
 }
 
 [RequireComponent(typeof(WordSelector))]
+[RequireComponent(typeof(GameObjectPool))]
 [RequireComponent(typeof(GameManager))]
 public class TileGrid : MonoBehaviour
 {
@@ -29,12 +30,14 @@ public class TileGrid : MonoBehaviour
 
     int[] StarWordRequires;
     string ObjectiveQuestion = "Something witty here... idk";
-    string ObjectivePhrase;
     
     int WordsUsed = 0;
     int points = 0;
     float ChanceOfRandomWords = 40f;
 
+
+    [NonSerialized]
+    public string ObjectivePhrase;    
     [NonSerialized]
     public string[] InitialSpawns;
     [NonSerialized]
@@ -43,6 +46,10 @@ public class TileGrid : MonoBehaviour
     public float ChanceOf2X = 10f;
     [NonSerialized]
     public WordSelector WordHandler;
+    [NonSerialized]
+    public GameObjectPool TilePool;
+    [NonSerialized]
+    public PowerUpManager PowerUpManager;
     [NonSerialized]
     public int width;
     [NonSerialized]
@@ -56,14 +63,15 @@ public class TileGrid : MonoBehaviour
     public Level lvl;
     [Space(50)]
     public UIManager UIManager;
-    //public TileDisplay UIManager.Display;
-    public GameObjectPool TilePool;
     
 
 
     public void GMAwake()
     {
         WordHandler = GetComponent<WordSelector>();
+        TilePool = GetComponent<GameObjectPool>();
+        PowerUpManager = GetComponent<PowerUpManager>();
+
         ObjectiveQuestion = lvl.ObjectiveQuestion;
         ObjectivePhrase = lvl.ObjectivePhrase;
 
@@ -93,8 +101,7 @@ public class TileGrid : MonoBehaviour
             else
                 DisplayPhrase += "_";
         
-
-        UIManager.Display.Display(DisplayPhrase);
+        ActivateDisplayTile(true);
 
         UIManager.QuestionBox.text = ObjectiveQuestion;
 
@@ -107,7 +114,7 @@ public class TileGrid : MonoBehaviour
         //StartCoroutine(nameof(SpawnCour));
     }
 
-    private bool IsAlphaNumeric(char v)
+    public static bool IsAlphaNumeric(char v)
     {
         return (v >= 'a' && v <= 'z') || (v >= 'A' && v <= 'Z') || (v >= '0' && v <= '9');
     }
@@ -139,20 +146,25 @@ public class TileGrid : MonoBehaviour
     }
 
 
-   public void LogDictionary<T>(Dictionary<T, int> dictionary)
+   public void ActivateDisplayTile(bool b)
     {
-        List<KeyValuePair<T, int>> sortedElements = new (dictionary);
+        UIManager.Display.Display(DisplayPhrase,b);
 
-        // Sort the elements based on their counts in descending order
-        sortedElements.Sort((x, y) => y.Value.CompareTo(x.Value));
-
-        // Log the elements and their counts
-        foreach (var kvp in sortedElements)
+        if (ObjectivePhrase.Replace('#', ' ').Trim() == "")
         {
-            Debug.Log($"{kvp.Key}: {kvp.Value} times");
-        }
-    }
+            int stars = 0;
+            foreach (var item in StarWordRequires)
+                if (WordsUsed <= item)
+                    stars++;
 
+            Debug.Log("---WINNING SCREEN---");
+            Debug.Log("Points: " + points);
+            Debug.Log("Words: " + WordsUsed);
+            Debug.Log("Stars: " + stars);
+
+        }
+
+    }
 
     public char GetCharacter()
     {
@@ -192,7 +204,7 @@ public class TileGrid : MonoBehaviour
     {
         var fly = TilePool.Pool.Get();// Instantiate(FlyTile, item.transform.position, Quaternion.identity);
         fly.transform.SetPositionAndRotation(position, Quaternion.identity);
-        fly.GetComponent<FlyTile>().Destination = destination;
+        fly.GetComponent<FlyTile>().target = destination;
         fly.GetComponent<Tile>().SetCharacter(character);
         fly.GetComponent<Tile>().Activate();
     }
@@ -222,6 +234,36 @@ public class TileGrid : MonoBehaviour
 
         if (UIManager.OutputBox.text.Length >= MinUserWordSize && WordHandler.IsWord(word))
             MakeWord(pointsVal,word);
+    }
+
+    public void MakeWord(float pointsVal, string word)
+    {
+        WordsUsed++;
+        points += (int)pointsVal;
+        HashSet<char> chars = new();
+        for (int i = 0; i < ObjectivePhrase.Length; i++)
+            for (int j = 0; j < word.Length; j++)
+                if (ObjectivePhrase[i].Equals(word[j]))
+                {
+                    chars.Add(word[j]);
+                    DisplayPhrase = DisplayPhrase.Remove(i, 1).Insert(i, ObjectivePhrase[i] + "");
+                    ObjectivePhrase = ObjectivePhrase.Remove(i, 1).Insert(i, " ");
+                }
+
+        ActivateDisplayTile(false);
+        bool b = SpawnFlyTiles(chars);
+        UseGoldenTiles();
+
+        UIManager.OutputBox.text = "";
+        UIManager.PointBox.text = "Points : " + points;
+        UIManager.WordsUsedBox.text = WordsUsed + " Words";
+
+        //StartCoroutine(nameof(SpawnCour));
+
+        if (b)
+            StartCoroutine(SpawnGoldenTile());
+
+        CheckFor3LetterWords();
     }
 
     private void CheckFor3LetterWords()
@@ -308,57 +350,9 @@ public class TileGrid : MonoBehaviour
 
         foreach (var item in GoldenTiles)
             if (item.didFunction <= 1)
-                PowerUp.RectBoom(item.position, 1);
+                RayCast.RectBoom(item.position, 1);
     }
 
-    public void MakeWord(float pointsVal, string word)
-    {
-        WordsUsed++;
-        points += (int)pointsVal;
-        
-
-        HashSet<char> chars = new();
-        for (int i = 0; i < ObjectivePhrase.Length; i++)
-        {
-            for (int j = 0; j < word.Length; j++)
-            {
-                if (ObjectivePhrase[i].Equals(word[j]))
-                {
-                    chars.Add(word[j]);
-                    DisplayPhrase = DisplayPhrase.Remove(i, 1).Insert(i, ObjectivePhrase[i] + "");
-                    ObjectivePhrase = ObjectivePhrase.Remove(i, 1).Insert(i, " ");
-                }
-            }
-        }
-
-
-        UIManager.Display.Display(DisplayPhrase);
-        bool b = SpawnFlyTiles(chars);
-        UseGoldenTiles();
-
-        UIManager.OutputBox.text = "";
-        UIManager.PointBox.text = "Points : " + points;
-        UIManager.WordsUsedBox.text = WordsUsed + " Words";
-
-        //StartCoroutine(nameof(SpawnCour));
-        if (ObjectivePhrase.Trim() == "")
-        {
-            Debug.Log("---WINNING SCREEN---");
-
-            int stars = 0;
-            foreach (var item in StarWordRequires)
-                if (WordsUsed <= item)
-                    stars++;
-
-            Debug.Log(stars + " stars");
-
-        }
-
-        if(b)
-            StartCoroutine( SpawnGoldenTile());
-
-        CheckFor3LetterWords();
-    }
     
     private void InstantiatePrefab(Vector3 position)
     {

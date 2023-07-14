@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 170047489761353836}
   - component: {fileID: 170047489761353746}
   - component: {fileID: 1876447283}
+  - component: {fileID: 1898758228521804192}
+  - component: {fileID: 5690997121263268912}
   m_Layer: 0
   m_Name: TileGrid
   m_TagString: Untagged
@@ -28,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 170047489761353839}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 0.39999998, y: 0.39999998, z: 0.39999998}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -47,15 +49,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MinUserWordSize: 3
-  Settings: {fileID: 11400000, guid: 5f0ca2d3efc412e40aeec6263ba7007c, type: 2}
+  prefab: {fileID: 3427492216621710294, guid: 2942b7b0087751c4d9d35a0843546651, type: 3}
   lvl: {fileID: 11400000, guid: f717a940e98969c4a8cb2958fdd28bb3, type: 2}
   UIManager: {fileID: 0}
-  DisplayBox: {fileID: 0}
-  TilePool: {fileID: 0}
-  prefab: {fileID: 3427492216621710294, guid: 2942b7b0087751c4d9d35a0843546651, type: 3}
-  width: 0
-  height: 0
-  spawnMode: 1
 --- !u!114 &170047489761353746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,5 +75,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c82ccf195f2c4646ac52b2b8c920d65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1898758228521804192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170047489761353839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b640af39f1601ea43ab98993ba8c32f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolablePrefab: {fileID: 1634242576454886057, guid: 16e5dd6481ea22046a943bc27f799b47, type: 3}
+  defaultCapacity: 10
+  maxPoolSize: 15
+--- !u!114 &5690997121263268912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170047489761353839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38792645ecc993848a8610c185ba242d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

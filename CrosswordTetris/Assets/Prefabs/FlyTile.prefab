@@ -8,6 +8,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3427492216621710288, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3427492216621710288, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: e9b9872615ca41b4db7ca67db7dcd13b, type: 3}
@@ -110,8 +114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd9739aa03124854cbe2a386ae1e882c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Destination: {fileID: 0}
-  CurveSeconds: 0.3
-  WaitSeconds: 0
+  target: {fileID: 0}
+  CurveSeconds: 1
+  i: 0
   RandomVec: {x: 0, y: 0, z: 0}
-  Speed: 9
+  Speed: 10
