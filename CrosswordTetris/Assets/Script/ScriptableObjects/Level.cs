@@ -17,7 +17,7 @@ public class Level : ScriptableObject
     //public int Height;
 
 
-    public int[] StarRequired;
+    public int Moves;
 
 
     public int ChanceOf2X = 15;

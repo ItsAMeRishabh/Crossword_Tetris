@@ -27,12 +27,12 @@ public class TileGrid : MonoBehaviour
 {
     readonly List<TileLetter> Tiles = new();
 
-    int[] StarWordRequires;
     string ObjectiveQuestion = "Something witty here... idk";
     
     int WordsUsed = 0;
     int points = 0;
     float ChanceOfRandomWords = 40f;
+    int Moves;
 
 
     [NonSerialized]
@@ -63,8 +63,6 @@ public class TileGrid : MonoBehaviour
     public SettingsData Settings;
     [Space(50)]
     public UIManager UIManager;
-    
-
 
     public void GMAwake()
     {
@@ -81,7 +79,8 @@ public class TileGrid : MonoBehaviour
 
         InitialSpawns = lvl.Level.InitalLetter;//.ToArray().Reverse().ToArray()
 
-        StarWordRequires = lvl.Level.StarRequired;
+        Moves = lvl.Level.Moves;
+
         ChanceOf2X = lvl.Level.ChanceOf2X;
         ChanceOfRandomWords = lvl.Level.ChanceOfRandomCharacters;
 
@@ -152,16 +151,9 @@ public class TileGrid : MonoBehaviour
 
         if (ObjectivePhrase.Replace('#', ' ').Trim() == "")
         {
-            int stars = 0;
-            foreach (var item in StarWordRequires)
-                if (WordsUsed <= item)
-                    stars++;
-
             Debug.Log("---WINNING SCREEN---");
             Debug.Log("Points: " + points);
             Debug.Log("Words: " + WordsUsed);
-            Debug.Log("Stars: " + stars);
-
         }
 
     }
@@ -244,6 +236,8 @@ public class TileGrid : MonoBehaviour
     public void MakeWord(float pointsVal, string word)
     {
         WordsUsed++;
+        Moves--;
+
         points += (int)pointsVal;
         HashSet<char> chars = new();
         for (int i = 0; i < ObjectivePhrase.Length; i++)
@@ -262,6 +256,7 @@ public class TileGrid : MonoBehaviour
         UIManager.OutputBox.text = "";
         UIManager.PointBox.text = "Points : " + points;
         UIManager.WordsUsedBox.text = WordsUsed + " Words";
+        UIManager.MovesUsedBox.text = Moves + " Moves";
 
         //StartCoroutine(nameof(SpawnCour));
 
@@ -269,6 +264,12 @@ public class TileGrid : MonoBehaviour
             StartCoroutine(SpawnGoldenTile());
 
         CheckFor3LetterWords();
+
+        if(Moves == 0)
+        {
+            Debug.Log("LOSING SCREEN");
+            Debug.Log("OUT OF MOVES");
+        }
     }
 
     private void CheckFor3LetterWords()
