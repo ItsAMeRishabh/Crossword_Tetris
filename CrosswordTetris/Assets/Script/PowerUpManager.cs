@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ public class PowerUpManager : MonoBehaviour
     public int RevealAmount = 5;
 
 //#nullable enable
-    public PowerUp? Active = null;
+    public PowerUp Active { get; private set; }
 //#nullable disable
 
 
@@ -25,5 +26,14 @@ public class PowerUpManager : MonoBehaviour
             Active = powerUps[i];
         else
             Active = null;
+    }
+
+    public void Use(TileLetter tileLetter)
+    {
+        if(Active != null)
+        {
+            Active.Use(tileLetter);
+            Active = null;
+        }
     }
 }

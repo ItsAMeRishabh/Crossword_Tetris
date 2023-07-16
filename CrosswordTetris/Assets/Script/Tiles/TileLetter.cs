@@ -51,7 +51,7 @@ public class TileLetter : MonoBehaviour
             else
                 Select();
         else
-            parent.PowerUpManager.Active.Use(this);
+            parent.PowerUpManager.Use(this);
 
     }
 
@@ -63,7 +63,7 @@ public class TileLetter : MonoBehaviour
         spriteRend = GetComponentInChildren<SpriteRenderer>();
         characterMesh = GetComponentInChildren<TextMesh>();
         parent = transform.parent.GetComponent<TileGrid>();
-        StartCoroutine(InactiveCouroutine(true));
+        StartCoroutine(InactiveCouroutine(true,0));
     }
     
     //Setters
@@ -72,9 +72,9 @@ public class TileLetter : MonoBehaviour
         if (!isEmpty && !IsSelected())
         {
             selectedIndex = parent.AddToOutput(character);
-            spriteRend.sprite= parent.lvl.Settings.selected;
+            spriteRend.sprite= parent.Settings.selected;
 
-            characterMesh.color = parent.lvl.Settings.selectedFontColor;
+            characterMesh.color = parent.Settings.selectedFontColor;
         }
     }
     public void Deselect()
@@ -121,24 +121,26 @@ public class TileLetter : MonoBehaviour
     }
     private void SetInactive()
     {
+        if(selectedIndex != -1) 
+            parent.RemoveFromOutput(selectedIndex);
         spriteRend.sprite = emptyTexture;
         isEmpty = true;
         isGolden = false;
         selectedIndex = -1;
         character = ' ';
         characterMesh.text = "";
-        spriteRend.sprite= parent.lvl.Settings.inactive;
+        spriteRend.sprite= parent.Settings.inactive;
 
     }
 
 
 
     //Coroutines
-    private IEnumerator InactiveCouroutine(bool skip)
+    private IEnumerator InactiveCouroutine(bool skip, float v)
     {
         isEmpty = true;
 
-        yield return new WaitForSeconds(0.0f);
+        yield return new WaitForSeconds(v);
         if (!skip)
         {
 
@@ -168,9 +170,13 @@ public class TileLetter : MonoBehaviour
         spriteRend.gameObject.transform.localScale = Vector3.one;
         characterMesh.gameObject.transform.localScale = Vector3.one;
     }
+    public void StartInactiveCouroutine(float delay)
+    {
+        StartCoroutine(InactiveCouroutine(false,delay));
+    }
     public void StartInactiveCouroutine()
     {
-        StartCoroutine(InactiveCouroutine(false));
+        StartCoroutine(InactiveCouroutine(false,0));
     }
 
     //Getters
@@ -178,7 +184,7 @@ public class TileLetter : MonoBehaviour
     public int GetPoints()
     {
         float RET = 0;
-        foreach (var item in parent.lvl.Settings.LetterPoints)
+        foreach (var item in parent.Settings.LetterPoints)
         {
             if(item.word == character + "")
             {
@@ -205,20 +211,20 @@ public class TileLetter : MonoBehaviour
 
     public void SetGolden()
     {
-        spriteRend.sprite= parent.lvl.Settings.golden;
-        characterMesh.color = parent.lvl.Settings.goldenFontColor;
+        spriteRend.sprite= parent.Settings.golden;
+        characterMesh.color = parent.Settings.goldenFontColor;
         isGolden = true;
     }
     public void SetDefault()
     {
-        spriteRend.sprite = parent.lvl.Settings.active;
-        characterMesh.color = parent.lvl.Settings.activeFontColor;
+        spriteRend.sprite = parent.Settings.active;
+        characterMesh.color = parent.Settings.activeFontColor;
         isEmpty = false;
     }
     public void Set2X()
     {
-        spriteRend.sprite = parent.lvl.Settings.active2X;
-        characterMesh.color = parent.lvl.Settings.active2XFontColor;
+        spriteRend.sprite = parent.Settings.active2X;
+        characterMesh.color = parent.Settings.active2XFontColor;
         multiplier = 2;
         isEmpty = false;
     }

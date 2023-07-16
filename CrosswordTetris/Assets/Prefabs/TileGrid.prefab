@@ -50,7 +50,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MinUserWordSize: 3
   prefab: {fileID: 3427492216621710294, guid: 2942b7b0087751c4d9d35a0843546651, type: 3}
-  lvl: {fileID: 11400000, guid: f717a940e98969c4a8cb2958fdd28bb3, type: 2}
+  lvl: {fileID: 11400000, guid: cd889b9908fd803498d7c221c95e0c47, type: 2}
+  Settings: {fileID: 11400000, guid: 5f0ca2d3efc412e40aeec6263ba7007c, type: 2}
   UIManager: {fileID: 0}
 --- !u!114 &170047489761353746
 MonoBehaviour:
@@ -104,3 +105,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38792645ecc993848a8610c185ba242d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RevealAmount: 4

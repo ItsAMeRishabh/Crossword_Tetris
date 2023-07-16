@@ -60,7 +60,8 @@ public class TileGrid : MonoBehaviour
 
     [Space(10)]
     public GameObject prefab;
-    public Level lvl;
+    public ActiveLevel lvl;
+    public SettingsData Settings;
     [Space(50)]
     public UIManager UIManager;
     
@@ -72,22 +73,22 @@ public class TileGrid : MonoBehaviour
         TilePool = GetComponent<GameObjectPool>();
         PowerUpManager = GetComponent<PowerUpManager>();
 
-        ObjectiveQuestion = lvl.ObjectiveQuestion;
-        ObjectivePhrase = lvl.ObjectivePhrase;
+        ObjectiveQuestion = lvl.Level.ObjectiveQuestion;
+        ObjectivePhrase = lvl.Level.ObjectivePhrase;
 
-        int h = lvl.Height - lvl.InitialWord.Count;
+        int h = lvl.Level.Height - lvl.Level.InitialWord.Count;
         for (int x = 0; x < h; x++)
-                lvl.InitialWord.Add("");
+                lvl.Level.InitialWord.Add("");
 
-        InitialSpawns = lvl.InitialWord.ToArray().Reverse().ToArray();
+        InitialSpawns = lvl.Level.InitialWord.ToArray().Reverse().ToArray();
 
-        StarWordRequires = lvl.StarRequired;
-        ChanceOf2X = lvl.ChanceOf2X;
-        ChanceOfRandomWords = lvl.ChanceOfRandomCharacters;
+        StarWordRequires = lvl.Level.StarRequired;
+        ChanceOf2X = lvl.Level.ChanceOf2X;
+        ChanceOfRandomWords = lvl.Level.ChanceOfRandomCharacters;
 
 
-        width = lvl.Width;
-        height = lvl.Height;
+        width = lvl.Level.Width;
+        height = lvl.Level.Height;
         GenerateGameObjects();
     }
 
@@ -170,14 +171,14 @@ public class TileGrid : MonoBehaviour
     {
         if (Random.Range(0, 100) < ChanceOfRandomWords)
         {
-            return lvl.Settings.GetAlphabet()[Random.Range(0, 26)];
+            return Settings.GetAlphabet()[Random.Range(0, 26)];
         }
         else
         {
             string str = ObjectivePhrase.Replace(" ", "").Replace("#","");
             if(str.Length == 0)
             {
-                return lvl.Settings.GetAlphabet()[Random.Range(0, 26)];
+                return Settings.GetAlphabet()[Random.Range(0, 26)];
             }
             return str[Random.Range(0, str.Length)];
         }
@@ -328,7 +329,6 @@ public class TileGrid : MonoBehaviour
             {
                 GoldenTiles.Add(new GoldenTileMeta(item.transform.position, item.character));
             }
-
         foreach (var item in Tiles)
         {
             foreach (var item1 in GoldenTiles)
@@ -337,7 +337,7 @@ public class TileGrid : MonoBehaviour
                 {
                     //Debug.Log(item.character);
                     item1.didFunction++;
-                    item.StartInactiveCouroutine();
+                    item.StartInactiveCouroutine(.5f);
                 }
             }
 
@@ -351,9 +351,10 @@ public class TileGrid : MonoBehaviour
         foreach (var item in GoldenTiles)
             if (item.didFunction <= 1)
                 RayCast.RectBoom(item.position, 1);
+
     }
 
-    
+
     private void InstantiatePrefab(Vector3 position)
     {
         GameObject instantiatedPrefab = Instantiate(prefab,transform);
