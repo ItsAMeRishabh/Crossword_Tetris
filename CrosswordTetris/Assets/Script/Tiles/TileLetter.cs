@@ -58,8 +58,8 @@ public class TileLetter : MonoBehaviour
     public void GMAwake(int i, int width)
     {
         InitialX = transform.position.x;
-        X = (int)Mathf.Floor(i / width);
-        Y = (i % width); 
+        Y = (int)Mathf.Floor(i / width);
+        X = (i % width); 
         spriteRend = GetComponentInChildren<SpriteRenderer>();
         characterMesh = GetComponentInChildren<TextMesh>();
         parent = transform.parent.GetComponent<TileGrid>();
@@ -97,6 +97,17 @@ public class TileLetter : MonoBehaviour
             }
         }
     }
+    public void SetActive(string s)
+    {
+        if(s.Length <1)
+        {
+            SetActive('!');
+        }
+        else
+        {
+            SetActive(s[0]);
+        }   
+    }
     public void SetActive(char character)
     {
 
@@ -116,7 +127,7 @@ public class TileLetter : MonoBehaviour
 
 
         characterMesh.text = character+"";
-        transform.position += Vector3.up * 8;
+        transform.position += Vector3.up * 10;
         transform.position = new Vector3(InitialX, transform.position.y, transform.position.z);
     }
     private void SetInactive()
@@ -160,8 +171,8 @@ public class TileLetter : MonoBehaviour
 
         SetInactive();
 
-        if (Initial && (parent.InitialSpawns.Length > Y && parent.InitialSpawns[Y].Length > X))
-            SetActive(parent.InitialSpawns[Y][X].ToString().ToUpper()[0]);
+        if (Initial && parent.InitialSpawns.GetCell(X,Y).Length > 0)//&& (parent.InitialSpawns.GridSize.y > Y && parent.InitialSpawns.GridSize.x > X))
+            SetActive(parent.InitialSpawns.GetCell(X,Y).ToUpper());
         else
             SetActive(parent.GetCharacter());
 

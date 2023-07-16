@@ -4,6 +4,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using System.Linq;
 using System.Collections;
+using Array2DEditor;
 
 public class GoldenTileMeta
 {
@@ -24,8 +25,6 @@ public class GoldenTileMeta
 [RequireComponent(typeof(GameManager))]
 public class TileGrid : MonoBehaviour
 {
-    enum SpawnMode { HEX, RECT }
-    readonly SpawnMode spawnMode = SpawnMode.RECT;
     readonly List<TileLetter> Tiles = new();
 
     int[] StarWordRequires;
@@ -39,7 +38,7 @@ public class TileGrid : MonoBehaviour
     [NonSerialized]
     public string ObjectivePhrase;    
     [NonSerialized]
-    public string[] InitialSpawns;
+    public Array2DString InitialSpawns;
     [NonSerialized]
     public string DisplayPhrase;
     [NonSerialized]
@@ -76,19 +75,19 @@ public class TileGrid : MonoBehaviour
         ObjectiveQuestion = lvl.Level.ObjectiveQuestion;
         ObjectivePhrase = lvl.Level.ObjectivePhrase;
 
-        int h = lvl.Level.Height - lvl.Level.InitialWord.Count;
-        for (int x = 0; x < h; x++)
-                lvl.Level.InitialWord.Add("");
+        //int h = lvl.Level.InitalSpawns.GridSize.y- (lvl.Level.InitalSpawns.GridSize.x * lvl.Level.InitalSpawns.GridSize.y);
+        //for (int x = 0; x < h; x++)
+        //        lvl.Level.InitialWord.Add("");
 
-        InitialSpawns = lvl.Level.InitialWord.ToArray().Reverse().ToArray();
+        InitialSpawns = lvl.Level.InitalLetter;//.ToArray().Reverse().ToArray()
 
         StarWordRequires = lvl.Level.StarRequired;
         ChanceOf2X = lvl.Level.ChanceOf2X;
         ChanceOfRandomWords = lvl.Level.ChanceOfRandomCharacters;
 
 
-        width = lvl.Level.Width;
-        height = lvl.Level.Height;
+        width = lvl.Level.InitalLetter.GridSize.x;
+        height = lvl.Level.InitalLetter.GridSize.y;
         GenerateGameObjects();
     }
 
@@ -364,33 +363,16 @@ public class TileGrid : MonoBehaviour
 
     internal void GenerateGameObjects()
     {
-
         float scale = 4f;
         RemoveGameObjects();
-        for (int x = 0; x < width; x++)
+        for (int y = 0; y < height; y++)
         {
-            for (int y = 0; y < height; y++)
-            {
-                if (spawnMode == SpawnMode.HEX)
-                {
-                    Instantiate(prefab, new Vector3(
-                        ((1.75f * x) * transform.localScale.x) + transform.position.x,
-                        (((2 * y) + (x % 2)) * transform.localScale.x) + transform.position.y,
-                        5), Quaternion.identity, transform);
-
-                }
-                else
-                {
-                    InstantiatePrefab(new Vector3(
-                    (x * transform.localScale.x * scale) + transform.position.x - ((width-1) * transform.localScale.x * scale/ 2),
-                    (y * transform.localScale.y * scale) + transform.position.y,
-                    5));
-                    //Instantiate(prefab, new Vector3(
-                    //(2*x * transform.localScale.x) + transform.position.x -(transform.localScale.x * (width-1)),
-                    //(2*y * transform.localScale.x) + transform.position.y,
-                    //5), Quaternion.identity, transform);
-
-                }
+            for (int x = 0; x < width; x++)
+        {
+                InstantiatePrefab(new Vector3(
+                (x * transform.localScale.x * scale) + transform.position.x - ((width - 1) * transform.localScale.x * scale / 2),
+                (-y * transform.localScale.y * scale) + transform.position.y,
+                5));
             }
         }
     }
