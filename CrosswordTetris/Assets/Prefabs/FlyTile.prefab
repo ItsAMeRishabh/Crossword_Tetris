@@ -31,6 +31,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.49803925
       objectReference: {fileID: 0}
+    - target: {fileID: 3427492216621710288, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3427492216621710291, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -115,7 +119,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  CurveSeconds: 0.1
-  i: 0
-  RandomVec: {x: 0, y: 0, z: 0}
-  Speed: 10
+  control: {x: 3, y: 6, z: 0}
+  durationSeconds: 2
+  deviation: 1
+  speed: 1

@@ -192,11 +192,14 @@ public class TileGrid : MonoBehaviour
     }
     public void RemoveFromOutput(int i)
     {
-        foreach (var tile in Tiles)
-            if (tile.GetSelectedIndex() >= i)
-                tile.SetSelectedIndex(tile.GetSelectedIndex() - 1);
+        if (i < UIManager.OutputBox.text.Length)
+        {
+            foreach (var tile in Tiles)
+                if (tile.GetSelectedIndex() >= i)
+                    tile.SetSelectedIndex(tile.GetSelectedIndex() - 1);
 
-        UIManager.OutputBox.text = UIManager.OutputBox.text.Remove(i,1);
+            UIManager.OutputBox.text = UIManager.OutputBox.text.Remove(i, 1);
+        }
     }
 
 
@@ -204,7 +207,9 @@ public class TileGrid : MonoBehaviour
     {
         var fly = TilePool.Pool.Get();// Instantiate(FlyTile, item.transform.position, Quaternion.identity);
         fly.transform.SetPositionAndRotation(position, Quaternion.identity);
-        fly.GetComponent<FlyTile>().target = destination;
+        var flytile = fly.GetComponent<FlyTile>();
+        flytile.target = destination;
+        flytile.Init();
         fly.GetComponent<Tile>().SetCharacter(character);
         fly.GetComponent<Tile>().Activate();
     }
