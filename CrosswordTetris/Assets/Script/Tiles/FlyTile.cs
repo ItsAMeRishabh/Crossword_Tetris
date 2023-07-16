@@ -13,6 +13,7 @@ public class FlyTile : Poolable
     Vector3 InitPosition;
     Vector3 pA;
     Vector3 pB;
+    Vector3 targetPos;
     private void Start()
     {
         Init();
@@ -22,8 +23,9 @@ public class FlyTile : Poolable
     {
 
         InitPosition = transform.position;
+        targetPos = new Vector3(target.transform.position.x, target.transform.position.y, 0);
         Vector3 dev = new Vector3(Random.Range(-deviation, deviation), Random.Range(-deviation, deviation), 0);
-        control = Vector3.Lerp(transform.position, target.transform.position, 0.5f) + dev;
+        control = Vector3.Lerp(transform.position, targetPos, 0.5f) + dev;
 
         i = 0;
     }
@@ -54,7 +56,7 @@ public class FlyTile : Poolable
 
         pA = Vector3.Lerp(InitPosition, control, t);
 
-        pB = Vector3.Lerp(control, target.transform.position,t);
+        pB = Vector3.Lerp(control, targetPos,t);
 
         Vector3 p = Vector3.Lerp(pA, pB, t);
 

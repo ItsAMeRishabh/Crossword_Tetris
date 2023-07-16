@@ -19,16 +19,16 @@ MonoBehaviour:
     cellSize: {x: 32, y: 32}
     cells:
     - row:
-      - 
-      - 
-      - 
-      - 
-      - 
+      - d
+      - o
+      - u
+      - b
+      - t
     - row:
-      - 
-      - 
-      - 
-      - 
+      - t
+      - o
+      - l
+      - d
       - 
     - row:
       - 

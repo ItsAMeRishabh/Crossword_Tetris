@@ -18,8 +18,8 @@ MonoBehaviour:
   inactive: {fileID: 21300000, guid: 8470be0c13fb171499197220f8e5f320, type: 3}
   active: {fileID: 21300000, guid: c5d5a7d24f78a2741be24f8b4c982a9c, type: 3}
   activeFontColor: {r: 0.12941177, g: 0.2, b: 0.3019608, a: 1}
-  fly: {fileID: 21300000, guid: 98b27d4d42a737c4ab2a3b6695917271, type: 3}
-  flyFontColor: {r: 0, g: 0, b: 0, a: 1}
+  fly: {fileID: 21300000, guid: c5d5a7d24f78a2741be24f8b4c982a9c, type: 3}
+  flyFontColor: {r: 0.12941177, g: 0.2, b: 0.3019608, a: 1}
   active2X: {fileID: 21300000, guid: c6e8e2745ee32d04d81097ab74a70838, type: 3}
   active2XFontColor: {r: 0, g: 0, b: 0, a: 1}
   selected: {fileID: 21300000, guid: 98b27d4d42a737c4ab2a3b6695917271, type: 3}
