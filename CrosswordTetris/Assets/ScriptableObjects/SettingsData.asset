@@ -23,7 +23,7 @@ MonoBehaviour:
   active2X: {fileID: 21300000, guid: c6e8e2745ee32d04d81097ab74a70838, type: 3}
   active2XFontColor: {r: 0, g: 0, b: 0, a: 1}
   selected: {fileID: 21300000, guid: 98b27d4d42a737c4ab2a3b6695917271, type: 3}
-  selectedFontColor: {r: 0.4811321, g: 0.1009011, b: 0, a: 1}
+  selectedFontColor: {r: 0, g: 0.32156864, b: 0.4745098, a: 1}
   golden: {fileID: 21300000, guid: 109fef926dca18a45ae6de20cfdaade6, type: 3}
   goldenFontColor: {r: 0.1584018, g: 0, b: 0.21698111, a: 1}
   LetterPoints:

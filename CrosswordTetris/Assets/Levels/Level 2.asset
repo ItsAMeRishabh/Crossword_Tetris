@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0172d1f8b01fa0e44afd46daed316e79, type: 3}
   m_Name: Level 2
   m_EditorClassIdentifier: 
-  ObjectiveQuestion: level 2
-  ObjectivePhrase: Who let the#dogs out
+  ObjectiveQuestion: A Southern U.S. State
+  ObjectivePhrase: Mississippi
   InitalLetter:
     gridSize: {x: 5, y: 5}
     cellSize: {x: 32, y: 32}
@@ -27,27 +27,27 @@ MonoBehaviour:
     - row:
       - 
       - 
-      - 
-      - 
-      - 
+      - M
+      - o
+      - p
     - row:
-      - 
-      - 
-      - 
-      - 
-      - 
-    - row:
-      - 
+      - p
       - 
       - 
       - 
       - 
     - row:
+      - i
       - 
       - 
+      - m
+      - 
+    - row:
+      - e
       - 
       - 
-      - 
-  StarRequired: 04000000080000000c000000
+      - a
+      - t
+  Moves: 0
   ChanceOf2X: 0
   ChanceOfRandomCharacters: 70

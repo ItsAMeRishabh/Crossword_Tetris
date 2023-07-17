@@ -177,7 +177,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216621710288, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_SortingOrder
-      value: -1
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216621710291, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_RootOrder
@@ -249,11 +249,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216649234420, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.02
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216649234420, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.06
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216649234420, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -268,8 +268,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216649234423, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+      propertyPath: m_FontSize
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 3427492216649234423, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_CharacterSize
-      value: 0
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
@@ -292,7 +296,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   control: {x: 3, y: 6, z: 0}
-  particle: {fileID: 1690833637130901658}
   durationSeconds: 2
   deviation: 1
   speed: 1.5
@@ -486,8 +489,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
---- !u!4 &1690833637130901658 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8128253385777725055, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
-  m_PrefabInstance: {fileID: 7474382599740040933}
-  m_PrefabAsset: {fileID: 0}

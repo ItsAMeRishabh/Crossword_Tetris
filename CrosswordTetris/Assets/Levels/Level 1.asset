@@ -12,26 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0172d1f8b01fa0e44afd46daed316e79, type: 3}
   m_Name: Level 1
   m_EditorClassIdentifier: 
-  ObjectiveQuestion: Obamas Last name
-  ObjectivePhrase: Who let the#dogs out
+  ObjectiveQuestion: Let's Begin!
+  ObjectivePhrase: WORDUIZ
   InitalLetter:
     gridSize: {x: 5, y: 5}
     cellSize: {x: 32, y: 32}
     cells:
     - row:
+      - 
+      - 
+      - 
+      - 
+      - i
+    - row:
+      - W
+      - O
+      - r
       - d
-      - o
+      - 
+    - row:
+      - 
+      - 
       - u
-      - b
-      - t
-    - row:
-      - t
-      - o
-      - l
-      - d
+      - 
       - 
     - row:
-      - 
+      - q
       - 
       - 
       - 
@@ -40,14 +46,8 @@ MonoBehaviour:
       - 
       - 
       - 
+      - z
       - 
-      - 
-    - row:
-      - 
-      - 
-      - 
-      - 
-      - 
-  StarRequired: 04000000080000000c000000
+  Moves: 20
   ChanceOf2X: 0
   ChanceOfRandomCharacters: 70
