@@ -24,10 +24,10 @@ public class FlyTile : Poolable
         InitPosition = transform.position;
         targetPos = new (target.transform.position.x, target.transform.position.y, 0);
 
-        durationSeconds = (Vector3.Distance(InitPosition, targetPos) + Random.Range(0, Deviation)) / Speed;
+        durationSeconds = (Vector3.Distance(InitPosition, targetPos) );//@ + Random.Range(0, Deviation)) / Speed;
 
         Vector3 D = (InitPosition - targetPos).normalized;
-        Vector3 devi = new Vector3(-D.y,D.x,0) * Random.Range(-Deviation,Deviation);
+        Vector3 devi = new Vector3(-D.y,D.x,0);//@ * Random.Range(-Deviation,Deviation);
         control = Vector3.Lerp(transform.position, targetPos, 0.5f) + devi;
 
         SpeedAcc = Speed;

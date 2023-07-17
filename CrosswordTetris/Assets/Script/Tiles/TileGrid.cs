@@ -60,10 +60,11 @@ public class TileGrid : MonoBehaviour
     public GameObject prefab;
     public ActiveLevel lvl;
     public SettingsData Settings;
-    [Space(50)]
+    [Space(20)]
     public UIManager UIManager;
+    [Space(20)]
     public float Spacing = 0;
-
+    public float FlyTileSpawnDelay = .3f;
     public void GMAwake()
     {
         WordHandler = GetComponent<WordSelector>();
@@ -209,8 +210,10 @@ public class TileGrid : MonoBehaviour
     }
 
 
-    public void SpawnFlyTile(char character,Vector3 position, Tile destination )
+    public IEnumerator SpawnFlyTile(char character,Vector3 position, Tile destination , int i)
     {
+        //@
+        yield return new WaitForSeconds(i * FlyTileSpawnDelay);
         var fly = TilePool.Pool.Get();// Instantiate(FlyTile, item.transform.position, Quaternion.identity);
         fly.transform.SetPositionAndRotation(position, Quaternion.identity);
         var flytile = fly.GetComponent<FlyTile>();
@@ -311,6 +314,7 @@ public class TileGrid : MonoBehaviour
     private bool SpawnFlyTiles(HashSet<char> chars)
     {
         bool b = false;
+        int tiles = 0;
         for (int i = 0; i < UIManager.Display.transform.childCount; i++)
         {
             foreach (var item in Tiles)
@@ -323,7 +327,9 @@ public class TileGrid : MonoBehaviour
                         if (tile.character == item.character)
                         {
                             b = true;
-                            SpawnFlyTile(item.character, item.transform.position, tile);
+                            StartCoroutine(SpawnFlyTile(item.character, item.transform.position, tile,tiles));
+                                           //@SpawnFlyTile(item.character, item.transform.position, tile,tiles);
+                            tiles ++;
                             break;
                         }
                     }
