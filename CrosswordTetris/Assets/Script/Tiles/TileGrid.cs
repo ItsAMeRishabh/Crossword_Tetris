@@ -62,6 +62,7 @@ public class TileGrid : MonoBehaviour
     public SettingsData Settings;
     [Space(50)]
     public UIManager UIManager;
+    public float Spacing = 0;
 
     public void GMAwake()
     {
@@ -384,7 +385,7 @@ public class TileGrid : MonoBehaviour
             for (int x = 0; x < width; x++)
         {
                 InstantiatePrefab(new Vector3(
-                (( x * transform.localScale.x * scale) + transform.position.x - ((width - 1) * transform.localScale.x * scale / 2) )* .85f,
+                (( x * transform.localScale.x * scale) + transform.position.x - ((width - 1) * transform.localScale.x * scale / 2) )* (.85f+Spacing),
                 (-y * transform.localScale.y * scale) + transform.position.y,
                 5));
             }
