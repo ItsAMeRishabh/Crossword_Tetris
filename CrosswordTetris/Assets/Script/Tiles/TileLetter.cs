@@ -76,6 +76,8 @@ public class TileLetter : MonoBehaviour
 
             characterMesh.color = parent.Settings.selectedFontColor;
         }
+        parent.UpdatePoints();
+
     }
     public void Deselect()
     {
@@ -95,6 +97,8 @@ public class TileLetter : MonoBehaviour
             if (isGolden) {
                 SetGolden();
             }
+            parent.UpdatePoints();
+
         }
     }
     public void SetActive(string s)
@@ -129,10 +133,11 @@ public class TileLetter : MonoBehaviour
         characterMesh.text = character+"";
         transform.position += Vector3.up * 10;
         transform.position = new Vector3(InitialX, transform.position.y, transform.position.z);
+
     }
     private void SetInactive()
     {
-        if(selectedIndex != -1) 
+        if (selectedIndex != -1)
             parent.RemoveFromOutput(selectedIndex);
         spriteRend.sprite = emptyTexture;
         isEmpty = true;

@@ -1,145 +1,57 @@
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class FlyTile : Poolable
 {
     public Tile target;
-    public Vector3 control;
-    public float durationSeconds = 2;
-    public float deviation;
-    public float speed = .1f;
+    public Transform particle;
+    
+    Vector3 control;
+    float durationSeconds = 2;
+
+    public float Deviation;
+    public float Speed = 1;
+    public float Accelaration = 1;
+
+    float SpeedAcc = 1;
     float i;
     Vector3 InitPosition;
-    Vector3 pA;
-    Vector3 pB;
     Vector3 targetPos;
-    private void Start()
-    {
-        Init();
-    }
+
     
     public void Init()
     {
 
         InitPosition = transform.position;
-        targetPos = new Vector3(target.transform.position.x, target.transform.position.y, 0);
-        Vector3 dev = new Vector3(Random.Range(-deviation, deviation), Random.Range(-deviation, deviation), 0);
-        control = Vector3.Lerp(transform.position, targetPos, 0.5f) + dev;
+        targetPos = new (target.transform.position.x, target.transform.position.y, 0);
 
+        durationSeconds = (Vector3.Distance(InitPosition, targetPos) + Random.Range(0, Deviation)) / Speed;
+
+        Vector3 D = (InitPosition - targetPos).normalized;
+        Vector3 devi = new Vector3(-D.y,D.x,0) * Random.Range(-Deviation,Deviation);
+        control = Vector3.Lerp(transform.position, targetPos, 0.5f) + devi;
+
+        SpeedAcc = Speed;
         i = 0;
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, control);
-        Gizmos.DrawLine(control, target.transform.position);
-
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(pA,pB);
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(pA, .1f);
-        Gizmos.DrawSphere(pB, .1f);
-
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawSphere(target.transform.position, .1f);
-
-
     }
 
     private void Update() 
     {
         float t = i / durationSeconds;
-        Debug.Log(t);
+        Vector3 p0 = Vector3.Lerp(Vector3.Lerp(InitPosition, control, t), Vector3.Lerp(control, targetPos, t), t);
+        Vector3 vec = (p0 - transform.position).normalized;
 
-        pA = Vector3.Lerp(InitPosition, control, t);
+        float angle = Mathf.Atan2(vec.y, vec.x) * Mathf.Rad2Deg;
+        particle.transform.rotation = Quaternion.AngleAxis(angle - 90,Vector3.forward);
 
-        pB = Vector3.Lerp(control, targetPos,t);
+        transform.position = p0;
 
-        Vector3 p = Vector3.Lerp(pA, pB, t);
-
-
-        transform.position = p;
-
-        i += Time.deltaTime * speed;
+        i += Time.deltaTime * SpeedAcc;
+        SpeedAcc += Accelaration;
         if(i > durationSeconds)
-        //if (Vector3.Distance(transform.position, target.gameObject.transform.position) < 0.1f)
         {
-            Init();
             target.Activate();
             ReleaseObject();
         }
     }
 
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class d: Poolable
-{
-    public Tile target;
-    public float CurveSeconds = 2;
-    public float i;
-    public Vector3 RandomVec;
-    public float Speed;
-    float R = 10f;
-    private void Start()
-    {
-        Init();
-    }
-
-    private void Init()
-    {
-        float x = Random.Range(-R, R);
-        float y = Random.Range(-R, R);
-        RandomVec = new(x, y, 0);
-
-        i = CurveSeconds;
-    }
-
-
-    private void Update()
-    {
-        if (target != null)
-        {
-
-            if (i > 0)
-                i-= Time.deltaTime;
-            else
-                i+= 0;
-
-
-            float t = i / CurveSeconds;
-            transform.position = Vector3.MoveTowards(transform.position, RandomVec, Speed * t * Time.deltaTime);
-            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Speed * R * (1-t) * Time.deltaTime);
-
-            if (Vector3.Distance(transform.position, target.gameObject.transform.position) < 0.1f)
-            {
-                target.Activate();
-                ReleaseObject();
-                Init();
-            }
-        }
-    }
 }

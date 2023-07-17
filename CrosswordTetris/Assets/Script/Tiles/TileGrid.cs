@@ -29,7 +29,6 @@ public class TileGrid : MonoBehaviour
 
     string ObjectiveQuestion = "Something witty here... idk";
     
-    int WordsUsed = 0;
     int points = 0;
     float ChanceOfRandomWords = 40f;
     int Moves;
@@ -103,6 +102,7 @@ public class TileGrid : MonoBehaviour
         ActivateDisplayTile(true);
 
         UIManager.QuestionBox.text = ObjectiveQuestion;
+        UIManager.MovesUsedBox.text = Moves + " Moves";
 
         for (int i = 0; i < transform.childCount; i++)
             Tiles.Add(transform.GetChild(i).GetComponent<TileLetter>());
@@ -153,7 +153,6 @@ public class TileGrid : MonoBehaviour
         {
             Debug.Log("---WINNING SCREEN---");
             Debug.Log("Points: " + points);
-            Debug.Log("Words: " + WordsUsed);
         }
 
     }
@@ -176,6 +175,20 @@ public class TileGrid : MonoBehaviour
     }
 
 
+    public void UpdatePoints()
+    {
+        float pointsVal = 0;
+        foreach (var tile in Tiles)
+            if (tile.IsSelected())
+                pointsVal += tile.GetPoints();
+
+        if (pointsVal == 0)
+
+            UIManager.ExpBox.text = "";
+        else
+        UIManager.ExpBox.text = "+" + pointsVal + " XP";
+
+    }
 
     public int AddToOutput(char c)
     {
@@ -216,10 +229,7 @@ public class TileGrid : MonoBehaviour
 
         string word = UIManager.OutputBox.text.ToUpper();
         
-        float pointsVal = 0;
-        
-
-        
+        float pointsVal = 0;        
         foreach (var tile in Tiles)
             if (tile.IsSelected())
                 pointsVal += tile.GetPoints();
@@ -235,7 +245,6 @@ public class TileGrid : MonoBehaviour
 
     public void MakeWord(float pointsVal, string word)
     {
-        WordsUsed++;
         Moves--;
 
         points += (int)pointsVal;
@@ -255,7 +264,6 @@ public class TileGrid : MonoBehaviour
 
         UIManager.OutputBox.text = "";
         UIManager.PointBox.text = "Points : " + points;
-        UIManager.WordsUsedBox.text = WordsUsed + " Words";
         UIManager.MovesUsedBox.text = Moves + " Moves";
 
         //StartCoroutine(nameof(SpawnCour));
@@ -376,7 +384,7 @@ public class TileGrid : MonoBehaviour
             for (int x = 0; x < width; x++)
         {
                 InstantiatePrefab(new Vector3(
-                (x * transform.localScale.x * scale) + transform.position.x - ((width - 1) * transform.localScale.x * scale / 2),
+                (( x * transform.localScale.x * scale) + transform.position.x - ((width - 1) * transform.localScale.x * scale / 2) )* .85f,
                 (-y * transform.localScale.y * scale) + transform.position.y,
                 5));
             }
