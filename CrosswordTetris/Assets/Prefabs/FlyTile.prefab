@@ -296,8 +296,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   particle: {fileID: 1690833637130901658}
-  Deviation: 3.5
-  Speed: 1
+  Deviation: 2
+  Speed: 0.8
   Accelaration: 0.1
 --- !u!4 &5574963641749200389 stripped
 Transform:
@@ -312,6 +312,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 5574963641749200389}
     m_Modifications:
     - target: {fileID: 8128253385777725040, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8128253385777725040, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
       propertyPath: ShapeModule.m_Rotation.x
       value: 90
       objectReference: {fileID: 0}
@@ -325,7 +329,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8128253385777725040, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8128253385777725040, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
       propertyPath: EmissionModule.m_Bursts.Array.data[0].cycleCount
@@ -439,13 +443,17 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: -2
       objectReference: {fileID: 0}
+    - target: {fileID: 8128253385777725041, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
+      propertyPath: m_RenderAlignment
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8128253385777725042, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
       propertyPath: m_Name
       value: StarTrailParticleEffect
       objectReference: {fileID: 0}
     - target: {fileID: 8128253385777725042, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8128253385777725055, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
       propertyPath: m_RootOrder

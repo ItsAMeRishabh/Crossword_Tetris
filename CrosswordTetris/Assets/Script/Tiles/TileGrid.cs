@@ -103,7 +103,7 @@ public class TileGrid : MonoBehaviour
         ActivateDisplayTile(true);
 
         UIManager.QuestionBox.text = ObjectiveQuestion;
-        UIManager.MovesUsedBox.text = Moves + " Moves";
+        UIManager.MovesUsedBox.text = Moves + "";
 
         for (int i = 0; i < transform.childCount; i++)
             Tiles.Add(transform.GetChild(i).GetComponent<TileLetter>());
@@ -265,7 +265,7 @@ public class TileGrid : MonoBehaviour
 
         UIManager.OutputBox.text = "";
         UIManager.PointBox.text = "Points : " + points;
-        UIManager.MovesUsedBox.text = Moves + " Moves";
+        UIManager.MovesUsedBox.text = Moves + "";
 
         //StartCoroutine(nameof(SpawnCour));
 
