@@ -5,6 +5,7 @@ public class Tile : MonoBehaviour
 {
 
     public SpriteRenderer sr;
+    public ParticleSystem ps;
 
     public TextMesh characterMesh;
 
@@ -42,6 +43,7 @@ public class Tile : MonoBehaviour
 
     public void Activate()
     {
+        ps.Play();
         sr.sprite = tileTexture;
         //sr.sprite = Settings.display;
         characterMesh.color = fontcolor;// Settings.displayFontColor;
