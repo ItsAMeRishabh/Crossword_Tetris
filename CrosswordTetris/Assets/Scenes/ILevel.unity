@@ -2591,7 +2591,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1234341858
 GameObject:
@@ -3439,6 +3439,10 @@ PrefabInstance:
       propertyPath: UIManager
       value: 
       objectReference: {fileID: 1839822391565999272}
+    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
+      propertyPath: FlyTileSpawnDelay
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 170047489761353837, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -3869,13 +3873,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8128253385777725040, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8128253385777725042, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
       propertyPath: m_Name
       value: StarTrailParticleEffect
       objectReference: {fileID: 0}
+    - target: {fileID: 8128253385777725042, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8128253385777725055, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8128253385777725055, guid: 7bb941a222225204889b1ba6b8caff8b, type: 3}
       propertyPath: m_LocalPosition.x

@@ -73,7 +73,7 @@ TrailRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: -3
   m_Time: 0.6
   m_Parameters:
     serializedVersion: 3
@@ -248,6 +248,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216649234420, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3427492216649234420, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -297,8 +301,8 @@ MonoBehaviour:
   target: {fileID: 0}
   particle: {fileID: 1690833637130901658}
   Deviation: 2
-  Speed: 0.8
-  Accelaration: 0.1
+  Speed: 0.02
+  Accelaration: 0.03
 --- !u!4 &5574963641749200389 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3427492216621710291, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
