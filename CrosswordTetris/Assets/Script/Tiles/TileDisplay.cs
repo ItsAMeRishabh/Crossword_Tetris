@@ -73,7 +73,7 @@ public class TileDisplay : MonoBehaviour
         float min = float.MaxValue;
         
         foreach (GameObject child in line)
-            if (child.gameObject.activeSelf)
+            if (child.activeSelf)
             {
                 if (child.transform.localPosition.x > max)
                     max = child.transform.localPosition.x;

@@ -19,7 +19,7 @@ public class TileLetter : MonoBehaviour
     [SerializeField]
     int selectedIndex = -1;
     [SerializeField]
-    bool isEmpty = true;
+    //bool isEmpty = true;
     bool isGolden = false;
     public char character = ' ';
 
@@ -31,7 +31,8 @@ public class TileLetter : MonoBehaviour
 
     private bool Initial = true;
     private float InitialX = 0;
-    TileGrid parent;
+    
+    public TileGrid parent;
 
     public void Set(TileLetter comp)
     {
@@ -69,7 +70,7 @@ public class TileLetter : MonoBehaviour
     //Setters
     public void Select()
     {
-        if (!isEmpty && !IsSelected())
+        if (!IsSelected())
         {
             selectedIndex = parent.AddToOutput(character);
             spriteRend.sprite= parent.Settings.selected;
@@ -81,7 +82,7 @@ public class TileLetter : MonoBehaviour
     }
     public void Deselect()
     {
-        if (!isEmpty && IsSelected())
+        if (IsSelected())
         {
             transform.parent.GetComponent<TileGrid>().RemoveFromOutput(selectedIndex);
             selectedIndex =  -1;
@@ -101,23 +102,18 @@ public class TileLetter : MonoBehaviour
 
         }
     }
-    public void SetActive(string s)
+    
+    void Activate(char character)
     {
-        if(s.Length <1)
-        {
-            SetActive('!');
-        }
-        else
-        {
-            SetActive(s[0]);
-        }   
-    }
-    public void SetActive(char character)
-    {
+        if (selectedIndex != -1)
+            parent.RemoveFromOutput(selectedIndex);
+        isGolden = false;
+        selectedIndex = -1;
+        
 
         multiplier = Random.Range(0, 100) < parent.ChanceOf2X ? 2 : 1;
         spriteRend.sprite = tileTexture;
-        isEmpty = false;
+        //isEmpty = false;
         this.character = character;
 
         if(multiplier == 1)
@@ -129,33 +125,17 @@ public class TileLetter : MonoBehaviour
             Set2X();
         }
 
-
         characterMesh.text = character+"";
         transform.position += Vector3.up * 10;
         transform.position = new Vector3(InitialX, transform.position.y, transform.position.z);
 
     }
-    private void SetInactive()
-    {
-        if (selectedIndex != -1)
-            parent.RemoveFromOutput(selectedIndex);
-        spriteRend.sprite = emptyTexture;
-        isEmpty = true;
-        isGolden = false;
-        selectedIndex = -1;
-        character = ' ';
-        characterMesh.text = "";
-        spriteRend.sprite= parent.Settings.inactive;
-
-    }
-
 
 
     //Coroutines
-    private IEnumerator InactiveCouroutine(bool skip, float v)
+    IEnumerator InactiveCouroutine(bool skip, float v)
     {
-        isEmpty = true;
-
+        
         yield return new WaitForSeconds(v);
         if (!skip)
         {
@@ -174,12 +154,11 @@ public class TileLetter : MonoBehaviour
             }
         }
 
-        SetInactive();
-
+        
         if (Initial && parent.InitialSpawns.GetCell(X,Y).Length > 0)//&& (parent.InitialSpawns.GridSize.y > Y && parent.InitialSpawns.GridSize.x > X))
-            SetActive(parent.InitialSpawns.GetCell(X,Y).ToUpper());
+            Activate(parent.InitialSpawns.GetCell(X, Y).ToUpper()[0]);
         else
-            SetActive(parent.GetCharacter());
+            Activate(parent.GetCharacter());
 
         Initial = false;
 
@@ -190,12 +169,8 @@ public class TileLetter : MonoBehaviour
     {
         StartCoroutine(InactiveCouroutine(false,delay));
     }
-    public void StartInactiveCouroutine()
-    {
-        StartCoroutine(InactiveCouroutine(false,0));
-    }
 
-    //Getters
+    //Getters/Setters
 
     public int GetPoints()
     {
@@ -235,20 +210,16 @@ public class TileLetter : MonoBehaviour
     {
         spriteRend.sprite = parent.Settings.active;
         characterMesh.color = parent.Settings.activeFontColor;
-        isEmpty = false;
+        //isEmpty = false;
     }
     public void Set2X()
     {
         spriteRend.sprite = parent.Settings.active2X;
         characterMesh.color = parent.Settings.active2XFontColor;
         multiplier = 2;
-        isEmpty = false;
+        //isEmpty = false;
     }
 
-    public bool IsEmpty()
-    {
-        return isEmpty;
-    }
     public bool IsSelected()
     {
         return selectedIndex != -1;

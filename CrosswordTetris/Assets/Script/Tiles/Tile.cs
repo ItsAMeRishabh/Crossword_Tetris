@@ -24,7 +24,7 @@ public class Tile : MonoBehaviour
     {
         sr = GetComponent<SpriteRenderer>();
         characterMesh = GetComponentInChildren<TextMesh>();
-        if (TryGetComponent(out FlyTile _))
+        if (TryGetComponent(out FlyPather _))
         {
             tileTexture = Settings.fly;
             emptyTexture = Settings.inactive;

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public abstract class PowerUp
 {
@@ -22,7 +24,12 @@ public class Shovel : PowerUp
 {
     public override void Activate(TileLetter tile)
     {
-        tile.StartInactiveCouroutine();
+        tile.parent.UpdatePhrases(tile.character.ToString(),out HashSet<char> _);
+        Debug.Log(tile.parent.ObjectivePhrase);
+        Debug.Log(tile.parent.DisplayPhrase);
+        tile.StartInactiveCouroutine(0);
+        tile.parent.SpawnFlyTile(tile,0);
+
     }
 }
 public class Reveal : PowerUp
@@ -98,7 +105,7 @@ public static class RayCast
                 if (hits[i].collider.gameObject.TryGetComponent<TileLetter>(out var a))
                 {
                     a.Deselect();
-                    a.StartInactiveCouroutine();
+                    a.StartInactiveCouroutine(0);
                 }
             }
         }

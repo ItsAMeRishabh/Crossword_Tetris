@@ -1,19 +1,20 @@
 using UnityEngine;
 
-public class FlyTile : Poolable
+public class FlyPather : Poolable
 {
     public Tile target;
     public Transform particle;
     
-    Vector3 control;
-    float durationSeconds = 2;
 
     public float Deviation;
     public float Speed = 1;
     public float Accelaration = 1;
 
-    float SpeedAcc = 1;
     float i;
+    float SpeedAcc = 1;
+    float durationSeconds = 2;
+
+    Vector3 control;
     Vector3 InitPosition;
     Vector3 targetPos;
 
@@ -27,7 +28,7 @@ public class FlyTile : Poolable
         durationSeconds = (Vector3.Distance(InitPosition, targetPos) );//@ + Random.Range(0, Deviation)) / Speed;
 
         Vector3 D = (InitPosition - targetPos).normalized;
-        Vector3 devi = new Vector3(-D.y,D.x,0);//@ * Random.Range(-Deviation,Deviation);
+        Vector3 devi = new (-D.y,D.x,0);//@ * Random.Range(-Deviation,Deviation);
         control = Vector3.Lerp(transform.position, targetPos, 0.5f) + devi;
 
         SpeedAcc = Speed;

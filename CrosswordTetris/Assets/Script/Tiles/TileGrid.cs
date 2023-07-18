@@ -5,6 +5,7 @@ using Random = UnityEngine.Random;
 using System.Linq;
 using System.Collections;
 using Array2DEditor;
+using Unity.VisualScripting;
 
 public class GoldenTileMeta
 {
@@ -108,12 +109,12 @@ public class TileGrid : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++)
             Tiles.Add(transform.GetChild(i).GetComponent<TileLetter>());
     }
-    public void Win()
+    void Win()
     {
         Debug.Log("---WINNING SCREEN---");
         Debug.Log("Points: " + Points);
     }
-    public void Lose()
+    void Lose()
     {
 
     }
@@ -128,11 +129,8 @@ public class TileGrid : MonoBehaviour
         Dictionary<char, int> tiles = new();
         foreach (var tile in Tiles)
         {
-            if (!tile.IsEmpty())
-            {
-                tiles.TryAdd(tile.character, 0);
-                tiles[tile.character]++;
-            }
+            tiles.TryAdd(tile.character, 0);
+            tiles[tile.character]++;
         }
 
         //Get most common character
@@ -148,19 +146,35 @@ public class TileGrid : MonoBehaviour
         //Set a random tile to golden
         list[Random.Range(0, list.Count)].SetGolden();
     }
-    public IEnumerator SpawnFlyTile(char character, Vector3 position, Tile destination, int i)
+    IEnumerator SpawnFlyTileCour(char character, Vector3 position, Tile destination, int offset)
     {
-        //@
-        yield return new WaitForSeconds(i * FlyTileSpawnDelay);
+        yield return new WaitForSeconds(offset * FlyTileSpawnDelay);
         var fly = TilePool.Pool.Get();// Instantiate(FlyTile, item.transform.position, Quaternion.identity);
         fly.transform.SetPositionAndRotation(position, Quaternion.identity);
-        var flytile = fly.GetComponent<FlyTile>();
+        var flytile = fly.GetComponent<FlyPather>();
         flytile.target = destination;
         flytile.Init();
         fly.GetComponent<Tile>().SetCharacter(character);
         fly.GetComponent<Tile>().Activate();
     }
 
+    public bool SpawnFlyTile(TileLetter tile , int offset)
+    {
+        bool CouldSpawn = false;
+        //StartCoroutine(SpawnFlyTileCour(character, position, destination, offset));
+        for (int i = 0; i < UIManager.Display.transform.childCount; i++)
+        {
+            var distile = UIManager.Display.transform.GetChild(i).GetComponent<Tile>();
+            if (distile.character == tile.character)
+            {
+                CouldSpawn = true;
+                StartCoroutine(SpawnFlyTileCour(tile.character, tile.transform.position, distile, offset));
+                break;
+            }
+        }
+
+        return CouldSpawn;
+    }
 
 
     //UI Update Functions
@@ -248,7 +262,6 @@ public class TileGrid : MonoBehaviour
 
         UpdatePhrases(Word,out HashSet<char> chars);
 
-        UpdateDisplayTile(false);
         SpawnFlyTiles(chars, out bool CouldSpawn);
         UseGoldenTiles();
 
@@ -265,34 +278,26 @@ public class TileGrid : MonoBehaviour
 
         if (Moves == 0)Lose();
     }
-    private void SpawnFlyTiles(HashSet<char> chars, out bool CouldSpawn)
+    void SpawnFlyTiles(HashSet<char> chars, out bool CouldSpawn)
     {
         CouldSpawn = false;
-        int tiles = 0;
-        for (int i = 0; i < UIManager.Display.transform.childCount; i++)
+        int num = 0;
+        foreach (var tile in Tiles)
         {
-            foreach (var item in Tiles)
+            if (tile.IsSelected() && chars.Contains(tile.character))
             {
-                if (item.IsSelected() && chars.Contains(item.character))
+                if(SpawnFlyTile(tile, num))
                 {
-                    var tile = UIManager.Display.transform.GetChild(i).GetComponent<Tile>();
-                    if (tile.character == item.character)
-                    {
-                        CouldSpawn = true;
-                        StartCoroutine(SpawnFlyTile(item.character, item.transform.position, tile, tiles));
-                        tiles++;
-                        break;
-                    }
+                    num++;
+                    CouldSpawn = true;
                 }
-
             }
-        }        
+        }
     }
 
 
-
     //Misc Functions
-    private void UseGoldenTiles()
+    void UseGoldenTiles()
     {
         List<GoldenTileMeta> GoldenTiles = new();
         foreach (var item in Tiles)
@@ -315,7 +320,7 @@ public class TileGrid : MonoBehaviour
             if (item.IsSelected())
             {
                 item.Deselect();
-                item.StartInactiveCouroutine();
+                item.StartInactiveCouroutine(0);
             }
         }
 
@@ -324,7 +329,7 @@ public class TileGrid : MonoBehaviour
                 RayCast.RectBoom(item.position, 1);
 
     }
-    private async void CheckFor3LetterWords()
+    async void CheckFor3LetterWords()
     {
         await System.Threading.Tasks.Task.Run(() =>
         {
@@ -349,7 +354,7 @@ public class TileGrid : MonoBehaviour
 
             foreach (var item in Tiles)
             {
-                item.StartInactiveCouroutine();
+                item.StartInactiveCouroutine(0);
 
             }
         });
@@ -381,18 +386,20 @@ public class TileGrid : MonoBehaviour
                     DisplayPhrase = DisplayPhrase.Remove(i, 1).Insert(i, ObjectivePhrase[i] + "");
                     ObjectivePhrase = ObjectivePhrase.Remove(i, 1).Insert(i, " ");
                 }
+
+        UpdateDisplayTile(false);
     }
 
 
 
     //Gameobject Functions
-    private void InstantiatePrefab(Vector3 position)
+    void InstantiatePrefab(Vector3 position)
     {
         GameObject instantiatedPrefab = Instantiate(prefab, transform);
         instantiatedPrefab.transform.SetLocalPositionAndRotation(position, Quaternion.identity);
         instantiatedPrefab.transform.localScale = Vector3.one;
     }
-    internal void GenerateGameObjects()
+    void GenerateGameObjects()
     {
         float scale = 4f;
         RemoveGameObjects();
@@ -407,7 +414,7 @@ public class TileGrid : MonoBehaviour
             }
         }
     }
-    internal void RemoveGameObjects()
+    void RemoveGameObjects()
     {
         var tempArray = new GameObject[transform.childCount];
 
