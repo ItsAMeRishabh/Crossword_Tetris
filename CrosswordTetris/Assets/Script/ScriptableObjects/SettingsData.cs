@@ -37,9 +37,9 @@ public class SettingsData : ScriptableObject
     public List<Word> LetterPoints = new();
     readonly char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
-    public char[] GetAlphabet()
+    public char GetRandomChar()
     {
-        return alphabet;
+        return alphabet[Random.Range(0,alphabet.Length-1)];
     }
 
     public SettingsData()
@@ -53,4 +53,10 @@ public class SettingsData : ScriptableObject
             LetterPoints.Add(w);
         }
     }
+
+    public static bool IsAlphaNumeric(char v)
+    {
+        return (v >= 'a' && v <= 'z') || (v >= 'A' && v <= 'Z') || (v >= '0' && v <= '9');
+    }
+
 }

@@ -39,7 +39,7 @@ public class Reveal : PowerUp
         List<int> keyValuePairs = new();
 
         for (int i = 0; i < tileGrid.ObjectivePhrase.Length; i++)
-            if (TileGrid.IsAlphaNumeric(tileGrid.ObjectivePhrase[i]))
+            if (SettingsData.IsAlphaNumeric(tileGrid.ObjectivePhrase[i]))
                 keyValuePairs.Add(i);
 
 
@@ -55,7 +55,7 @@ public class Reveal : PowerUp
 
                 keyValuePairs.Remove(rand);
             }
-        tileGrid.ActivateDisplayTile(tileGrid);
+        tileGrid.UpdateDisplayTile(tileGrid);
     }
 }
 public static class RayCast

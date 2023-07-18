@@ -28,14 +28,14 @@ public class TileGrid : MonoBehaviour
     readonly List<TileLetter> Tiles = new();
 
     string ObjectiveQuestion = "Something witty here... idk";
-    
-    int points = 0;
+
+    int Points = 0;
     float ChanceOfRandomWords = 40f;
     int Moves;
 
 
     [NonSerialized]
-    public string ObjectivePhrase;    
+    public string ObjectivePhrase;
     [NonSerialized]
     public Array2DString InitialSpawns;
     [NonSerialized]
@@ -65,64 +65,66 @@ public class TileGrid : MonoBehaviour
     [Space(20)]
     public float Spacing = 0;
     public float FlyTileSpawnDelay = .3f;
+
+    //Base Functions
     public void GMAwake()
     {
+        //Assign stuff
         WordHandler = GetComponent<WordSelector>();
         TilePool = GetComponent<GameObjectPool>();
         PowerUpManager = GetComponent<PowerUpManager>();
 
+        //Import level data
         ObjectiveQuestion = lvl.Level.ObjectiveQuestion;
-        ObjectivePhrase = lvl.Level.ObjectivePhrase;
-
-        //int h = lvl.Level.InitalSpawns.GridSize.y- (lvl.Level.InitalSpawns.GridSize.x * lvl.Level.InitalSpawns.GridSize.y);
-        //for (int x = 0; x < h; x++)
-        //        lvl.Level.InitialWord.Add("");
-
-        InitialSpawns = lvl.Level.InitalLetter;//.ToArray().Reverse().ToArray()
-
+        ObjectivePhrase = lvl.Level.ObjectivePhrase.ToUpper();
+        InitialSpawns = lvl.Level.InitalLetter;
         Moves = lvl.Level.Moves;
-
         ChanceOf2X = lvl.Level.ChanceOf2X;
         ChanceOfRandomWords = lvl.Level.ChanceOfRandomCharacters;
-
-
         width = lvl.Level.InitalLetter.GridSize.x;
         height = lvl.Level.InitalLetter.GridSize.y;
+
+        //Generate the grid
         GenerateGameObjects();
     }
-
     public void GMStart()
     {
-        ObjectivePhrase = ObjectivePhrase.ToUpper();
-
+        //Set Display Phrase
         for (int i = 0; i < ObjectivePhrase.Length; i++)
-            if (!IsAlphaNumeric(ObjectivePhrase[i]))
+        {
+            if (!SettingsData.IsAlphaNumeric(ObjectivePhrase[i]))
                 DisplayPhrase += ObjectivePhrase[i];
             else
                 DisplayPhrase += "_";
-        
-        ActivateDisplayTile(true);
+        }
+
+        UpdateDisplayTile(true);
 
         UIManager.QuestionBox.text = ObjectiveQuestion;
         UIManager.MovesUsedBox.text = Moves + "";
+        UIManager.ExpBox.text = "";
 
+        //Get all tiles
         for (int i = 0; i < transform.childCount; i++)
             Tiles.Add(transform.GetChild(i).GetComponent<TileLetter>());
-
-
-
-        //CheckFor3LetterWords();
-        //StartCoroutine(nameof(SpawnCour));
     }
-
-    public static bool IsAlphaNumeric(char v)
+    public void Win()
     {
-        return (v >= 'a' && v <= 'z') || (v >= 'A' && v <= 'Z') || (v >= '0' && v <= '9');
+        Debug.Log("---WINNING SCREEN---");
+        Debug.Log("Points: " + Points);
+    }
+    public void Lose()
+    {
+
     }
 
+
+    //Spawn Functions
     IEnumerator SpawnGoldenTile()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
+
+        //Get all tile characters
         Dictionary<char, int> tiles = new();
         foreach (var tile in Tiles)
         {
@@ -132,66 +134,71 @@ public class TileGrid : MonoBehaviour
                 tiles[tile.character]++;
             }
         }
-        //LogDictionary<char>(tiles);
+
+        //Get most common character
         char m = tiles.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
-        List<TileLetter> list = new ();
+
+        //Get all tiles with that character
+        List<TileLetter> list = new();
         foreach (var tile in Tiles)
-            if(tile.character == m)
+            if (tile.character == m)
                 list.Add(tile);
 
 
+        //Set a random tile to golden
         list[Random.Range(0, list.Count)].SetGolden();
-        
-
-
+    }
+    public IEnumerator SpawnFlyTile(char character, Vector3 position, Tile destination, int i)
+    {
+        //@
+        yield return new WaitForSeconds(i * FlyTileSpawnDelay);
+        var fly = TilePool.Pool.Get();// Instantiate(FlyTile, item.transform.position, Quaternion.identity);
+        fly.transform.SetPositionAndRotation(position, Quaternion.identity);
+        var flytile = fly.GetComponent<FlyTile>();
+        flytile.target = destination;
+        flytile.Init();
+        fly.GetComponent<Tile>().SetCharacter(character);
+        fly.GetComponent<Tile>().Activate();
     }
 
 
-   public void ActivateDisplayTile(bool b)
+
+    //UI Update Functions
+    public void UpdateDisplayTile(bool b)
     {
-        UIManager.Display.Display(DisplayPhrase,b);
+        UIManager.Display.Display(DisplayPhrase, b);
 
         if (ObjectivePhrase.Replace('#', ' ').Trim() == "")
         {
-            Debug.Log("---WINNING SCREEN---");
-            Debug.Log("Points: " + points);
+            Win();
         }
 
     }
-
-    public char GetCharacter()
+    public float UpdatePoints()
     {
-        if (Random.Range(0, 100) < ChanceOfRandomWords)
+        if (WordHandler.IsWord(UIManager.OutputBox.text.ToUpper()) && UIManager.OutputBox.text.Length >= MinUserWordSize)
         {
-            return Settings.GetAlphabet()[Random.Range(0, 26)];
+            float pointsVal = 0;
+            foreach (var tile in Tiles)
+                if (tile.IsSelected())
+                {
+                    pointsVal += tile.GetPoints();
+                }
+            UIManager.ExpBox.text = "+" + pointsVal + " XP";
+            return pointsVal;
         }
         else
         {
-            string str = ObjectivePhrase.Replace(" ", "").Replace("#","");
-            if(str.Length == 0)
-            {
-                return Settings.GetAlphabet()[Random.Range(0, 26)];
-            }
-            return str[Random.Range(0, str.Length)];
-        }
-    }
-
-
-    public void UpdatePoints()
-    {
-        float pointsVal = 0;
-        foreach (var tile in Tiles)
-            if (tile.IsSelected())
-                pointsVal += tile.GetPoints();
-
-        if (pointsVal == 0)
-
             UIManager.ExpBox.text = "";
-        else
-        UIManager.ExpBox.text = "+" + pointsVal + " XP";
-
+            return 0;
+        }
     }
 
+
+
+
+
+    //Output Functions
     public int AddToOutput(char c)
     {
         UIManager.OutputBox.text += c;
@@ -208,139 +215,83 @@ public class TileGrid : MonoBehaviour
             UIManager.OutputBox.text = UIManager.OutputBox.text.Remove(i, 1);
         }
     }
-
-
-    public IEnumerator SpawnFlyTile(char character,Vector3 position, Tile destination , int i)
-    {
-        //@
-        yield return new WaitForSeconds(i * FlyTileSpawnDelay);
-        var fly = TilePool.Pool.Get();// Instantiate(FlyTile, item.transform.position, Quaternion.identity);
-        fly.transform.SetPositionAndRotation(position, Quaternion.identity);
-        var flytile = fly.GetComponent<FlyTile>();
-        flytile.target = destination;
-        flytile.Init();
-        fly.GetComponent<Tile>().SetCharacter(character);
-        fly.GetComponent<Tile>().Activate();
-    }
-
     public void ResetOutput()
     {
         foreach (var tile in Tiles)
             tile.Deselect();
     }
+
+
+    //Spaggeti Functions
     public void CheckTextBoxes()
     {
 
-        string word = UIManager.OutputBox.text.ToUpper();
-        
-        float pointsVal = 0;        
-        foreach (var tile in Tiles)
-            if (tile.IsSelected())
-                pointsVal += tile.GetPoints();
+        string Word = UIManager.OutputBox.text.ToUpper();
+        float pointsVal = UpdatePoints();
 
-        if(!WordHandler.IsWord(word))
+
+        if (!WordHandler.IsWord(Word))
         {
-            Debug.LogError(word + " is not a word!");
+            Debug.LogError(Word + " is not a word!");
+            return;
+        }
+        if (!(UIManager.OutputBox.text.Length >= MinUserWordSize))
+        {
+            Debug.LogError("Word should be longer than " + MinUserWordSize);
+            return;
         }
 
-        if (UIManager.OutputBox.text.Length >= MinUserWordSize && WordHandler.IsWord(word))
-            MakeWord(pointsVal,word);
-    }
-
-    public void MakeWord(float pointsVal, string word)
-    {
+        
         Moves--;
+        Points += (int)pointsVal;
 
-        points += (int)pointsVal;
-        HashSet<char> chars = new();
-        for (int i = 0; i < ObjectivePhrase.Length; i++)
-            for (int j = 0; j < word.Length; j++)
-                if (ObjectivePhrase[i].Equals(word[j]))
-                {
-                    chars.Add(word[j]);
-                    DisplayPhrase = DisplayPhrase.Remove(i, 1).Insert(i, ObjectivePhrase[i] + "");
-                    ObjectivePhrase = ObjectivePhrase.Remove(i, 1).Insert(i, " ");
-                }
 
-        ActivateDisplayTile(false);
-        bool b = SpawnFlyTiles(chars);
+        UpdatePhrases(Word,out HashSet<char> chars);
+
+        UpdateDisplayTile(false);
+        SpawnFlyTiles(chars, out bool CouldSpawn);
         UseGoldenTiles();
 
         UIManager.OutputBox.text = "";
-        UIManager.PointBox.text = "Points : " + points;
+        UIManager.PointBox.text = "Points : " + Points;
         UIManager.MovesUsedBox.text = Moves + "";
 
         //StartCoroutine(nameof(SpawnCour));
 
-        if (b)
-            StartCoroutine(SpawnGoldenTile());
+        if (CouldSpawn)StartCoroutine(SpawnGoldenTile());
 
         CheckFor3LetterWords();
 
-        if(Moves == 0)
-        {
-            Debug.Log("LOSING SCREEN");
-            Debug.Log("OUT OF MOVES");
-        }
-    }
 
-    private void CheckFor3LetterWords()
-    {
-        for (int x = 0; x < Tiles.Count; x++)
-        {
-            for (int y = 0; y < Tiles.Count; y++)
-            {
-                for (int z = 0; z < Tiles.Count; z++)
-                {
-                    if (x != y && y != z && z != x)
-                    {
-                        string s = Tiles[x].character + "" + Tiles[y].character + "" + Tiles[z].character;
-                        if (WordHandler.IsWord(s))
-                        {
-                            Debug.LogWarning(s);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-
-        foreach (var item in Tiles)
-        {
-            item.StartInactiveCouroutine();
-        }
+        if (Moves == 0)Lose();
     }
-    
-    private bool SpawnFlyTiles(HashSet<char> chars)
+    private void SpawnFlyTiles(HashSet<char> chars, out bool CouldSpawn)
     {
-        bool b = false;
+        CouldSpawn = false;
         int tiles = 0;
         for (int i = 0; i < UIManager.Display.transform.childCount; i++)
         {
             foreach (var item in Tiles)
             {
-                if (item.IsSelected())
+                if (item.IsSelected() && chars.Contains(item.character))
                 {
-                    if (chars.Contains(item.character))
+                    var tile = UIManager.Display.transform.GetChild(i).GetComponent<Tile>();
+                    if (tile.character == item.character)
                     {
-                        var tile = UIManager.Display.transform.GetChild(i).GetComponent<Tile>();
-                        if (tile.character == item.character)
-                        {
-                            b = true;
-                            StartCoroutine(SpawnFlyTile(item.character, item.transform.position, tile,tiles));
-                                           //@SpawnFlyTile(item.character, item.transform.position, tile,tiles);
-                            tiles ++;
-                            break;
-                        }
+                        CouldSpawn = true;
+                        StartCoroutine(SpawnFlyTile(item.character, item.transform.position, tile, tiles));
+                        tiles++;
+                        break;
                     }
-
                 }
-            }
-        }
 
-        return b;
+            }
+        }        
     }
 
+
+
+    //Misc Functions
     private void UseGoldenTiles()
     {
         List<GoldenTileMeta> GoldenTiles = new();
@@ -373,15 +324,74 @@ public class TileGrid : MonoBehaviour
                 RayCast.RectBoom(item.position, 1);
 
     }
+    private async void CheckFor3LetterWords()
+    {
+        await System.Threading.Tasks.Task.Run(() =>
+        {
+            for (int x = 0; x < Tiles.Count; x++)
+            {
+                for (int y = 0; y < Tiles.Count; y++)
+                {
+                    for (int z = 0; z < Tiles.Count; z++)
+                    {
+                        if (x != y && y != z && z != x)
+                        {
+                            string s = Tiles[x].character + "" + Tiles[y].character + "" + Tiles[z].character;
+                            if (WordHandler.IsWord(s))
+                            {
+                                Debug.LogWarning(s);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (var item in Tiles)
+            {
+                item.StartInactiveCouroutine();
+
+            }
+        });
+    }
+    public char GetCharacter()
+    {
+        if (Random.Range(0, 100) < ChanceOfRandomWords)
+        {
+            return Settings.GetRandomChar();
+        }
+        else
+        {
+            string str = ObjectivePhrase.Replace(" ", "").Replace("#", "");
+            if (str.Length == 0)
+            {
+                return Settings.GetRandomChar();
+            }
+            return str[Random.Range(0, str.Length)];
+        }
+    }
+    public void UpdatePhrases(string Word, out HashSet<char>  chars)
+    {
+        chars = new();
+        for (int i = 0; i < ObjectivePhrase.Length; i++)
+            for (int j = 0; j < Word.Length; j++)
+                if (ObjectivePhrase[i].Equals(Word[j]))
+                {
+                    chars.Add(Word[j]);
+                    DisplayPhrase = DisplayPhrase.Remove(i, 1).Insert(i, ObjectivePhrase[i] + "");
+                    ObjectivePhrase = ObjectivePhrase.Remove(i, 1).Insert(i, " ");
+                }
+    }
 
 
+
+    //Gameobject Functions
     private void InstantiatePrefab(Vector3 position)
     {
-        GameObject instantiatedPrefab = Instantiate(prefab,transform);
+        GameObject instantiatedPrefab = Instantiate(prefab, transform);
         instantiatedPrefab.transform.SetLocalPositionAndRotation(position, Quaternion.identity);
         instantiatedPrefab.transform.localScale = Vector3.one;
     }
-
     internal void GenerateGameObjects()
     {
         float scale = 4f;
@@ -389,9 +399,9 @@ public class TileGrid : MonoBehaviour
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
-        {
+            {
                 InstantiatePrefab(new Vector3(
-                (( x * transform.localScale.x * scale) + transform.position.x - ((width - 1) * transform.localScale.x * scale / 2) )* (.85f+Spacing),
+                ((x * transform.localScale.x * scale) + transform.position.x - ((width - 1) * transform.localScale.x * scale / 2)) * (.85f + Spacing),
                 (-y * transform.localScale.y * scale) + transform.position.y,
                 5));
             }
