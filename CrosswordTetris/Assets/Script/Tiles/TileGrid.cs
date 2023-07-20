@@ -68,6 +68,12 @@ public class TileGrid : MonoBehaviour
     public float FlyTileSpawnDelay = .3f;
 
     //Base Functions
+
+    private void Update()
+    {
+        UIManager.FPSCount.text = "FPS : " + (1 / Time.deltaTime).ToString("0");    
+    }
+
     public void GMAwake()
     {
         //Assign stuff

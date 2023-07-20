@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0172d1f8b01fa0e44afd46daed316e79, type: 3}
   m_Name: Level 3
   m_EditorClassIdentifier: 
-  ObjectiveQuestion: lvl 3
-  ObjectivePhrase: Who let the#dogs out
+  ObjectiveQuestion: Taylor Swift's Hit Song
+  ObjectivePhrase: SHAKE IT OFF
   InitalLetter:
     gridSize: {x: 5, y: 5}
     cellSize: {x: 32, y: 32}
@@ -23,31 +23,31 @@ MonoBehaviour:
       - 
       - 
       - 
-      - 
+      - T
     - row:
       - 
       - 
       - 
       - 
-      - 
+      - A
     - row:
       - 
       - 
       - 
       - 
-      - 
+      - K
     - row:
       - 
       - 
       - 
       - 
-      - 
+      - E
     - row:
+      - F
+      - I
+      - X
       - 
       - 
-      - 
-      - 
-      - 
-  StarRequired: 04000000080000000c000000
+  Moves: 20
   ChanceOf2X: 0
   ChanceOfRandomCharacters: 70

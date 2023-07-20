@@ -46,7 +46,7 @@ public class FlyPather : Poolable
 
         transform.position = p0;
 
-        i += Time.deltaTime * SpeedAcc;
+        i += Time.fixedDeltaTime * SpeedAcc;
         SpeedAcc += Accelaration;
         if(i > durationSeconds)
         {
