@@ -21,6 +21,8 @@ public class TileLetter : MonoBehaviour
     [SerializeField]
     //bool isEmpty = true;
     bool isGolden = false;
+    //bool isFrozen = false;
+
     public char character = ' ';
 
     public int X;
@@ -46,6 +48,8 @@ public class TileLetter : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (parent.Ended)
+            return;
         if (parent.PowerUpManager.Active == null)
             if (IsSelected())
                 Deselect();
@@ -56,20 +60,25 @@ public class TileLetter : MonoBehaviour
 
     }
 
-    public void GMAwake(int i, int width)
+    public void GMAwake()
     {
         InitialX = transform.position.x;
-        Y = (int)Mathf.Floor(i / width);
-        X = (i % width); 
         spriteRend = GetComponentInChildren<SpriteRenderer>();
         characterMesh = GetComponentInChildren<TextMesh>();
         parent = transform.parent.GetComponent<TileGrid>();
-        StartCoroutine(InactiveCouroutine(true,0));
+        StartCoroutine(ActivationCouroutine(true,0));
     }
     
+    public void SetCoords(int X, int Y)
+    {
+        this.X = X;
+        this.Y = Y;
+    }
+
     //Setters
     public void Select()
     {
+        //GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         if (!IsSelected())
         {
             selectedIndex = parent.AddToOutput(character);
@@ -133,7 +142,7 @@ public class TileLetter : MonoBehaviour
 
 
     //Coroutines
-    IEnumerator InactiveCouroutine(bool skip, float v)
+    IEnumerator ActivationCouroutine(bool skip, float v)
     {
         
         yield return new WaitForSeconds(v);
@@ -154,9 +163,32 @@ public class TileLetter : MonoBehaviour
             }
         }
 
-        
-        if (Initial && parent.InitialSpawns.GetCell(X,Y).Length > 0)//&& (parent.InitialSpawns.GridSize.y > Y && parent.InitialSpawns.GridSize.x > X))
-            Activate(parent.InitialSpawns.GetCell(X, Y).ToUpper()[0]);
+
+        if (Initial && parent.InitialSpawns.GetCell(X, Y).Length > 0)
+        {
+            string cell = parent.InitialSpawns.GetCell(X, Y).ToUpper();
+            switch (cell.Length)
+            {
+                case 1:
+                    Activate(cell[0]);
+                    break;
+                case 2:
+                    if (SettingsData.IsAlphaNumeric(cell[0]))
+                    {
+                        Activate(cell[0]);
+                    }
+                    else
+                    {
+                        Activate(cell[1]);
+                    }
+                    break;
+                case 3:
+                    Activate(cell[1]);
+                    break;
+                default:
+                    break;
+            }
+        }
         else
             Activate(parent.GetCharacter());
 
@@ -164,10 +196,12 @@ public class TileLetter : MonoBehaviour
 
         spriteRend.gameObject.transform.localScale = Vector3.one;
         characterMesh.gameObject.transform.localScale = Vector3.one;
+        //GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+
     }
-    public void StartInactiveCouroutine(float delay)
+    public void StartActivationCouroutine(float delay)
     {
-        StartCoroutine(InactiveCouroutine(false,delay));
+        StartCoroutine(ActivationCouroutine(false,delay));
     }
 
     //Getters/Setters

@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).GetComponent<TileLetter>().GMAwake(i, Grid.width);
+            transform.GetChild(i).GetComponent<TileLetter>().GMAwake();
         }
     }
     void Start()

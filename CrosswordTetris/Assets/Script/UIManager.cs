@@ -10,4 +10,6 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI MovesUsedBox;
     public TextMeshProUGUI ExpBox;
     public TileDisplay Display;
+    public GameObject WinPanel;
+    public GameObject LosePanel;
 }

@@ -5,7 +5,6 @@ using Random = UnityEngine.Random;
 using System.Linq;
 using System.Collections;
 using Array2DEditor;
-using Unity.VisualScripting;
 
 public class GoldenTileMeta
 {
@@ -34,7 +33,8 @@ public class TileGrid : MonoBehaviour
     float ChanceOfRandomWords = 40f;
     int Moves;
 
-
+    [NonSerialized]
+    public bool Ended = false;
     [NonSerialized]
     public string ObjectivePhrase;
     [NonSerialized]
@@ -111,12 +111,17 @@ public class TileGrid : MonoBehaviour
     }
     void Win()
     {
+        //yield return new WaitForSeconds(3.5f);
         Debug.Log("---WINNING SCREEN---");
         Debug.Log("Points: " + Points);
+        //Time.timeScale = 0;
+        Ended = true;
+        UIManager.WinPanel.SetActive(true);
     }
     void Lose()
     {
-
+        //Time.timeScale = 0;
+        UIManager.LosePanel.SetActive(true);
     }
 
 
@@ -169,7 +174,7 @@ public class TileGrid : MonoBehaviour
             {
                 CouldSpawn = true;
                 StartCoroutine(SpawnFlyTileCour(tile.character, tile.transform.position, distile, offset));
-                break;
+                //break;
             }
         }
 
@@ -286,7 +291,8 @@ public class TileGrid : MonoBehaviour
         {
             if (tile.IsSelected() && chars.Contains(tile.character))
             {
-                if(SpawnFlyTile(tile, num))
+                //chars.Count(c => c == tile.character);
+                if (SpawnFlyTile(tile, num))
                 {
                     num++;
                     CouldSpawn = true;
@@ -313,14 +319,14 @@ public class TileGrid : MonoBehaviour
                 {
                     //Debug.Log(item.character);
                     item1.didFunction++;
-                    item.StartInactiveCouroutine(.5f);
+                    item.StartActivationCouroutine(.5f);
                 }
             }
 
             if (item.IsSelected())
             {
                 item.Deselect();
-                item.StartInactiveCouroutine(0);
+                item.StartActivationCouroutine(0);
             }
         }
 
@@ -354,7 +360,7 @@ public class TileGrid : MonoBehaviour
 
             foreach (var item in Tiles)
             {
-                item.StartInactiveCouroutine(0);
+                item.StartActivationCouroutine(0);
 
             }
         });
@@ -393,24 +399,25 @@ public class TileGrid : MonoBehaviour
 
 
     //Gameobject Functions
-    void InstantiatePrefab(Vector3 position)
+    void InstantiatePrefab(Vector3 position, int X, int Y)
     {
         GameObject instantiatedPrefab = Instantiate(prefab, transform);
         instantiatedPrefab.transform.SetLocalPositionAndRotation(position, Quaternion.identity);
         instantiatedPrefab.transform.localScale = Vector3.one;
+        instantiatedPrefab.GetComponent<TileLetter>().SetCoords(X,Y);
     }
     void GenerateGameObjects()
     {
         float scale = 4f;
         RemoveGameObjects();
-        for (int y = 0; y < height; y++)
+        for (int y = height-1; y >= 0; y--)
         {
             for (int x = 0; x < width; x++)
             {
                 InstantiatePrefab(new Vector3(
                 ((x * transform.localScale.x * scale) + transform.position.x - ((width - 1) * transform.localScale.x * scale / 2)) * (.85f + Spacing),
-                (-y * transform.localScale.y * scale) + transform.position.y,
-                5));
+                (y * transform.localScale.y * scale)  - 26,
+                5), x,height-y-1 );
             }
         }
     }
