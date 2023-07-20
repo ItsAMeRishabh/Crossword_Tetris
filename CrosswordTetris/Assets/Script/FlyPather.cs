@@ -35,7 +35,7 @@ public class FlyPather : Poolable
         i = 0;
     }
 
-    private void Update() 
+    private void FixedUpdate() 
     {
         float t = i / durationSeconds;
         Vector3 p0 = Vector3.Lerp(Vector3.Lerp(InitPosition, control, t), Vector3.Lerp(control, targetPos, t), t);
