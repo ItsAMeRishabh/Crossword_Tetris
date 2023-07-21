@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level 4
   m_EditorClassIdentifier: 
   ObjectiveQuestion: Daughter in the Addams Family
-  ObjectivePhrase: WEDNESDAY ADDAMS
+  ObjectivePhrase: WEDNESDAY#ADDAMS
   InitalLetter:
     gridSize: {x: 5, y: 5}
     cellSize: {x: 32, y: 32}
