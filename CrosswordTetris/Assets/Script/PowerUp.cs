@@ -24,11 +24,11 @@ public class Shovel : PowerUp
 {
     public override void Activate(TileLetter tile)
     {
-        tile.parent.UpdatePhrases(tile.character.ToString(),out HashSet<char> _);
-        Debug.Log(tile.parent.ObjectivePhrase);
-        Debug.Log(tile.parent.DisplayPhrase);
+        tile.parent.UpdatePhrases(tile.character.ToString(),out HashSet<char> hs);
+        bool b = hs.Contains(tile.character);
         tile.StartActivationCouroutine(0);
-        tile.parent.SpawnFlyTile(tile,0);
+        if (b)
+            tile.parent.SpawnFlyTile(tile,0);
 
     }
 }

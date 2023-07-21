@@ -58,6 +58,10 @@ public class TileLetter : MonoBehaviour
     {
         if (parent.Ended)
             return;
+
+        if(type == Type.Frozen)
+            return;
+
         if (parent.PowerUpManager.Active == null)
             if (IsSelected())
                 Deselect();
@@ -185,10 +189,16 @@ public class TileLetter : MonoBehaviour
                 case 2:
                     if (SettingsData.IsAlphaNumeric(cell[0]))
                     {
-                        if (cell[1] == '@')
+                        switch (cell[1])
                         {
-                            GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-                            type = Type.Bubble;
+                            case '@':
+                                GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                                type = Type.Bubble;
+                                break;
+
+                            case '#':
+                                type = Type.Frozen;
+                                break;
                         }
                         Activate(cell[0]);
                     }
