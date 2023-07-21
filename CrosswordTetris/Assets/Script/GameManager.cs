@@ -12,10 +12,6 @@ public class GameManager : MonoBehaviour
         Grid.WordHandler.GMAwake();
         Grid.PowerUpManager.GMAwake();
 
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            transform.GetChild(i).GetComponent<TileLetter>().GMAwake();
-        }
     }
     void Start()
     {

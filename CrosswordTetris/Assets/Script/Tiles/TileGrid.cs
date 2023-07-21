@@ -32,6 +32,7 @@ public class TileGrid : MonoBehaviour
     int Points = 0;
     float ChanceOfRandomWords = 40f;
     int Moves;
+    bool HasWon = false;
 
     [NonSerialized]
     public bool Ended = false;
@@ -66,6 +67,7 @@ public class TileGrid : MonoBehaviour
     [Space(20)]
     public float Spacing = 0;
     public float FlyTileSpawnDelay = .3f;
+    public float ObjectiveDelay = 1f;
 
     //Base Functions
 
@@ -114,9 +116,13 @@ public class TileGrid : MonoBehaviour
         //Get all tiles
         for (int i = 0; i < transform.childCount; i++)
             Tiles.Add(transform.GetChild(i).GetComponent<TileLetter>());
+
+
+        StartCoroutine(ShowObjective());
     }
     void Win()
     {
+        HasWon= true;
         //yield return new WaitForSeconds(3.5f);
         Debug.Log("---WINNING SCREEN---");
         Debug.Log("Points: " + Points);
@@ -130,6 +136,17 @@ public class TileGrid : MonoBehaviour
         UIManager.LosePanel.SetActive(true);
     }
 
+    IEnumerator ShowObjective()
+    {
+        yield return new WaitForSeconds(.1f);
+        UIManager.ObjectivePanel.TogglePanel();
+        yield return new WaitForSeconds(ObjectiveDelay);
+        UIManager.ObjectivePanel.TogglePanel();
+
+        foreach (var tile in Tiles)
+            tile.GMAwake();
+        
+    }
 
     //Spawn Functions
     IEnumerator SpawnGoldenTile()
@@ -287,7 +304,7 @@ public class TileGrid : MonoBehaviour
         CheckFor3LetterWords();
 
 
-        if (Moves == 0)Lose();
+        if (Moves == 0 && !HasWon)Lose();
     }
     void SpawnFlyTiles(HashSet<char> chars, out bool CouldSpawn)
     {
@@ -302,6 +319,7 @@ public class TileGrid : MonoBehaviour
                 {
                     num++;
                     CouldSpawn = true;
+                    chars.Remove(tile.character);
                 }
             }
         }
@@ -422,7 +440,7 @@ public class TileGrid : MonoBehaviour
             {
                 InstantiatePrefab(new Vector3(
                 ((x * transform.localScale.x * scale) + transform.position.x - ((width - 1) * transform.localScale.x * scale / 2)) * (.85f + Spacing),
-                (y * transform.localScale.y * scale)  - 26,
+                (y * transform.localScale.y * scale) ,
                 5), x,height-y-1 );
             }
         }

@@ -11,8 +11,10 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI ExpBox;
     public TextMeshProUGUI FPSCount;
     public TileDisplay Display;
+    [Space(10)]
     public GameObject WinPanel;
     public GameObject LosePanel;
+    public SlidingPanel ObjectivePanel;
 
     private void Awake()
     {

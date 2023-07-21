@@ -1,12 +1,20 @@
 using System.Collections;
 using UnityEngine;
 
+public enum Type
+{
+    Normal,
+    Frozen,
+    Bubble
+}
 public class TileLetter : MonoBehaviour
 {
 
     public SpriteRenderer spriteRend;
 
     public TextMesh characterMesh;
+
+    public Type type;
 
     [SerializeField]
     Sprite tileTexture;
@@ -66,7 +74,7 @@ public class TileLetter : MonoBehaviour
         spriteRend = GetComponentInChildren<SpriteRenderer>();
         characterMesh = GetComponentInChildren<TextMesh>();
         parent = transform.parent.GetComponent<TileGrid>();
-        StartCoroutine(ActivationCouroutine(true,0));
+        StartActivationCouroutine(true,0);
     }
     
     public void SetCoords(int X, int Y)
@@ -135,7 +143,9 @@ public class TileLetter : MonoBehaviour
         }
 
         characterMesh.text = character+"";
-        transform.position += Vector3.up * 10;
+        //Debug.Log(character);
+        if(type != Type.Bubble)  
+            transform.position += Vector3.up * 10;
         transform.position = new Vector3(InitialX, transform.position.y, transform.position.z);
 
     }
@@ -175,6 +185,11 @@ public class TileLetter : MonoBehaviour
                 case 2:
                     if (SettingsData.IsAlphaNumeric(cell[0]))
                     {
+                        if (cell[1] == '@')
+                        {
+                            GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                            type = Type.Bubble;
+                        }
                         Activate(cell[0]);
                     }
                     else
@@ -196,12 +211,17 @@ public class TileLetter : MonoBehaviour
 
         spriteRend.gameObject.transform.localScale = Vector3.one;
         characterMesh.gameObject.transform.localScale = Vector3.one;
+
         //GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
 
     }
     public void StartActivationCouroutine(float delay)
     {
-        StartCoroutine(ActivationCouroutine(false,delay));
+        StartCoroutine(ActivationCouroutine(false, delay));
+    }
+    public void StartActivationCouroutine(bool b,float delay)
+    {
+        StartCoroutine(ActivationCouroutine(b, delay));
     }
 
     //Getters/Setters
