@@ -141,6 +141,7 @@ public class TileGrid : MonoBehaviour
     {
         //Time.timeScale = 0;
         UIManager.LosePanel.SetActive(true);
+        Ended = true;
     }
 
     IEnumerator ShowObjective()
