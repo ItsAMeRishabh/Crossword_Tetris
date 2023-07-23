@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-//using static UnityEditor.Progress;
 
 public abstract class PowerUp
 {
@@ -67,7 +65,57 @@ public class Reveal : PowerUp
 }
 public static class RayCast
 {
-    public static void HexBoom(Vector2 pos, int rad)
+    public static void RectBoom(Vector2 pos, int rad)
+    {
+        BoomRay(pos, Vector2.up, rad);
+        BoomRay(pos, Vector2.right, rad);
+        BoomRay(pos, -Vector2.up, rad);
+        BoomRay(pos, -Vector2.right, rad);
+    }
+    public static void RectDefrost(Vector2 pos, int rad)
+    {
+        DefrostRay(pos, Vector2.up, rad);
+        DefrostRay(pos, Vector2.right, rad);
+        DefrostRay(pos, -Vector2.up, rad);
+        DefrostRay(pos, -Vector2.right, rad);
+    }
+
+    private static void Ray(Vector2 pos, Vector2 vec, int rad, System.Action<TileLetter> action)
+    {
+        RaycastHit2D[] hits = Physics2D.RaycastAll(pos, vec, rad);
+        for (int i = 0; i < hits.Length; i++)
+        {
+            if (hits[i].collider != null && i != 0 && i < rad + 1)
+            {
+                if (hits[i].collider.gameObject.TryGetComponent<TileLetter>(out var a))
+                {
+                    action.Invoke(a);
+                }
+            }
+        }
+
+
+    }
+
+    static void BoomRay(Vector2 pos, Vector2 vec, int rad)
+    {
+        Ray(pos, vec, rad, (TileLetter a) => {
+            a.Deselect();
+            a.StartActivationCouroutine(0);
+        });
+    }
+    static void DefrostRay(Vector2 pos, Vector2 vec, int rad)
+    {
+        Ray(pos, vec, rad, (TileLetter a) => {
+            a.type = Type.Normal;
+            a.SetDefault();
+        });
+    }
+
+}
+
+/*
+     public static void HexBoom(Vector2 pos, int rad)
     {
         DeathBoomRay(pos, Vector2.up, rad);
         DeathBoomRay(pos, new Vector2(Mathf.Sqrt(3 / 4f), 0.5f), rad);
@@ -75,13 +123,6 @@ public static class RayCast
         DeathBoomRay(pos, -Vector2.up, rad);
         DeathBoomRay(pos, -new Vector2(Mathf.Sqrt(3 / 4f), 0.5f), rad);
         DeathBoomRay(pos, -new Vector2(Mathf.Sqrt(3 / 4f), -0.5f), rad);
-    }
-    public static void RectBoom(Vector2 pos, int rad)
-    {
-        DeathBoomRay(pos, Vector2.up, rad);
-        DeathBoomRay(pos, Vector2.right, rad);
-        DeathBoomRay(pos, -Vector2.up, rad);
-        DeathBoomRay(pos, -Vector2.right, rad);
     }
     public static IEnumerator RectBoomCour(Vector3 pos, int rad)
     {
@@ -95,21 +136,4 @@ public static class RayCast
         yield return new WaitForSeconds(delay);
         DeathBoomRay(pos, -Vector2.right, rad);
     }
-    public static void DeathBoomRay(Vector2 pos, Vector2 vec, int rad)
-    {
-        RaycastHit2D[] hits = Physics2D.RaycastAll(pos, vec, rad);
-        for (int i = 0; i < hits.Length; i++)
-        {
-            if (hits[i].collider != null && i != 0 && i < rad + 1)
-            {
-                if (hits[i].collider.gameObject.TryGetComponent<TileLetter>(out var a))
-                {
-                    a.Deselect();
-                    a.StartActivationCouroutine(0);
-                }
-            }
-        }
-
-    }
-
-}
+*/

@@ -4,32 +4,41 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SettingsData", menuName = "Config/SettingsData")]
 public class SettingsData : ScriptableObject
 {
-    [Space(10)]
+    [Space(20)]
     public Sprite displayInactive;
     public Sprite display;
     public Color displayFontColor;
 
 
-    [Space(10)]
+    [Space(20)]
     public Sprite inactive;
-    public Sprite active;
-    public Color activeFontColor;
 
-    [Space(5)]
+    
+    [Space(20)]
+    public Sprite normal;
+    public Color normalFontColor;
+
+    public Sprite frozen;
+    public Color frozenFontColor;
+
+    public Sprite bubble;
+    public Color bubbleFontColor;
+
+    [Space(25)]
     public Sprite fly;
     public Color flyFontColor;
 
 
-    [Space(5)]
+    [Space(25)]
     public Sprite active2X;
     public Color active2XFontColor;
 
 
-    [Space(5)]
+    [Space(25)]
     public Sprite selected;
     public Color selectedFontColor;
 
-    [Space(5)]
+    [Space(25)]
     public Sprite golden;
     public Color goldenFontColor;
 
@@ -46,11 +55,10 @@ public class SettingsData : ScriptableObject
     {
         for (int i = 0; i < alphabet.Length; i++)
         {
-            Word w = new()
+            LetterPoints.Add(new()
             {
                 word = alphabet[i] + ""
-            };
-            LetterPoints.Add(w);
+            });
         }
     }
 

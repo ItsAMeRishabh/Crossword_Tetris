@@ -14,7 +14,7 @@ public class TileLetter : MonoBehaviour
 
     public TextMesh characterMesh;
 
-    public Type type;
+    public Type type = Type.Normal;
 
     [SerializeField]
     Sprite tileTexture;
@@ -158,10 +158,10 @@ public class TileLetter : MonoBehaviour
     //Coroutines
     IEnumerator ActivationCouroutine(bool skip, float v)
     {
-        
         yield return new WaitForSeconds(v);
         if (!skip)
         {
+            RayCast.RectDefrost(transform.position,1);
 
             while (spriteRend.gameObject.transform.localScale.x < 1.3f)
             {
@@ -272,10 +272,24 @@ public class TileLetter : MonoBehaviour
     }
     public void SetDefault()
     {
-        spriteRend.sprite = parent.Settings.active;
-        characterMesh.color = parent.Settings.activeFontColor;
-        //isEmpty = false;
-    }
+        switch (type)
+        {
+            case Type.Normal:
+                spriteRend.sprite = parent.Settings.normal;
+                characterMesh.color = parent.Settings.normalFontColor;
+                break;
+            case Type.Frozen:
+                spriteRend.sprite = parent.Settings.frozen;
+                characterMesh.color = parent.Settings.frozenFontColor;
+                break;
+            case Type.Bubble:
+                spriteRend.sprite = parent.Settings.bubble;
+                characterMesh.color = parent.Settings.bubbleFontColor;
+                break;
+            default:
+                break;
+        }
+        }
     public void Set2X()
     {
         spriteRend.sprite = parent.Settings.active2X;

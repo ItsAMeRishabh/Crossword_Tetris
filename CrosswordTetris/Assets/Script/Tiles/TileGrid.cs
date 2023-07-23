@@ -107,7 +107,14 @@ public class TileGrid : MonoBehaviour
                 DisplayPhrase += "_";
         }
 
+
+        Debug.Log(ObjectivePhrase);
+        Debug.Log(DisplayPhrase);
+
+
         UpdateDisplayTile(true);
+        DisplayPhrase = DisplayPhrase.Replace("#", "");
+        ObjectivePhrase = ObjectivePhrase.Replace("#", "");
 
         UIManager.QuestionBox.text = ObjectiveQuestion;
         UIManager.MovesUsedBox.text = Moves + "";
@@ -157,33 +164,42 @@ public class TileGrid : MonoBehaviour
         Dictionary<char, int> tiles = new();
         foreach (var tile in Tiles)
         {
-            tiles.TryAdd(tile.character, 0);
-            tiles[tile.character]++;
+            if (tile.type == Type.Normal)
+            {
+                tiles.TryAdd(tile.character, 0);
+                tiles[tile.character]++;
+            }
         }
 
         //Get most common character
-        char m = tiles.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
+        if (tiles.Count > 0)
+        {
+            char m = tiles.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
 
-        //Get all tiles with that character
-        List<TileLetter> list = new();
-        foreach (var tile in Tiles)
-            if (tile.character == m)
-                list.Add(tile);
+            //Get all tiles with that character
+            List<TileLetter> list = new();
+            foreach (var tile in Tiles)
+                if (tile.character == m)
+                    list.Add(tile);
 
 
-        //Set a random tile to golden
-        list[Random.Range(0, list.Count)].SetGolden();
+            //Set a random tile to golden
+            list[Random.Range(0, list.Count)].SetGolden();
+        }
     }
     IEnumerator SpawnFlyTileCour(char character, Vector3 position, Tile destination, int offset)
     {
         yield return new WaitForSeconds(offset * FlyTileSpawnDelay);
         var fly = TilePool.Pool.Get();// Instantiate(FlyTile, item.transform.position, Quaternion.identity);
         fly.transform.SetPositionAndRotation(position, Quaternion.identity);
-        var flytile = fly.GetComponent<FlyPather>();
-        flytile.target = destination;
-        flytile.Init();
-        fly.GetComponent<Tile>().SetCharacter(character);
-        fly.GetComponent<Tile>().Activate();
+
+        var flypath = fly.GetComponent<FlyPather>();
+        flypath.target = destination;
+        flypath.Init();
+        
+        var tile = fly.GetComponent<Tile>();
+        tile.SetCharacter(character);
+        tile.Activate();
     }
 
     public bool SpawnFlyTile(TileLetter tile , int offset)
@@ -210,7 +226,7 @@ public class TileGrid : MonoBehaviour
     {
         UIManager.Display.Display(DisplayPhrase, b);
 
-        if (ObjectivePhrase.Replace('#', ' ').Trim() == "")
+        if (ObjectivePhrase.Trim().Length == 0)
         {
             Win();
         }

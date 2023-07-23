@@ -16,8 +16,12 @@ MonoBehaviour:
   display: {fileID: 21300000, guid: 517ad1400c6c7d544b1aad7992fbf27a, type: 3}
   displayFontColor: {r: 0.82452834, g: 1, b: 0.94904125, a: 1}
   inactive: {fileID: 21300000, guid: 8470be0c13fb171499197220f8e5f320, type: 3}
-  active: {fileID: 21300000, guid: c5d5a7d24f78a2741be24f8b4c982a9c, type: 3}
-  activeFontColor: {r: 0.12941177, g: 0.2, b: 0.3019608, a: 1}
+  normal: {fileID: 21300000, guid: c5d5a7d24f78a2741be24f8b4c982a9c, type: 3}
+  normalFontColor: {r: 0.12941177, g: 0.20000002, b: 0.3019608, a: 1}
+  frozen: {fileID: 21300000, guid: 2894087d4da4c4d498e7dbc30ab848d0, type: 3}
+  frozenFontColor: {r: 0.12941177, g: 0.20000002, b: 0.3019608, a: 1}
+  bubble: {fileID: 0}
+  bubbleFontColor: {r: 0, g: 0, b: 0, a: 0}
   fly: {fileID: 21300000, guid: c5d5a7d24f78a2741be24f8b4c982a9c, type: 3}
   flyFontColor: {r: 0.12941177, g: 0.2, b: 0.3019608, a: 1}
   active2X: {fileID: 21300000, guid: c6e8e2745ee32d04d81097ab74a70838, type: 3}

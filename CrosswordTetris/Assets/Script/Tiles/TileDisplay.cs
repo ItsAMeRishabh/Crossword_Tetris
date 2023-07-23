@@ -1,8 +1,4 @@
-using System.Collections.Generic;
-using System.Xml.Serialization;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class TileDisplay : MonoBehaviour
 {
@@ -18,16 +14,19 @@ public class TileDisplay : MonoBehaviour
         {
             string[] lines = sentence.Split('#');
             for (int i = 0; i < lines.Length; i++)
+            {
                 DisplayLine(lines[i], i);
+                Debug.Log(lines[i].Length);
+            }
         }
         else
         {
-            string sentence1 = sentence.Replace("#", "");
-            for (int i = 0; i < sentence1.Length; i++)
+            //string sentence1 = sentence.Replace("#", "");
+            for (int i = 0; i < sentence.Length; i++)
             {
                 Tile t = transform.GetChild(i).GetComponent<Tile>();
-                if (sentence1[i]!= '_')
-                    t.SetCharacter(sentence1[i]);
+                if (sentence[i] != '_')
+                    t.SetCharacter(sentence[i]);
 
                 if (activate)
                     t.Activate();
