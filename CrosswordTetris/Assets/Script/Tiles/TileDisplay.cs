@@ -16,7 +16,6 @@ public class TileDisplay : MonoBehaviour
             for (int i = 0; i < lines.Length; i++)
             {
                 DisplayLine(lines[i], i);
-                Debug.Log(lines[i].Length);
             }
         }
         else

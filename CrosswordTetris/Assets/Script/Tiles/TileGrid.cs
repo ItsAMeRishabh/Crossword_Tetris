@@ -84,14 +84,15 @@ public class TileGrid : MonoBehaviour
         PowerUpManager = GetComponent<PowerUpManager>();
 
         //Import level data
-        ObjectiveQuestion = lvl.Level.ObjectiveQuestion;
-        ObjectivePhrase = lvl.Level.ObjectivePhrase.ToUpper();
-        InitialSpawns = lvl.Level.InitalLetter;
-        Moves = lvl.Level.Moves;
-        ChanceOf2X = lvl.Level.ChanceOf2X;
-        ChanceOfRandomWords = lvl.Level.ChanceOfRandomCharacters;
-        width = lvl.Level.InitalLetter.GridSize.x;
-        height = lvl.Level.InitalLetter.GridSize.y;
+        Level level = lvl.Levels[lvl.Current];
+        ObjectiveQuestion = level.ObjectiveQuestion;
+        ObjectivePhrase = level.ObjectivePhrase.ToUpper();
+        InitialSpawns = level.InitalLetter;
+        Moves = level.Moves;
+        ChanceOf2X = level.ChanceOf2X;
+        ChanceOfRandomWords = level.ChanceOfRandomCharacters;
+        width = level.InitalLetter.GridSize.x;
+        height = level.InitalLetter.GridSize.y;
 
         //Generate the grid
         GenerateGameObjects();
@@ -106,10 +107,6 @@ public class TileGrid : MonoBehaviour
             else
                 DisplayPhrase += "_";
         }
-
-
-        Debug.Log(ObjectivePhrase);
-        Debug.Log(DisplayPhrase);
 
 
         UpdateDisplayTile(true);
@@ -129,6 +126,9 @@ public class TileGrid : MonoBehaviour
     }
     void Win()
     {
+        if(lvl.CompletedLevels <= lvl.Current)
+            lvl.CompletedLevels = lvl.Current + 1;
+        //lvl.CompletedLevels = 
         HasWon= true;
         //yield return new WaitForSeconds(3.5f);
         Debug.Log("---WINNING SCREEN---");

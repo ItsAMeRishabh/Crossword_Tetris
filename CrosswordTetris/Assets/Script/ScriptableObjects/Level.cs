@@ -1,5 +1,4 @@
 using Array2DEditor;
-using Unity.Collections;
 using UnityEngine;
 [CreateAssetMenu(fileName = "Level", menuName = "Config/Level")]
 

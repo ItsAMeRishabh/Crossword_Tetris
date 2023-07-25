@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectiveQuestion: Let's Begin!
   ObjectivePhrase: WORDUIZ
+  HoverForCheatsheet: 0
   InitalLetter:
     gridSize: {x: 5, y: 5}
     cellSize: {x: 32, y: 32}
