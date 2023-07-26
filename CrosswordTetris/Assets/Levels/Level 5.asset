@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectiveQuestion: Elsa's Signature Song
   ObjectivePhrase: LET IT GO
+  HoverForCheatsheet: 0
   InitalLetter:
-    gridSize: {x: 5, y: 5}
+    gridSize: {x: 6, y: 5}
     cellSize: {x: 32, y: 32}
     cells:
     - row:
@@ -24,11 +25,6 @@ MonoBehaviour:
       - 
       - 
       - 
-    - row:
-      - 
-      - 
-      - 
-      - 
       - 
     - row:
       - 
@@ -36,13 +32,23 @@ MonoBehaviour:
       - 
       - 
       - 
+      - 
+    - row:
+      - 
+      - 
+      - 
+      - 
+      - 
+      - 
     - row:
       - 
       - 
       - 
       - 
       - 
+      - 
     - row:
+      - 
       - 
       - 
       - 

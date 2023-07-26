@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Level 10
   m_EditorClassIdentifier: 
   ObjectiveQuestion: Nerdy girl turns royal overnight
-  ObjectivePhrase: The Princess Diaries
+  ObjectivePhrase: The Princess#Diaries
+  HoverForCheatsheet: 0
   InitalLetter:
-    gridSize: {x: 5, y: 5}
+    gridSize: {x: 6, y: 6}
     cellSize: {x: 32, y: 32}
     cells:
     - row:
@@ -24,11 +25,6 @@ MonoBehaviour:
       - 
       - 
       - 
-    - row:
-      - 
-      - 
-      - 
-      - 
       - 
     - row:
       - 
@@ -36,13 +32,30 @@ MonoBehaviour:
       - 
       - 
       - 
+      - 
+    - row:
+      - 
+      - 
+      - 
+      - 
+      - 
+      - 
     - row:
       - 
       - 
       - 
       - 
       - 
+      - 
     - row:
+      - 
+      - 
+      - 
+      - 
+      - 
+      - 
+    - row:
+      - 
       - 
       - 
       - 
