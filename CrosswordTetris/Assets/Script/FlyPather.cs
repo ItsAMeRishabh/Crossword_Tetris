@@ -35,7 +35,7 @@ public class FlyPather : Poolable
         i = 0;
     }
 
-    private void FixedUpdate() 
+    private void Update() 
     {
         float t = i / durationSeconds;
         Vector3 p0 = Vector3.Lerp(Vector3.Lerp(InitPosition, control, t), Vector3.Lerp(control, targetPos, t), t);
@@ -44,8 +44,10 @@ public class FlyPather : Poolable
         particle.transform.rotation = Quaternion.AngleAxis((Mathf.Atan2(vec.y, vec.x) * Mathf.Rad2Deg) - 90,Vector3.forward);
         transform.position = p0;
 
-        i += Time.fixedDeltaTime * SpeedAcc;
-        SpeedAcc += Accelaration;
+        SpeedAcc += Accelaration * Time.deltaTime * .5f;
+        i += Time.deltaTime * SpeedAcc;
+        SpeedAcc += Accelaration *Time.deltaTime *.5f;
+        
         if(i > durationSeconds)
         {
             target.Activate();

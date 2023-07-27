@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    public ActiveLevel ActiveLevel;
+    public LevelHandler ActiveLevel;
     public GameObject Levels;
 
     public Sprite Current;

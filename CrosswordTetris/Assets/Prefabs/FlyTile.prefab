@@ -301,8 +301,8 @@ MonoBehaviour:
   target: {fileID: 0}
   particle: {fileID: 1690833637130901658}
   Deviation: 2
-  Speed: 0.08
-  Accelaration: 0.12
+  Speed: 1.5
+  Accelaration: 2
 --- !u!4 &5574963641749200389 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3427492216621710291, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}

@@ -1,16 +1,7 @@
 using UnityEngine.Pool;
 using UnityEngine;
-using Random = UnityEngine.Random;
-using System;
 using System.Collections.Generic;
-using System.IO;
 
-[Serializable]
-public class Word
-{
-    public string word = "";
-    public float value = 0;
-}
 
 public class WordSelector : MonoBehaviour
 {

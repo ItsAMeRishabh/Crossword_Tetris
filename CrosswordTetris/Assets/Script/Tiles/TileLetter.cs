@@ -1,11 +1,16 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public enum Type
 {
     Normal,
     Frozen,
-    Bubble
+    Bubble,
+    Golden,
+    Disabled
+
 }
 public class TileLetter : MonoBehaviour
 {
@@ -15,6 +20,7 @@ public class TileLetter : MonoBehaviour
     public TextMesh characterMesh;
 
     public Type type = Type.Normal;
+    public int BubbleBlocked = 0;
 
     [SerializeField]
     Sprite tileTexture;
@@ -22,17 +28,17 @@ public class TileLetter : MonoBehaviour
     Sprite emptyTexture;
 
 
-    public float multiplier = 1;
+    //public float multiplier = 1;
 
     [SerializeField]
     int selectedIndex = -1;
-    [SerializeField]
+    //[SerializeField]
     //bool isEmpty = true;
-    bool isGolden = false;
+    //bool isGolden = false;
     //bool isFrozen = false;
 
-    public char character = ' ';
-
+    public char Letter;
+    
     public int X;
     public int Y;
 
@@ -43,16 +49,9 @@ public class TileLetter : MonoBehaviour
     private float InitialX = 0;
     
     public TileGrid parent;
+    private Rigidbody2D rb;
 
-    public void Set(TileLetter comp)
-    {
-        comp.spriteRend.sprite = spriteRend.sprite;
-        comp.spriteRend.color = spriteRend.color;
 
-        comp.characterMesh.text = characterMesh.text;
-        comp.characterMesh.color = characterMesh.color;
-
-    }
 
     private void OnMouseDown()
     {
@@ -78,6 +77,7 @@ public class TileLetter : MonoBehaviour
         spriteRend = GetComponentInChildren<SpriteRenderer>();
         characterMesh = GetComponentInChildren<TextMesh>();
         parent = transform.parent.GetComponent<TileGrid>();
+        rb = GetComponent<Rigidbody2D>();
         StartActivationCouroutine(true,0);
     }
     
@@ -90,15 +90,11 @@ public class TileLetter : MonoBehaviour
     //Setters
     public void Select()
     {
-        //GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-        if (!IsSelected())
+        if (!IsSelected() && type != Type.Frozen)
         {
-            selectedIndex = parent.AddToOutput(character);
-            spriteRend.sprite= parent.Settings.selected;
-
-            characterMesh.color = parent.Settings.selectedFontColor;
+            selectedIndex = parent.AddToOutput(Letter);
+            UpdateVisual();
         }
-        parent.UpdatePoints();
 
     }
     public void Deselect()
@@ -107,53 +103,51 @@ public class TileLetter : MonoBehaviour
         {
             transform.parent.GetComponent<TileGrid>().RemoveFromOutput(selectedIndex);
             selectedIndex =  -1;
-            if (multiplier == 1)
+            UpdateVisual();
+
+        }
+    }
+
+    void Activate(char character)
+    {
+        transform.position = new Vector3(InitialX, transform.position.y, transform.position.z);
+        if (parent.TilesNeeded[X] > 0)
+        {
+            if (type == Type.Disabled)
+                type = Type.Normal;
+
+            if (type == Type.Bubble)
             {
-                SetDefault();
+                BubbleBlocked = parent.TilesNeeded[X];
+                parent.TilesNeeded[X] = 0;
             }
             else
             {
-                Set2X();
-
+                parent.TilesNeeded[X]--;
             }
-            if (isGolden) {
-                SetGolden();
-            }
-            parent.UpdatePoints();
 
-        }
-    }
-    
-    void Activate(char character)
-    {
-        if (selectedIndex != -1)
-            parent.RemoveFromOutput(selectedIndex);
-        isGolden = false;
-        selectedIndex = -1;
-        
+            if (selectedIndex != -1)
+                parent.RemoveFromOutput(selectedIndex);
 
-        multiplier = Random.Range(0, 100) < parent.ChanceOf2X ? 2 : 1;
-        spriteRend.sprite = tileTexture;
-        //isEmpty = false;
-        this.character = character;
 
-        if(multiplier == 1)
-        {
-            SetDefault();
+            //type = Type.Normal;
+            Letter = character;
+            selectedIndex = -1;
         }
         else
         {
-            Set2X();
+            type = Type.Disabled;
+
         }
 
-        characterMesh.text = character+"";
-        //Debug.Log(character);
-        if(type != Type.Bubble)  
+        if (type != Type.Bubble)
+        {
             transform.position += Vector3.up * 10;
-        transform.position = new Vector3(InitialX, transform.position.y, transform.position.z);
+        }
+
+        UpdateVisual();
 
     }
-
 
     //Coroutines
     IEnumerator ActivationCouroutine(bool skip, float v)
@@ -161,6 +155,13 @@ public class TileLetter : MonoBehaviour
         yield return new WaitForSeconds(v);
         if (!skip)
         {
+            if (type == Type.Bubble)
+            {
+                type = Type.Normal;
+                UpdateVisual();
+                yield break;
+            }
+            parent.TilesNeeded[X]++;
             RayCast.RectDefrost(transform.position,1);
 
             while (spriteRend.gameObject.transform.localScale.x < 1.3f)
@@ -192,7 +193,6 @@ public class TileLetter : MonoBehaviour
                         switch (cell[1])
                         {
                             case '@':
-                                GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
                                 type = Type.Bubble;
                                 break;
 
@@ -238,17 +238,16 @@ public class TileLetter : MonoBehaviour
 
     public int GetPoints()
     {
-        float RET = 0;
-        foreach (var item in parent.Settings.LetterPoints)
+        foreach (var item in parent.Settings.LetterMetaData)
         {
-            if(item.word == character + "")
+            if(item.letter == Letter)
             {
-                RET = item.value;
+                return (int)item.value;
             }
         }
 
 
-        return (int)(RET * multiplier);
+        return 0;
     }
     public int GetSelectedIndex()
     {
@@ -264,14 +263,25 @@ public class TileLetter : MonoBehaviour
 
     //Prop Edits
 
-    public void SetGolden()
+    public void UpdateVisual()
     {
-        spriteRend.sprite= parent.Settings.golden;
-        characterMesh.color = parent.Settings.goldenFontColor;
-        isGolden = true;
-    }
-    public void SetDefault()
-    {
+        characterMesh.text = Letter + "";
+
+        if (IsSelected())
+        {
+            spriteRend.sprite = parent.Settings.selected;
+            characterMesh.color = parent.Settings.selectedFontColor;
+            return;
+        }
+
+        if(type != Type.Disabled)
+        {
+            rb.simulated = true;
+            spriteRend.enabled = true;
+            rb.bodyType = RigidbodyType2D.Dynamic;
+
+        }
+
         switch (type)
         {
             case Type.Normal:
@@ -283,28 +293,28 @@ public class TileLetter : MonoBehaviour
                 characterMesh.color = parent.Settings.frozenFontColor;
                 break;
             case Type.Bubble:
+                rb.bodyType = RigidbodyType2D.Static;
                 spriteRend.sprite = parent.Settings.bubble;
                 characterMesh.color = parent.Settings.bubbleFontColor;
+                break;
+            case Type.Golden:
+                spriteRend.sprite = parent.Settings.golden;
+                characterMesh.color = parent.Settings.goldenFontColor;
+                break;
+
+            case Type.Disabled:
+                rb.simulated = false;
+                spriteRend.enabled = false;
+                //characterMesh.text = " ";
                 break;
             default:
                 break;
         }
         }
-    public void Set2X()
-    {
-        spriteRend.sprite = parent.Settings.active2X;
-        characterMesh.color = parent.Settings.active2XFontColor;
-        multiplier = 2;
-        //isEmpty = false;
-    }
-
+    
     public bool IsSelected()
     {
         return selectedIndex != -1;
     }
-    public bool IsGolden()
-    {
-        return isGolden;
-    }
-
+    
 }

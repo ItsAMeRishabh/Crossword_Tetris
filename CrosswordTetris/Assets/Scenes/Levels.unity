@@ -4451,10 +4451,10 @@ RectTransform:
   m_Father: {fileID: 1725299960}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1240, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -1920, y: 0}
+  m_SizeDelta: {x: 1284, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2093385782
 GameObject:
@@ -4910,21 +4910,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
-      propertyPath: Spacing
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: UIManager
       value: 
       objectReference: {fileID: 1839822391565999272}
-    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
-      propertyPath: ObjectiveDelay
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
-      propertyPath: FlyTileSpawnDelay
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 170047489761353837, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: m_RootOrder
       value: 4

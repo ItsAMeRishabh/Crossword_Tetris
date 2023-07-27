@@ -17,69 +17,97 @@ MonoBehaviour:
   displayFontColor: {r: 0.82452834, g: 1, b: 0.94904125, a: 1}
   inactive: {fileID: 21300000, guid: 8470be0c13fb171499197220f8e5f320, type: 3}
   normal: {fileID: 21300000, guid: c5d5a7d24f78a2741be24f8b4c982a9c, type: 3}
-  normalFontColor: {r: 0.12941177, g: 0.20000002, b: 0.3019608, a: 1}
   frozen: {fileID: 21300000, guid: 2894087d4da4c4d498e7dbc30ab848d0, type: 3}
-  frozenFontColor: {r: 0.12941177, g: 0.20000002, b: 0.3019608, a: 1}
-  bubble: {fileID: 0}
-  bubbleFontColor: {r: 0, g: 0, b: 0, a: 0}
+  bubble: {fileID: 21300000, guid: 0ac55f9f886d827408c102bdf33c5ff7, type: 3}
   fly: {fileID: 21300000, guid: c5d5a7d24f78a2741be24f8b4c982a9c, type: 3}
-  flyFontColor: {r: 0.12941177, g: 0.2, b: 0.3019608, a: 1}
   active2X: {fileID: 21300000, guid: c6e8e2745ee32d04d81097ab74a70838, type: 3}
-  active2XFontColor: {r: 0, g: 0, b: 0, a: 1}
   selected: {fileID: 21300000, guid: 98b27d4d42a737c4ab2a3b6695917271, type: 3}
-  selectedFontColor: {r: 0, g: 0.32156864, b: 0.4745098, a: 1}
   golden: {fileID: 21300000, guid: 109fef926dca18a45ae6de20cfdaade6, type: 3}
+  normalFontColor: {r: 0.12941177, g: 0.20000002, b: 0.3019608, a: 1}
+  frozenFontColor: {r: 0.023905255, g: 0.44006705, b: 0.745283, a: 1}
+  bubbleFontColor: {r: 0.6603774, g: 0, b: 0, a: 1}
+  flyFontColor: {r: 0.12941177, g: 0.2, b: 0.3019608, a: 1}
+  active2XFontColor: {r: 0, g: 0, b: 0, a: 1}
+  selectedFontColor: {r: 0, g: 0.32156864, b: 0.4745098, a: 1}
   goldenFontColor: {r: 0.1584018, g: 0, b: 0.21698111, a: 1}
-  LetterPoints:
-  - word: A
+  scaler: 1.25
+  LetterMetaData:
+  - letter: 65
     value: 100
-  - word: B
+    weightage: 8
+  - letter: 66
     value: 300
-  - word: C
+    weightage: 3
+  - letter: 67
     value: 300
-  - word: D
+    weightage: 5
+  - letter: 68
     value: 200
-  - word: E
+    weightage: 4
+  - letter: 69
     value: 100
-  - word: F
+    weightage: 11
+  - letter: 70
     value: 400
-  - word: G
+    weightage: 2
+  - letter: 71
     value: 200
-  - word: H
+    weightage: 3
+  - letter: 72
     value: 400
-  - word: I
+    weightage: 3
+  - letter: 73
     value: 100
-  - word: J
+    weightage: 8
+  - letter: 74
     value: 800
-  - word: K
+    weightage: 1
+  - letter: 75
     value: 500
-  - word: L
+    weightage: 1
+  - letter: 76
     value: 100
-  - word: M
+    weightage: 6
+  - letter: 77
     value: 300
-  - word: N
+    weightage: 4
+  - letter: 78
     value: 100
-  - word: O
+    weightage: 6
+  - letter: 79
     value: 100
-  - word: P
+    weightage: 6
+  - letter: 80
     value: 300
-  - word: Q
+    weightage: 3.5
+  - letter: 81
     value: 1000
-  - word: R
+    weightage: 1
+  - letter: 82
     value: 100
-  - word: S
+    weightage: 7
+  - letter: 83
     value: 100
-  - word: T
+    weightage: 8
+  - letter: 84
     value: 100
-  - word: U
+    weightage: 7
+  - letter: 85
     value: 100
-  - word: V
+    weightage: 3
+  - letter: 86
     value: 400
-  - word: W
+    weightage: 1
+  - letter: 87
     value: 400
-  - word: X
+    weightage: 1
+  - letter: 88
     value: 800
-  - word: Y
+    weightage: 1
+  - letter: 89
     value: 400
-  - word: Z
+    weightage: 2
+  - letter: 90
     value: 1000
+    weightage: 1
+  totalWeight: 142.40001

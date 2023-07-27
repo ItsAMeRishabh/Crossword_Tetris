@@ -48,11 +48,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad827083d69122b449758f95b561944b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TilesNeeded: 
   MinUserWordSize: 3
   prefab: {fileID: 3427492216621710294, guid: 2942b7b0087751c4d9d35a0843546651, type: 3}
   lvl: {fileID: 11400000, guid: cd889b9908fd803498d7c221c95e0c47, type: 2}
   Settings: {fileID: 11400000, guid: 5f0ca2d3efc412e40aeec6263ba7007c, type: 2}
   UIManager: {fileID: 0}
+  Spacing: 0.05
+  FlyTileSpawnDelay: 0.1
+  ObjectiveDelay: 2
 --- !u!114 &170047489761353746
 MonoBehaviour:
   m_ObjectHideFlags: 0

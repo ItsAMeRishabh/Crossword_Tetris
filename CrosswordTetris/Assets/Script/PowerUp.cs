@@ -22,8 +22,8 @@ public class Shovel : PowerUp
 {
     public override void Activate(TileLetter tile)
     {
-        tile.parent.UpdatePhrases(tile.character.ToString(),out HashSet<char> hs);
-        bool b = hs.Contains(tile.character);
+        tile.parent.UpdatePhrases(tile.Letter.ToString(),out HashSet<char> hs);
+        bool b = hs.Contains(tile.Letter);
         tile.StartActivationCouroutine(0);
         if (b)
             tile.parent.SpawnFlyTile(tile,0);
@@ -107,8 +107,11 @@ public static class RayCast
     static void DefrostRay(Vector2 pos, Vector2 vec, int rad)
     {
         Ray(pos, vec, rad, (TileLetter a) => {
-            a.type = Type.Normal;
-            a.SetDefault();
+            if (a.type == Type.Frozen)
+            {
+                a.type = Type.Normal;
+                a.UpdateVisual();
+            }
         });
     }
 
