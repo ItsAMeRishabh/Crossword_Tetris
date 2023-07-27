@@ -22,8 +22,8 @@ public class Tile : MonoBehaviour
     
     public void Awake()
     {
-        sr = GetComponent<SpriteRenderer>();
-        characterMesh = GetComponentInChildren<TextMesh>();
+        //sr = GetComponent<SpriteRenderer>();
+        //characterMesh = GetComponentInChildren<TextMesh>();
         if (TryGetComponent(out FlyPather _))
         {
             tileTexture = Settings.fly;

@@ -21,22 +21,12 @@ public class TileLetter : MonoBehaviour
 
     public Type type = Type.Normal;
     
-    int BubbleBlocked = -1;
-
-    [SerializeField]
-    Sprite tileTexture;
-    [SerializeField]
-    Sprite emptyTexture;
-
 
     //public float multiplier = 1;
 
     [SerializeField]
     int selectedIndex = -1;
-    //[SerializeField]
-    //bool isEmpty = true;
-    //bool isGolden = false;
-    //bool isFrozen = false;
+    int BubbleBlocked = -1;
 
     public char Letter;
     
@@ -51,7 +41,7 @@ public class TileLetter : MonoBehaviour
     private float TopY = 0;
     
     public TileGrid parent;
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
 
 
 
@@ -77,10 +67,7 @@ public class TileLetter : MonoBehaviour
     {
         InitialX = transform.position.x;
         TopY = transform.position.y + 10;
-        spriteRend = GetComponentInChildren<SpriteRenderer>();
-        characterMesh = GetComponentInChildren<TextMesh>();
         parent = transform.parent.GetComponent<TileGrid>();
-        rb = GetComponent<Rigidbody2D>();
         StartActivationCouroutine(true,0);
     }
     
@@ -104,7 +91,7 @@ public class TileLetter : MonoBehaviour
     {
         if (IsSelected())
         {
-            transform.parent.GetComponent<TileGrid>().RemoveFromOutput(selectedIndex);
+            parent.RemoveFromOutput(selectedIndex);
             selectedIndex =  -1;
             UpdateVisual();
 

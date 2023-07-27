@@ -18,7 +18,9 @@ public class FlyPather : Poolable
     Vector3 InitPosition;
     Vector3 targetPos;
 
-    
+    Vector3 p0;
+        Vector3 vec;
+
     public void Init()
     {
 
@@ -28,8 +30,7 @@ public class FlyPather : Poolable
         durationSeconds = (Vector3.Distance(InitPosition, targetPos) );//@ + Random.Range(0, Deviation)) / Speed;
 
         Vector3 D = (InitPosition - targetPos).normalized;
-        Vector3 devi = new (-D.y,D.x,0);//@ * Random.Range(-Deviation,Deviation);
-        control = Vector3.Lerp(transform.position, targetPos, 0.5f) + devi;
+        control = Vector3.Lerp(transform.position, targetPos, 0.5f) + new Vector3(-D.y, D.x, 0); 
 
         SpeedAcc = Speed;
         i = 0;
@@ -38,8 +39,8 @@ public class FlyPather : Poolable
     private void Update() 
     {
         float t = i / durationSeconds;
-        Vector3 p0 = Vector3.Lerp(Vector3.Lerp(InitPosition, control, t), Vector3.Lerp(control, targetPos, t), t);
-        Vector3 vec = (p0 - transform.position).normalized;
+        p0 = Vector3.Lerp(Vector3.Lerp(InitPosition, control, t), Vector3.Lerp(control, targetPos, t), t);
+        vec = (p0 - transform.position).normalized;
 
         particle.transform.rotation = Quaternion.AngleAxis((Mathf.Atan2(vec.y, vec.x) * Mathf.Rad2Deg) - 90,Vector3.forward);
         transform.position = p0;

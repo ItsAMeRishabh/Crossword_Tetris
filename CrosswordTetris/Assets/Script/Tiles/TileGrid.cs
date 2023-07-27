@@ -45,11 +45,8 @@ public class TileGrid : MonoBehaviour
     public string DisplayPhrase;
     [NonSerialized]
     public float ChanceOf2X = 10f;
-    [NonSerialized]
     public WordSelector WordHandler;
-    [NonSerialized]
     public GameObjectPool TilePool;
-    [NonSerialized]
     public PowerUpManager PowerUpManager;
     [NonSerialized]
     public int width;
@@ -80,9 +77,9 @@ public class TileGrid : MonoBehaviour
     public void GMAwake()
     {
         //Assign stuff
-        WordHandler = GetComponent<WordSelector>();
-        TilePool = GetComponent<GameObjectPool>();
-        PowerUpManager = GetComponent<PowerUpManager>();
+        //WordHandler = GetComponent<WordSelector>();
+        //TilePool = GetComponent<GameObjectPool>();
+        //PowerUpManager = GetComponent<PowerUpManager>();
 
         //Import level data
         Level level = lvl.Levels[lvl.Current];

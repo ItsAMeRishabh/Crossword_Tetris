@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 170047489761353837}
+  - component: {fileID: 1876447283}
   - component: {fileID: 170047489761353836}
   - component: {fileID: 170047489761353746}
-  - component: {fileID: 1876447283}
   - component: {fileID: 1898758228521804192}
   - component: {fileID: 5690997121263268912}
   m_Layer: 0
@@ -36,6 +36,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1876447283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170047489761353839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c82ccf195f2c4646ac52b2b8c920d65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &170047489761353836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49,6 +61,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TilesNeeded: 
+  WordHandler: {fileID: 170047489761353746}
+  TilePool: {fileID: 1898758228521804192}
+  PowerUpManager: {fileID: 5690997121263268912}
   MinUserWordSize: 3
   prefab: {fileID: 3427492216621710294, guid: 2942b7b0087751c4d9d35a0843546651, type: 3}
   lvl: {fileID: 11400000, guid: cd889b9908fd803498d7c221c95e0c47, type: 2}
@@ -70,18 +85,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   txt: {fileID: 4900000, guid: f5ad182090dd69c4090d1b2e42f5a4fa, type: 3}
---- !u!114 &1876447283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 170047489761353839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c82ccf195f2c4646ac52b2b8c920d65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1898758228521804192
 MonoBehaviour:
   m_ObjectHideFlags: 0
