@@ -326,8 +326,9 @@ GameObject:
   - component: {fileID: 101002804}
   - component: {fileID: 101002806}
   - component: {fileID: 101002805}
+  - component: {fileID: 101002807}
   m_Layer: 5
-  m_Name: Panel (1)
+  m_Name: W_Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -342,7 +343,7 @@ RectTransform:
   m_GameObject: {fileID: 101002803}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.89, y: 1.89, z: 1.89}
+  m_LocalScale: {x: 1.9, y: 1.9, z: 1.9}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1768315637}
@@ -391,6 +392,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 101002803}
   m_CullTransparentMesh: 1
+--- !u!95 &101002807
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 101002803}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fd42cc9c7be4658468fe94a56bef805c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &117859276
 GameObject:
   m_ObjectHideFlags: 0
@@ -3900,7 +3921,7 @@ GameObject:
   - component: {fileID: 1768315635}
   - component: {fileID: 1768315634}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Transition_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
