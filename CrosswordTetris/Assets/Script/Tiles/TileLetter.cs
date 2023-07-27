@@ -20,7 +20,8 @@ public class TileLetter : MonoBehaviour
     public TextMesh characterMesh;
 
     public Type type = Type.Normal;
-    public int BubbleBlocked = 0;
+    
+    int BubbleBlocked = -1;
 
     [SerializeField]
     Sprite tileTexture;
@@ -47,6 +48,7 @@ public class TileLetter : MonoBehaviour
 
     private bool Initial = true;
     private float InitialX = 0;
+    private float TopY = 0;
     
     public TileGrid parent;
     private Rigidbody2D rb;
@@ -74,6 +76,7 @@ public class TileLetter : MonoBehaviour
     public void GMAwake()
     {
         InitialX = transform.position.x;
+        TopY = transform.position.y + 10;
         spriteRend = GetComponentInChildren<SpriteRenderer>();
         characterMesh = GetComponentInChildren<TextMesh>();
         parent = transform.parent.GetComponent<TileGrid>();
@@ -114,9 +117,11 @@ public class TileLetter : MonoBehaviour
         if (parent.TilesNeeded[X] > 0)
         {
             if (type == Type.Disabled)
+            {
                 type = Type.Normal;
+            }
 
-            if (type == Type.Bubble)
+            if (type == Type.Bubble && BubbleBlocked == -1)
             {
                 BubbleBlocked = parent.TilesNeeded[X];
                 parent.TilesNeeded[X] = 0;
@@ -137,12 +142,11 @@ public class TileLetter : MonoBehaviour
         else
         {
             type = Type.Disabled;
-
         }
 
         if (type != Type.Bubble)
         {
-            transform.position += Vector3.up * 10;
+            transform.position = new Vector3(InitialX, TopY, transform.position.z);
         }
 
         UpdateVisual();
@@ -157,13 +161,17 @@ public class TileLetter : MonoBehaviour
         {
             if (type == Type.Bubble)
             {
+                parent.TilesNeeded[X] = BubbleBlocked;
+                BubbleBlocked = -1;
                 type = Type.Normal;
                 UpdateVisual();
                 yield break;
             }
-            parent.TilesNeeded[X]++;
-            RayCast.RectDefrost(transform.position,1);
-
+            if (type != Type.Disabled)
+            {
+                parent.TilesNeeded[X]++;
+                RayCast.RectDefrost(transform.position, 1);
+            }
             while (spriteRend.gameObject.transform.localScale.x < 1.3f)
             {
                 spriteRend.gameObject.transform.localScale += Vector3.one * PopScale;
