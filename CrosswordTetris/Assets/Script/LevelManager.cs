@@ -28,8 +28,11 @@ public class LevelManager : MonoBehaviour
                 child.GetComponent<UnityEngine.UI.Image>().sprite = Locked;
                 continue;
             }
+            
             child.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => Open(levelIndex));
             child.GetComponentInChildren<TextMeshProUGUI>().text = (1 + levelIndex).ToString();
+
+            //
         }
     }
 

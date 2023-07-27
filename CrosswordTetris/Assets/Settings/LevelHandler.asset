@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LevelHandler
   m_EditorClassIdentifier: 
   Current: 0
-  CompletedLevels: 3
+  CompletedLevels: 0
   Levels:
   - {fileID: 11400000, guid: f717a940e98969c4a8cb2958fdd28bb3, type: 2}
   - {fileID: 11400000, guid: 707f36b20f964af46a3a85377fd821e7, type: 2}
