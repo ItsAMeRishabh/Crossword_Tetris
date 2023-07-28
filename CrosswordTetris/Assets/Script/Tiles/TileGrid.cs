@@ -5,6 +5,7 @@ using Random = UnityEngine.Random;
 using System.Linq;
 using System.Collections;
 using Array2DEditor;
+using Unity.VisualScripting;
 
 public class GoldenTileMeta
 {
@@ -31,9 +32,11 @@ public class TileGrid : MonoBehaviour
     string ObjectiveQuestion = "Something witty here... idk";
 
     int Points = 0;
+    int Stars = 0;
     float ChanceOfRandomWords = 40f;
     int Moves;
     bool HasWon = false;
+    public int[] StarsThreshHolds;
 
     [NonSerialized]
     public bool Ended = false;
@@ -44,7 +47,9 @@ public class TileGrid : MonoBehaviour
     [NonSerialized]
     public string DisplayPhrase;
     [NonSerialized]
-    public float ChanceOf2X = 10f;
+    public float ChanceOfCoin;
+    [NonSerialized]
+    public float ChanceOfGem;
     public WordSelector WordHandler;
     public GameObjectPool TilePool;
     public PowerUpManager PowerUpManager;
@@ -87,10 +92,14 @@ public class TileGrid : MonoBehaviour
         ObjectivePhrase = level.ObjectivePhrase.ToUpper();
         InitialSpawns = level.InitalLetter;
         Moves = level.Moves;
-        ChanceOf2X = level.ChanceOf2X;
+        ChanceOfCoin = level.ChanceOfCoin;
+        ChanceOfGem = level.ChanceOfGem;
         ChanceOfRandomWords = level.ChanceOfRandomCharacters;
         width = level.InitalLetter.GridSize.x;
         height = level.InitalLetter.GridSize.y;
+        StarsThreshHolds = (int[])level.StarsThreshHolds.Clone();
+        UIManager.PointsProgress.SetStars(StarsThreshHolds);
+
         for (int i = 0; i < width; i++)
             TilesNeeded.Add(height);
         
@@ -115,26 +124,29 @@ public class TileGrid : MonoBehaviour
         DisplayPhrase = DisplayPhrase.Replace("#", "");
         ObjectivePhrase = ObjectivePhrase.Replace("#", "");
 
+        UpdateUI();
         UIManager.QuestionBox.text = ObjectiveQuestion;
-        UIManager.MovesUsedBox.text = Moves + "";
         UIManager.ExpBox.text = "";
 
         //Get all tiles
         for (int i = 0; i < transform.childCount; i++)
+        {
             Tiles.Add(transform.GetChild(i).GetComponent<TileLetter>());
-
+            Tiles[^1].GMPreAwake();
+        }
 
         StartCoroutine(ShowObjective());
     }
     void Win()
     {
-        if(lvl.CompletedLevels <= lvl.Current)
-            lvl.CompletedLevels = lvl.Current + 1;
+        if (lvl.CompletedLevels <= lvl.Current)
+            lvl.SetCompletedLevels(lvl.Current + 1);
         //lvl.CompletedLevels = 
         HasWon= true;
         //yield return new WaitForSeconds(3.5f);
         Debug.Log("---WINNING SCREEN---");
         Debug.Log("Points: " + Points);
+        Debug.Log("Stars: " + Stars);
         //Time.timeScale = 0;
         Ended = true;
         UIManager.WinPanel.SetActive(true);
@@ -148,13 +160,10 @@ public class TileGrid : MonoBehaviour
 
     IEnumerator ShowObjective()
     {
-        //yield return new WaitForSeconds(.1f);
-        //UIManager.ObjectivePanel.TogglePanel();
         yield return new WaitForSeconds(ObjectiveDelay);
-        //UIManager.ObjectivePanel.TogglePanel();
 
         foreach (var tile in Tiles)
-            tile.GMAwake();
+            tile.GMAwake(this);
         
     }
 
@@ -306,9 +315,23 @@ public class TileGrid : MonoBehaviour
             return;
         }
 
+        for (int i = 0; i < StarsThreshHolds.Length; i++)
+        {
+
+            if (pointsVal >= StarsThreshHolds[i] && StarsThreshHolds[i] != -1)
+            {
+                Stars++;
+                StarsThreshHolds[i] = -1;
+            }
+        }
+
 
         Moves--;
         Points += (int)pointsVal;
+
+
+
+        UpdateUI();
 
 
         UpdatePhrases(Word, out HashSet<char> chars);
@@ -316,9 +339,6 @@ public class TileGrid : MonoBehaviour
         SpawnFlyTiles(chars, out bool CouldSpawn);
         UseGoldenTiles();
 
-        UIManager.OutputBox.text = "";
-        UIManager.PointBox.text = "Points : " + Points;
-        UIManager.MovesUsedBox.text = Moves + "";
 
         //StartCoroutine(nameof(SpawnCour));
 
@@ -333,6 +353,18 @@ public class TileGrid : MonoBehaviour
 
         if (Moves == 0 && !HasWon) Lose();
     }
+
+    private void UpdateUI()
+    {
+
+        UIManager.PointsProgress.Points(Points);
+        UIManager.OutputBox.text = "";
+        UIManager.PointBox.text = "Points : " + Points;
+        UIManager.MovesUsedBox.text = Moves + "";
+        UIManager.Coins.text = lvl.Coins + " Coins";
+        UIManager.Gems.text = lvl.Gems + " Gems";
+    }
+
     void SpawnFlyTiles(HashSet<char> chars, out bool CouldSpawn)
     {
         CouldSpawn = false;
@@ -368,6 +400,8 @@ public class TileGrid : MonoBehaviour
             {
                 if (item.Letter == item1.character)
                 {
+                    Points += item.GetPoints(); UIManager.PointsProgress.Points(Points);
+
                     //Debug.Log(item.character);
                     item1.didFunction++;
                     item.StartActivationCouroutine(.5f);

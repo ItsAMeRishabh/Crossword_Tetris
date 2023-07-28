@@ -10,7 +10,11 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI MovesUsedBox;
     public TextMeshProUGUI ExpBox;
     public TextMeshProUGUI FPSCount;
+    public TextMeshProUGUI Coins;
+    public TextMeshProUGUI Gems;
     public TileDisplay Display;
+    public ProgressBar PointsProgress;
+
     [Space(10)]
     public GameObject WinPanel;
     public GameObject LosePanel;

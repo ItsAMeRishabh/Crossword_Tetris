@@ -31,7 +31,13 @@ public class SettingsData : ScriptableObject
     public Sprite active2X;
     public Sprite selected;
     public Sprite golden;
+    public Sprite debris;
 
+
+    [Space(20)]
+
+    public Sprite gem;
+    public Sprite coin;
 
     [Space(20)]
     public Color normalFontColor;

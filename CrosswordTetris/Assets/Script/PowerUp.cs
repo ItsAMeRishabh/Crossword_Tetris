@@ -112,6 +112,11 @@ public static class RayCast
                 a.type = Type.Normal;
                 a.UpdateVisual();
             }
+
+            if(a.type == Type.Debris)
+            {
+                a.StartActivationCouroutine(0);
+            }
         });
     }
 

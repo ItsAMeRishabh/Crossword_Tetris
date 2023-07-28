@@ -28,9 +28,9 @@ MonoBehaviour:
     - row:
       - W#
       - O#
-      - r#
-      - d#
-      - 
+      - ^r
+      - d
+      - '%'
     - row:
       - 
       - 
@@ -38,7 +38,7 @@ MonoBehaviour:
       - 
       - 
     - row:
-      - q
+      - q@
       - 
       - 
       - 
@@ -47,8 +47,10 @@ MonoBehaviour:
       - 
       - 
       - 
-      - z
+      - $z
       - 
+  StarsThreshHolds: e8030000d007000088130000
   Moves: 20
-  ChanceOf2X: 0
+  ChanceOfCoin: 15
+  ChanceOfGem: 1
   ChanceOfRandomCharacters: 70

@@ -8,15 +8,17 @@ public class Level : ScriptableObject
     public string ObjectiveQuestion;
     public string ObjectivePhrase;
 
-    [Tooltip("# : Frozen\n@ : Bubble")]
+    [Tooltip("# : Frozen\n@ : Bubble\n% : Debris\n$ : Coins\n^ : Gems")]
     public bool HoverForCheatsheet;
+
     public Array2DString InitalLetter;
 
 
-
+    public int[] StarsThreshHolds = new int[] { 500, 900, 1200 };
     public int Moves;
 
 
-    public int ChanceOf2X = 15;
+    public float ChanceOfCoin = 15;
+    public float ChanceOfGem = 1;
     public int ChanceOfRandomCharacters = 70;
 }
