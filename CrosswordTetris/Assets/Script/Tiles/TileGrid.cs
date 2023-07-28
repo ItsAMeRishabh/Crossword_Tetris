@@ -148,10 +148,10 @@ public class TileGrid : MonoBehaviour
 
     IEnumerator ShowObjective()
     {
-        yield return new WaitForSeconds(.1f);
-        UIManager.ObjectivePanel.TogglePanel();
+        //yield return new WaitForSeconds(.1f);
+        //UIManager.ObjectivePanel.TogglePanel();
         yield return new WaitForSeconds(ObjectiveDelay);
-        UIManager.ObjectivePanel.TogglePanel();
+        //UIManager.ObjectivePanel.TogglePanel();
 
         foreach (var tile in Tiles)
             tile.GMAwake();
