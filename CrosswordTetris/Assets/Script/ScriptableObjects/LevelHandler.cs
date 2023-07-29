@@ -28,7 +28,7 @@ public class LevelHandler : ScriptableObject
         PlayerPrefs.SetInt("CompletedLevels", completedLevels);
     }
 
-    void Awake()
+    void OnEnable()
     {
         CompletedLevels = PlayerPrefs.GetInt("CompletedLevels", 0);
         Coins = PlayerPrefs.GetInt("Coins", 0);

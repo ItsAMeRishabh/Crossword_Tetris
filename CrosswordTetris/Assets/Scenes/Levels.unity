@@ -653,6 +653,7 @@ GameObject:
   - component: {fileID: 179757792}
   - component: {fileID: 179757794}
   - component: {fileID: 179757793}
+  - component: {fileID: 179757795}
   m_Layer: 5
   m_Name: Win
   m_TagString: Untagged
@@ -723,6 +724,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 179757791}
   m_CullTransparentMesh: 1
+--- !u!114 &179757795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179757791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46f8bdbdf01bd614aaa5505d711e7ffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lvl: {fileID: 11400000, guid: cd889b9908fd803498d7c221c95e0c47, type: 2}
+  Phrase: {fileID: 1486369564}
+  Points: {fileID: 1776477567}
+  Coins: {fileID: 1167357312}
+  Gems: {fileID: 138142661}
+  Star1: {fileID: 827323463}
+  Star2: {fileID: 244050967}
+  Star3: {fileID: 1110331139}
+  Active: {r: 1, g: 1, b: 1, a: 1}
+  InActive: {r: 0.10754714, g: 0.101886764, b: 0.11320752, a: 0.91764706}
 --- !u!1 &180975022
 GameObject:
   m_ObjectHideFlags: 0
@@ -2787,10 +2810,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 992857005}
-        m_TargetAssemblyTypeName: Navigator, Assembly-CSharp
-        m_MethodName: Goto
-        m_Mode: 5
+      - m_Target: {fileID: 179757795}
+        m_TargetAssemblyTypeName: WinScreenManager, Assembly-CSharp
+        m_MethodName: Claim
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5721,19 +5744,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1382318178}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 992857005}
-        m_TargetAssemblyTypeName: Navigator, Assembly-CSharp
-        m_MethodName: Goto
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: LevelSelector
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1382318178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7729,7 +7740,7 @@ MonoBehaviour:
   Gems: {fileID: 2127125655}
   Display: {fileID: 2016133571}
   PointsProgress: {fileID: 1368007782}
-  WinPanel: {fileID: 179757791}
+  WinPanel: {fileID: 179757795}
   LosePanel: {fileID: 498501176}
   ObjectivePanel: {fileID: 0}
 --- !u!224 &2374837695537728677

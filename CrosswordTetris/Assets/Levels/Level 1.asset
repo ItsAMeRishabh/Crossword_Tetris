@@ -49,7 +49,7 @@ MonoBehaviour:
       - 
       - $z
       - 
-  StarsThreshHolds: e8030000d007000088130000
+  StarsThreshHolds: d0070000a00f000088130000
   Moves: 20
   ChanceOfCoin: 15
   ChanceOfGem: 1

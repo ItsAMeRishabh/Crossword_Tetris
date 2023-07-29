@@ -169,6 +169,18 @@ public class TileLetter : MonoBehaviour
     //Coroutines
     IEnumerator ActivationCouroutine(bool skip, float v)
     {
+        parent.Unstable++;
+        if (Bonus.Coin == bonus)
+        {
+            bonus = Bonus.None;
+            parent.Coins++;
+        }
+        if (bonus == Bonus.Gem)
+        {
+            bonus = Bonus.None;
+            parent.Gems++;
+        }
+
         yield return new WaitForSeconds(v);
         if (!skip)
         {
@@ -183,6 +195,7 @@ public class TileLetter : MonoBehaviour
                 BubbleBlocked = -1;
                 type = Type.Normal;
                 UpdateVisual();
+                parent.Unstable--;
                 yield break;
             }
             if (type != Type.Disabled)
@@ -190,19 +203,6 @@ public class TileLetter : MonoBehaviour
                 parent.TilesNeeded[X]++;
                 RayCast.RectDefrost(transform.position, 1);
             }
-
-            if (Bonus.Coin == bonus)
-            {
-                bonus = Bonus.None;
-                parent.lvl.SetCoins(parent.lvl.Coins + 1);
-            }
-            if (bonus == Bonus.Gem)
-            {
-
-                bonus = Bonus.None;
-                parent.lvl.SetGems(parent.lvl.Gems + 1);
-            }
-
 
 
 
@@ -306,6 +306,8 @@ public class TileLetter : MonoBehaviour
         spriteRend.gameObject.transform.localScale = Vector3.one;
         characterMesh.gameObject.transform.localScale = Vector3.one;
 
+
+        parent.Unstable--;
         //GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
 
     }

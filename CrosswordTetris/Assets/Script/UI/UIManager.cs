@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
     public ProgressBar PointsProgress;
 
     [Space(10)]
-    public GameObject WinPanel;
+    public WinScreenManager WinPanel;
     public GameObject LosePanel;
     public SlidingPanel ObjectivePanel;
 

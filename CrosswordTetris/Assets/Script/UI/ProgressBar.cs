@@ -26,7 +26,7 @@ public class ProgressBar : MonoBehaviour
         m = StarThreshHolds.Max();
 
         for (int i = 0; i < StarImages.Count; i++)
-            StarImages[i].anchoredPosition = new Vector3(ProgressBarImage.sizeDelta.x * StarThreshHolds[i] / m, StarImages[i].anchoredPosition.y, 0);
+            StarImages[i].anchoredPosition = new Vector3(ProgressBarBack.sizeDelta.x * StarThreshHolds[i] / m, StarImages[i].anchoredPosition.y, 0);
 
         ProgressBarImage.sizeDelta = new Vector2(0, ProgressBarImage.sizeDelta.y);
     }

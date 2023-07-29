@@ -11,7 +11,7 @@ public class CloudMovement : MonoBehaviour
     [SerializeField]
     private int offsetRange;
 
-    private void FixedUpdate()
+    private void Start()
     {
         ObjectPoolerScript.objpoolerinstance.SpawnFromPool("Clouds", spawnPoint, Quaternion.identity);
         gameObject.transform.position += new Vector3(cloudMoveSpeed*Time.fixedDeltaTime, 0);
@@ -23,7 +23,7 @@ public class CloudMovement : MonoBehaviour
         {
             //new Y offset
             int offset = Random.Range(-offsetRange, offsetRange);
-            Vector3 newTransform = new Vector3(spawnPoint.x, offset, 0);
+            //Vector3 newTransform = new Vector3(spawnPoint.x, offset, 0);
 
             gameObject.transform.position = new Vector3(spawnPoint.x, spawnPoint.y + offset);
 

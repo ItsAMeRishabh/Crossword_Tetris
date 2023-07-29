@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections;
 using Array2DEditor;
 using Unity.VisualScripting;
+using System.Threading.Tasks;
 
 public class GoldenTileMeta
 {
@@ -37,6 +38,26 @@ public class TileGrid : MonoBehaviour
     int Moves;
     bool HasWon = false;
     public int[] StarsThreshHolds;
+
+
+    public int _unstable;
+    public int Unstable
+    {
+        get
+        {
+            return _unstable;
+        }
+        set
+        {
+            _unstable = value;
+            if(_unstable == 0)
+            {
+                StartCoroutine(Win());
+                StartCoroutine(Lose());
+            }
+        }
+    }
+
 
     [NonSerialized]
     public bool Ended = false;
@@ -71,6 +92,10 @@ public class TileGrid : MonoBehaviour
     public float Spacing = 0;
     public float FlyTileSpawnDelay = .3f;
     public float ObjectiveDelay = 1f;
+
+    public int Coins = 0;
+    public int Gems = 0;
+
 
     //Base Functions
 
@@ -137,25 +162,33 @@ public class TileGrid : MonoBehaviour
 
         StartCoroutine(ShowObjective());
     }
-    void Win()
+    IEnumerator Win()
     {
-        if (lvl.CompletedLevels <= lvl.Current)
-            lvl.SetCompletedLevels(lvl.Current + 1);
-        //lvl.CompletedLevels = 
-        HasWon= true;
-        //yield return new WaitForSeconds(3.5f);
-        Debug.Log("---WINNING SCREEN---");
-        Debug.Log("Points: " + Points);
-        Debug.Log("Stars: " + Stars);
-        //Time.timeScale = 0;
-        Ended = true;
-        UIManager.WinPanel.SetActive(true);
+        if (ObjectivePhrase.Trim().Length == 0)
+        {
+            yield return new WaitForSeconds(1);
+            UpdateUI();
+            if (lvl.CompletedLevels <= lvl.Current)
+                lvl.SetCompletedLevels(lvl.Current + 1);
+            //lvl.CompletedLevels = 
+            HasWon = true;
+            Debug.Log("---WINNING SCREEN---");
+            Debug.Log("Points: " + Points);
+            Debug.Log("Stars: " + Stars);
+            //Time.timeScale = 0;
+            Ended = true;
+            UIManager.WinPanel.Win(DisplayPhrase,Stars,Points, Coins, Gems);
+        }
     }
-    void Lose()
+    IEnumerator Lose()
     {
-        //Time.timeScale = 0;
-        UIManager.LosePanel.SetActive(true);
-        Ended = true;
+        if (Moves == 0 && !HasWon)
+        {
+            yield return new WaitForSeconds(1);
+            UpdateUI();
+            UIManager.LosePanel.SetActive(true);
+            Ended = true;
+        }
     }
 
     IEnumerator ShowObjective()
@@ -240,11 +273,6 @@ public class TileGrid : MonoBehaviour
     {
         UIManager.Display.Display(DisplayPhrase, b);
 
-        if (ObjectivePhrase.Trim().Length == 0)
-        {
-            Win();
-        }
-
     }
     public float UpdatePoints()
     {
@@ -266,6 +294,16 @@ public class TileGrid : MonoBehaviour
         }
     }
 
+    private void UpdateUI()
+    {
+
+        UIManager.PointsProgress.Points(Points);
+        UIManager.OutputBox.text = "";
+        UIManager.PointBox.text = "Points : " + Points;
+        UIManager.MovesUsedBox.text = Moves + "";
+        UIManager.Coins.text = Coins + " Coins";
+        UIManager.Gems.text = Gems + " Gems";
+    }
 
 
 
@@ -329,11 +367,6 @@ public class TileGrid : MonoBehaviour
         Moves--;
         Points += (int)pointsVal;
 
-
-
-        UpdateUI();
-
-
         UpdatePhrases(Word, out HashSet<char> chars);
 
         SpawnFlyTiles(chars, out bool CouldSpawn);
@@ -350,20 +383,9 @@ public class TileGrid : MonoBehaviour
             if (tile.type == Type.Disabled)
                 tile.StartActivationCouroutine(0);
 
-
-        if (Moves == 0 && !HasWon) Lose();
+        UpdateUI();
     }
 
-    private void UpdateUI()
-    {
-
-        UIManager.PointsProgress.Points(Points);
-        UIManager.OutputBox.text = "";
-        UIManager.PointBox.text = "Points : " + Points;
-        UIManager.MovesUsedBox.text = Moves + "";
-        UIManager.Coins.text = lvl.Coins + " Coins";
-        UIManager.Gems.text = lvl.Gems + " Gems";
-    }
 
     void SpawnFlyTiles(HashSet<char> chars, out bool CouldSpawn)
     {

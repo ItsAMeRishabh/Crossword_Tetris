@@ -353,7 +353,10 @@ MonoBehaviour:
   MovesUsedBox: {fileID: 0}
   ExpBox: {fileID: 0}
   FPSCount: {fileID: 0}
+  Coins: {fileID: 0}
+  Gems: {fileID: 0}
   Display: {fileID: 0}
+  PointsProgress: {fileID: 0}
   WinPanel: {fileID: 0}
   LosePanel: {fileID: 0}
   ObjectivePanel: {fileID: 0}
