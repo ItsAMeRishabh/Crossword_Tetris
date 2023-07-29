@@ -5,7 +5,7 @@ public class FrameRateManager : MonoBehaviour
 {
     [Header("Frame Settings")]
     int MaxRate = 9999;
-    public float TargetFrameRate = 60.0f;
+    public float TargetFrameRate = 200f;
     float currentFrameTime;
     void Awake()
     {

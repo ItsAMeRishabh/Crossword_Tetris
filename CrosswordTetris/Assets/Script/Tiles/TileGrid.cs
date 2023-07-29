@@ -301,7 +301,7 @@ public class TileGrid : MonoBehaviour
         UIManager.OutputBox.text = "";
         UIManager.PointBox.text = "Points : " + Points;
         UIManager.MovesUsedBox.text = Moves + "";
-        UIManager.Coins.text = Coins + " Coins";
+        UIManager.Coins.text = Coins + "";
         UIManager.Gems.text = Gems + " Gems";
     }
 
