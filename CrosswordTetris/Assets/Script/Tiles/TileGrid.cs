@@ -125,7 +125,7 @@ public class TileGrid : MonoBehaviour
         width = level.InitalLetter.GridSize.x;
         height = level.InitalLetter.GridSize.y;
 
-        UIManager.TileGridBG.sizeDelta = new Vector2(bgoffset + (width * 131 * bgscale), bgoffset + (height * 143 * bgscale));
+        UIManager.TileGridBG.sizeDelta = new Vector2(bgoffset + (width * 131 * bgscale), bgoffset + (height * 136 * bgscale));
 
         StarsThreshHolds = (int[])level.StarsThreshHolds.Clone();
         UIManager.PointsProgress.SetStars(StarsThreshHolds);
