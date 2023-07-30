@@ -312,7 +312,7 @@ public class TileGrid : MonoBehaviour
         if (i < UIManager.OutputBox.text.Length)
         {
             foreach (var tile in Tiles)
-                if (tile.IsSelected())
+                if (tile.GetSelectedIndex() >= i)
                     tile.SetSelectedIndex(tile.GetSelectedIndex() - 1);
 
             UIManager.OutputBox.text = UIManager.OutputBox.text.Remove(i, 1);
@@ -321,8 +321,9 @@ public class TileGrid : MonoBehaviour
     public void ResetOutput()
     {
         foreach (var tile in Tiles)
-            if(tile.IsSelected())
                 tile.Deselect();
+
+        UIManager.OutputBox.text = "";
     }
 
 

@@ -19,7 +19,6 @@ public class FlyPather : Poolable
     Vector3 targetPos;
 
     Vector3 p0;
-        Vector3 vec;
 
     public void Init()
     {
@@ -40,8 +39,7 @@ public class FlyPather : Poolable
     {
         float t = i / durationSeconds;
         p0 = Vector3.Lerp(Vector3.Lerp(InitPosition, control, t), Vector3.Lerp(control, targetPos, t), t);
-        vec = (p0 - transform.position).normalized;
-
+        
         //particle.transform.rotation = Quaternion.AngleAxis((Mathf.Atan2(vec.y, vec.x) * Mathf.Rad2Deg) - 90,Vector3.forward);
         transform.position = p0;
 

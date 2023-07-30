@@ -99,15 +99,23 @@ public class TileLetter : MonoBehaviour
     //Setters
     public void Select()
     {
-        selectedIndex = parent.AddToOutput(Letter);
-        UpdateVisual();
+        {
+            if (!IsSelected() && type != Type.Frozen && type != Type.Debris)
+            {
+                selectedIndex = parent.AddToOutput(Letter);
+                UpdateVisual();
+            }
+        }
     }
 
     public void Deselect()
     {
-        parent.RemoveFromOutput(selectedIndex);
-        selectedIndex = -1;
-        UpdateVisual();
+        if (IsSelected())
+        {
+            parent.RemoveFromOutput(selectedIndex);
+            selectedIndex = -1;
+            UpdateVisual();
+        }
     }
 
     void Activate(char character)
