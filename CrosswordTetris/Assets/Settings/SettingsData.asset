@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6bcac9d5da02e7429beb024d5d2e59e, type: 3}
   m_Name: SettingsData
   m_EditorClassIdentifier: 
-  displayInactive: {fileID: 21300000, guid: 517ad1400c6c7d544b1aad7992fbf27a, type: 3}
-  display: {fileID: 21300000, guid: 517ad1400c6c7d544b1aad7992fbf27a, type: 3}
-  displayFontColor: {r: 0.82452834, g: 1, b: 0.94904125, a: 1}
+  displayInactive: {fileID: 21300000, guid: 44dc295e7d464904dae35768baef7016, type: 3}
+  display: {fileID: 21300000, guid: 44dc295e7d464904dae35768baef7016, type: 3}
+  displayFontColor: {r: 1, g: 1, b: 1, a: 1}
   inactive: {fileID: 21300000, guid: 8470be0c13fb171499197220f8e5f320, type: 3}
-  normal: {fileID: 21300000, guid: c5d5a7d24f78a2741be24f8b4c982a9c, type: 3}
+  normal: {fileID: 21300000, guid: 40098915656de4d419ea42585b95884c, type: 3}
   frozen: {fileID: 21300000, guid: 2894087d4da4c4d498e7dbc30ab848d0, type: 3}
-  bubble: {fileID: 21300000, guid: 0ac55f9f886d827408c102bdf33c5ff7, type: 3}
-  fly: {fileID: 21300000, guid: c5d5a7d24f78a2741be24f8b4c982a9c, type: 3}
+  bubble: {fileID: 21300000, guid: 6410c1bb877394bd4acd17e82436d2a7, type: 3}
+  fly: {fileID: 21300000, guid: 40098915656de4d419ea42585b95884c, type: 3}
   active2X: {fileID: 21300000, guid: c6e8e2745ee32d04d81097ab74a70838, type: 3}
-  selected: {fileID: 21300000, guid: 98b27d4d42a737c4ab2a3b6695917271, type: 3}
-  golden: {fileID: 21300000, guid: 109fef926dca18a45ae6de20cfdaade6, type: 3}
+  selected: {fileID: 21300000, guid: dd7644a77f2058a4a9124429852d331d, type: 3}
+  golden: {fileID: 21300000, guid: b7f5d3e2a838c0e45a0ea1084227c67e, type: 3}
   debris: {fileID: 21300000, guid: 3042b019b052942a1baf7aa49d7ca6bb, type: 3}
   gem: {fileID: 21300000, guid: dfc9e9b983e34dc468f9a9fb8ae2e426, type: 3}
   coin: {fileID: 21300000, guid: 962c14aa1354bf34b815f39fb5f6fa7c, type: 3}
