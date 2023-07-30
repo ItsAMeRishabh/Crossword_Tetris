@@ -8383,6 +8383,7 @@ MonoBehaviour:
   Gems: {fileID: 2127125655}
   Display: {fileID: 2016133571}
   PointsProgress: {fileID: 1368007782}
+  TextField: {fileID: 805403534}
   WinPanel: {fileID: 179757795}
   LosePanel: {fileID: 498501176}
   ObjectivePanel: {fileID: 0}

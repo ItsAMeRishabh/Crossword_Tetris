@@ -1,10 +1,10 @@
+using System;
 using UnityEngine;
 
 public class FlyPather : Poolable
 {
+    [NonSerialized]
     public Tile target;
-    public Transform particle;
-    
 
     public float Deviation;
     public float Speed = 1;
@@ -42,7 +42,7 @@ public class FlyPather : Poolable
         p0 = Vector3.Lerp(Vector3.Lerp(InitPosition, control, t), Vector3.Lerp(control, targetPos, t), t);
         vec = (p0 - transform.position).normalized;
 
-        particle.transform.rotation = Quaternion.AngleAxis((Mathf.Atan2(vec.y, vec.x) * Mathf.Rad2Deg) - 90,Vector3.forward);
+        //particle.transform.rotation = Quaternion.AngleAxis((Mathf.Atan2(vec.y, vec.x) * Mathf.Rad2Deg) - 90,Vector3.forward);
         transform.position = p0;
 
         SpeedAcc += Accelaration * Time.deltaTime * .5f;

@@ -100,7 +100,8 @@ public static class RayCast
     static void BoomRay(Vector2 pos, Vector2 vec, int rad)
     {
         Ray(pos, vec, rad, (TileLetter a) => {
-            a.Deselect();
+            if(a.IsSelected())
+                a.Deselect();
             a.StartActivationCouroutine(0);
         });
     }
