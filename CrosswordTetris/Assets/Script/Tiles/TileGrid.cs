@@ -5,8 +5,7 @@ using Random = UnityEngine.Random;
 using System.Linq;
 using System.Collections;
 using Array2DEditor;
-using Unity.VisualScripting;
-using System.Threading.Tasks;
+using UnityEngine.UIElements;
 
 public class GoldenTileMeta
 {
@@ -104,6 +103,9 @@ public class TileGrid : MonoBehaviour
         UIManager.FPSCount.text = "FPS : " + (1 / Time.deltaTime).ToString("0");    
     }
 
+    public float bgoffset;
+    public float bgscale;
+
     public void GMAwake()
     {
         //Assign stuff
@@ -122,12 +124,15 @@ public class TileGrid : MonoBehaviour
         ChanceOfRandomWords = level.ChanceOfRandomCharacters;
         width = level.InitalLetter.GridSize.x;
         height = level.InitalLetter.GridSize.y;
+
+        UIManager.TileGridBG.sizeDelta = new Vector2(bgoffset + (width * 131 * bgscale), bgoffset + (height * 143 * bgscale));
+
         StarsThreshHolds = (int[])level.StarsThreshHolds.Clone();
         UIManager.PointsProgress.SetStars(StarsThreshHolds);
 
         for (int i = 0; i < width; i++)
             TilesNeeded.Add(height);
-        
+
 
         //Generate the grid
         GenerateGameObjects();
@@ -294,8 +299,8 @@ public class TileGrid : MonoBehaviour
         UIManager.OutputBox.text = "";
         UIManager.PointBox.text = "Points : " + Points;
         UIManager.MovesUsedBox.text = Moves + "";
-        UIManager.Coins.text = Coins + "";
-        UIManager.Gems.text = Gems + " Gems";
+        UIManager.Coins.text = (Coins + lvl.Coins) + "";
+        UIManager.Gems.text = (Gems + lvl.Gems) + " Gems";
     }
 
 

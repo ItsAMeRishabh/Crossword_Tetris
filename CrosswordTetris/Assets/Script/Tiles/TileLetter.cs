@@ -120,7 +120,6 @@ public class TileLetter : MonoBehaviour
 
     void Activate(char character)
     {
-        transform.position = new Vector3(InitialX, transform.position.y, transform.position.z);
         if (parent.TilesNeeded[X] > 0)
         {
 

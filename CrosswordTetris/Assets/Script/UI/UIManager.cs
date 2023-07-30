@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     public TileDisplay Display;
     public ProgressBar PointsProgress;
     public Animator TextField;
+    public RectTransform TileGridBG;
 
     [Space(10)]
     public WinScreenManager WinPanel;
