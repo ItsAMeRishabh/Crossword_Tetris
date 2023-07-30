@@ -857,8 +857,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.5, y: -132.5}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0.5, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &185320353
 MonoBehaviour:
@@ -873,7 +873,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.1254902, g: 0.77254903, b: 0.3647059, a: 1}
+  m_Color: {r: 0.1254902, g: 0.77254903, b: 0.3647059, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6991,15 +6991,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6752555631902459456, guid: 3ba036c88ab95184680d9f8728ea0210, type: 3}
       propertyPath: m_LocalScale.x
-      value: 100
+      value: 85
       objectReference: {fileID: 0}
     - target: {fileID: 6752555631902459456, guid: 3ba036c88ab95184680d9f8728ea0210, type: 3}
       propertyPath: m_LocalScale.y
-      value: 100
+      value: 85
       objectReference: {fileID: 0}
     - target: {fileID: 6752555631902459456, guid: 3ba036c88ab95184680d9f8728ea0210, type: 3}
       propertyPath: m_LocalScale.z
-      value: 100
+      value: 85
       objectReference: {fileID: 0}
     - target: {fileID: 6752555631902459456, guid: 3ba036c88ab95184680d9f8728ea0210, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7170,7 +7170,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1692666294
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8504,6 +8504,10 @@ PrefabInstance:
       propertyPath: UIManager
       value: 
       objectReference: {fileID: 1839822391565999272}
+    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
+      propertyPath: ObjectiveDelay
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 170047489761353837, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: m_RootOrder
       value: 5

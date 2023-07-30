@@ -18,7 +18,7 @@ MonoBehaviour:
   inactive: {fileID: 21300000, guid: 8470be0c13fb171499197220f8e5f320, type: 3}
   normal: {fileID: 21300000, guid: 40098915656de4d419ea42585b95884c, type: 3}
   frozen: {fileID: 21300000, guid: 2894087d4da4c4d498e7dbc30ab848d0, type: 3}
-  bubble: {fileID: 21300000, guid: 6410c1bb877394bd4acd17e82436d2a7, type: 3}
+  bubble: {fileID: 21300000, guid: 0928c3abc815273409cdf109de87350a, type: 3}
   fly: {fileID: 21300000, guid: 40098915656de4d419ea42585b95884c, type: 3}
   active2X: {fileID: 21300000, guid: c6e8e2745ee32d04d81097ab74a70838, type: 3}
   selected: {fileID: 21300000, guid: dd7644a77f2058a4a9124429852d331d, type: 3}
@@ -28,7 +28,7 @@ MonoBehaviour:
   coin: {fileID: 21300000, guid: 962c14aa1354bf34b815f39fb5f6fa7c, type: 3}
   normalFontColor: {r: 0.12941177, g: 0.20000002, b: 0.3019608, a: 1}
   frozenFontColor: {r: 0.023905255, g: 0.44006705, b: 0.745283, a: 1}
-  bubbleFontColor: {r: 0.6603774, g: 0, b: 0, a: 1}
+  bubbleFontColor: {r: 0.12941177, g: 0.2, b: 0.3019608, a: 1}
   flyFontColor: {r: 0.12941177, g: 0.2, b: 0.3019608, a: 1}
   active2XFontColor: {r: 0, g: 0, b: 0, a: 1}
   selectedFontColor: {r: 0, g: 0.32156864, b: 0.4745098, a: 1}
