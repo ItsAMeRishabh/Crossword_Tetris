@@ -311,6 +311,10 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5544898792342042590, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6424396439944361618, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_fontSize
       value: 10

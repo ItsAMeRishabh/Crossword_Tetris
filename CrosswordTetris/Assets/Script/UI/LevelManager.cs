@@ -39,6 +39,6 @@ public class LevelManager : MonoBehaviour
     public void Open(int lvl)
     {
         ActiveLevel.Current = lvl;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Levels");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("NewLevels");
     }
 }

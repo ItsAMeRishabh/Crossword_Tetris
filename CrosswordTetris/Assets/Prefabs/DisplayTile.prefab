@@ -102,7 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sr: {fileID: 3427492216621710288}
   ps: {fileID: 1779047769777393580}
-  characterMesh: {fileID: 0}
+  characterMesh: {fileID: 6424396439944361618}
   isEmpty: 1
   character: 32
   Settings: {fileID: 11400000, guid: 5f0ca2d3efc412e40aeec6263ba7007c, type: 2}

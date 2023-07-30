@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI Gems;
     public TileDisplay Display;
     public ProgressBar PointsProgress;
+    public Animator TextField;
 
     [Space(10)]
     public WinScreenManager WinPanel;

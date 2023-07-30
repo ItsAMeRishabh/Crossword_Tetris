@@ -151,8 +151,7 @@ public class TileGrid : MonoBehaviour
 
         UpdateUI();
         UIManager.QuestionBox.text = ObjectiveQuestion;
-        UIManager.ExpBox.text = "";
-
+        
         //Get all tiles
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -276,22 +275,16 @@ public class TileGrid : MonoBehaviour
     }
     public float UpdatePoints()
     {
-        if (WordHandler.IsWord(UIManager.OutputBox.text.ToUpper()) && UIManager.OutputBox.text.Length >= MinUserWordSize)
-        {
-            float pointsVal = 0;
-            foreach (var tile in Tiles)
-                if (tile.IsSelected())
-                {
-                    pointsVal += tile.GetPoints();
-                }
-            UIManager.ExpBox.text = "+" + pointsVal + " XP";
-            return pointsVal;
-        }
-        else
-        {
-            UIManager.ExpBox.text = "";
-            return 0;
-        }
+
+        float pointsVal = 0;
+        foreach (var tile in Tiles)
+            if (tile.IsSelected())
+            {
+                pointsVal += tile.GetPoints();
+            }
+        UIManager.ExpBox.text = "+" + pointsVal + " XP";
+        //Debug.LogError(pointsVal + " PTS");
+        return pointsVal;
     }
 
     private void UpdateUI()
@@ -312,7 +305,6 @@ public class TileGrid : MonoBehaviour
     public int AddToOutput(char c)
     {
         UIManager.OutputBox.text += c;
-        UpdatePoints();
         return UIManager.OutputBox.text.Length - 1;
     }
     public void RemoveFromOutput(int i)
@@ -325,7 +317,6 @@ public class TileGrid : MonoBehaviour
 
             UIManager.OutputBox.text = UIManager.OutputBox.text.Remove(i, 1);
         }
-        UpdatePoints();
     }
     public void ResetOutput()
     {
@@ -344,15 +335,21 @@ public class TileGrid : MonoBehaviour
 
         if (!WordHandler.IsWord(Word))
         {
+            UIManager.TextField.ResetTrigger("Incorrect");
+            UIManager.TextField.SetTrigger("Incorrect");
             Debug.LogError(Word + " is not a word!");
             return;
         }
         if (!(UIManager.OutputBox.text.Length >= MinUserWordSize))
         {
+            UIManager.TextField.ResetTrigger("Incorrect");
+            UIManager.TextField.SetTrigger("Incorrect");
             Debug.LogError("Word should be longer than " + MinUserWordSize);
             return;
         }
 
+        UIManager.TextField.ResetTrigger("Correct");
+        UIManager.TextField.SetTrigger("Correct");
         for (int i = 0; i < StarsThreshHolds.Length; i++)
         {
 

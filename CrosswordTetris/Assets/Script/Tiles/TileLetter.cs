@@ -1,7 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public enum Type
 {
@@ -25,7 +24,7 @@ public class TileLetter : MonoBehaviour
     public SpriteRenderer spriteRend;
     public SpriteRenderer bonusRend;
 
-    public TextMesh characterMesh;
+    public TextMeshPro characterMesh;
 
     public Type type = Type.Normal;
     public Bonus bonus = Bonus.None;
@@ -63,10 +62,14 @@ public class TileLetter : MonoBehaviour
             return;
 
         if (parent.PowerUpManager.Active == null)
+        {
             if (IsSelected())
                 Deselect();
             else
                 Select();
+
+            parent.UpdatePoints();
+        }
         else
             parent.PowerUpManager.Use(this);
 
@@ -96,22 +99,15 @@ public class TileLetter : MonoBehaviour
     //Setters
     public void Select()
     {
-        if (!IsSelected() && type != Type.Frozen && type != Type.Debris)
-        {
-            selectedIndex = parent.AddToOutput(Letter);
-            UpdateVisual();
-        }
-
+        selectedIndex = parent.AddToOutput(Letter);
+        UpdateVisual();
     }
+
     public void Deselect()
     {
-        if (IsSelected())
-        {
-            parent.RemoveFromOutput(selectedIndex);
-            selectedIndex = -1;
-            UpdateVisual();
-
-        }
+        parent.RemoveFromOutput(selectedIndex);
+        selectedIndex = -1;
+        UpdateVisual();
     }
 
     void Activate(char character)

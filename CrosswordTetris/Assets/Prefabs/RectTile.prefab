@@ -307,7 +307,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRend: {fileID: 6914882129485344017}
   bonusRend: {fileID: 9071429211335733475}
-  characterMesh: {fileID: 0}
+  characterMesh: {fileID: 8077626323814489476}
   type: 0
   bonus: 0
   selectedIndex: -1

@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
@@ -7,7 +8,7 @@ public class Tile : MonoBehaviour
     public SpriteRenderer sr;
     public ParticleSystem ps;
 
-    public TextMesh characterMesh;
+    public TextMeshPro characterMesh;
 
     Sprite tileTexture;
     Color fontcolor;
