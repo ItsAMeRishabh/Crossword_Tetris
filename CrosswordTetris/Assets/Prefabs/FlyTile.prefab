@@ -147,6 +147,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1779047769777393571, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2099544965156392191, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+      propertyPath: sr
+      value: 
+      objectReference: {fileID: 5574963641749200390}
+    - target: {fileID: 2643737854841323326, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2643737854841323326, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.027
+      objectReference: {fileID: 0}
+    - target: {fileID: 3020024016322111173, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3427492216621710288, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_FlipX
       value: 1
@@ -185,7 +205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216621710288, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_SortingOrder
-      value: 16
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216621710291, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_RootOrder
@@ -277,7 +297,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216649234423, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_OffsetZ
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3427492216649234423, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_FontSize
@@ -286,6 +306,18 @@ PrefabInstance:
     - target: {fileID: 3427492216649234423, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
       propertyPath: m_CharacterSize
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5539466880033365704, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424396439944361618, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+      propertyPath: m_fontSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424396439944361618, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
@@ -314,6 +346,11 @@ MonoBehaviour:
 --- !u!4 &5574963641749200389 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3427492216621710291, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
+  m_PrefabInstance: {fileID: 7119867650905925078}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &5574963641749200390 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 3427492216621710288, guid: cab041b609a2b9f4da48490fb090db6d, type: 3}
   m_PrefabInstance: {fileID: 7119867650905925078}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7474382599740040933
