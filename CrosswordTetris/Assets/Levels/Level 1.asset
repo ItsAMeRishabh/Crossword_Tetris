@@ -26,11 +26,11 @@ MonoBehaviour:
       - 
       - i
     - row:
-      - W#
-      - O#
-      - ^r
+      - W
+      - O
+      - r
       - d
-      - '%'
+      - 
     - row:
       - 
       - 
@@ -38,7 +38,7 @@ MonoBehaviour:
       - 
       - 
     - row:
-      - q@
+      - q
       - 
       - 
       - 
@@ -47,7 +47,7 @@ MonoBehaviour:
       - 
       - 
       - 
-      - $z
+      - z
       - 
   StarsThreshHolds: d0070000a00f000088130000
   Moves: 20
