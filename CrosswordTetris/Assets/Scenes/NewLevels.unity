@@ -9216,7 +9216,7 @@ GameObject:
   - component: {fileID: 8617971523298299658}
   - component: {fileID: 1839822391565999272}
   m_Layer: 5
-  m_Name: UI
+  m_Name: UIGameElements
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
