@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ProgressBar : MonoBehaviour
 {
@@ -14,7 +15,12 @@ public class ProgressBar : MonoBehaviour
     public RectTransform ProgressBarImage;
     public RectTransform ProgressBarBack;
 
-    public List<RectTransform> StarImages;
+    readonly List<RectTransform> StarTransform = new();
+    public List<Image> StarImages;
+
+    public Sprite StarActive;
+    public Sprite StarInactive;
+
     int m;
     private void Start()
     {
@@ -26,8 +32,11 @@ public class ProgressBar : MonoBehaviour
         m = StarThreshHolds.Max();
 
         for (int i = 0; i < StarImages.Count; i++)
-            StarImages[i].anchoredPosition = new Vector3(ProgressBarBack.sizeDelta.x * StarThreshHolds[i] / m, StarImages[i].anchoredPosition.y, 0);
-
+        {
+            StarTransform.Add(StarImages[i].GetComponent<RectTransform>());
+            StarTransform[i].anchoredPosition = new Vector3(ProgressBarBack.sizeDelta.x * StarThreshHolds[i] / m, StarTransform[i].anchoredPosition.y, 0);
+            StarImages[i].sprite = StarInactive;
+        }
         ProgressBarImage.sizeDelta = new Vector2(0, ProgressBarImage.sizeDelta.y);
     }
 
@@ -38,15 +47,24 @@ public class ProgressBar : MonoBehaviour
 
     private void Update()
     {
-        if (Percentage <= 1)
-            if (Mathf.Abs(fill - Percentage) >= Speed)
-            {
-                if (fill - Percentage > -Speed)
-                    fill -= Speed;
+        if (fill <= 1 && Mathf.Abs(fill - Percentage) >= Speed)
+        {
+            //if ()
+            if (fill - Percentage > -Speed)
+                fill -= Speed;
 
-                if (fill - Percentage < Speed)
-                    fill += Speed;
-                ProgressBarImage.sizeDelta = new Vector2(ProgressBarBack.sizeDelta.x * fill, ProgressBarImage.sizeDelta.y);
+            if (fill - Percentage < Speed)
+                fill += Speed;
+            ProgressBarImage.sizeDelta = new Vector2(ProgressBarBack.sizeDelta.x * fill, ProgressBarImage.sizeDelta.y);
+
+            for (int i = 0; i < StarImages.Count; i++)
+            {
+                if (fill >= StarTransform[i].anchoredPosition.x / ProgressBarBack.sizeDelta.x)
+                    StarImages[i].sprite = StarActive;
+                else
+                    StarImages[i].sprite = StarInactive;
             }
+
+        }
     }
 }

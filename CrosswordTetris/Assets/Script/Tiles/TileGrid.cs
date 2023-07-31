@@ -32,7 +32,7 @@ public class TileGrid : MonoBehaviour
     string ObjectiveQuestion = "Something witty here... idk";
 
     int Points = 0;
-    int Stars = 0;
+    //int Stars = 0;
     float ChanceOfRandomWords = 40f;
     int Moves;
     bool HasWon = false;
@@ -53,6 +53,8 @@ public class TileGrid : MonoBehaviour
             {
                 StartCoroutine(Win());
                 StartCoroutine(Lose());
+                CheckFor3LetterWords();
+
             }
         }
     }
@@ -176,6 +178,14 @@ public class TileGrid : MonoBehaviour
                 lvl.SetCompletedLevels(lvl.Current + 1);
             //lvl.CompletedLevels = 
             HasWon = true;
+            int Stars = 0;
+
+            foreach(var threshold in StarsThreshHolds)
+            {
+                if (Points >= threshold)
+                    Stars++;
+            }
+
             Debug.Log("---WINNING SCREEN---");
             Debug.Log("Points: " + Points);
             Debug.Log("Stars: " + Stars);
@@ -357,16 +367,6 @@ public class TileGrid : MonoBehaviour
 
         UIManager.TextField.ResetTrigger("Correct");
         UIManager.TextField.SetTrigger("Correct");
-        for (int i = 0; i < StarsThreshHolds.Length; i++)
-        {
-
-            if (pointsVal >= StarsThreshHolds[i] && StarsThreshHolds[i] != -1)
-            {
-                Stars++;
-                StarsThreshHolds[i] = -1;
-            }
-        }
-
 
         Moves--;
         Points += (int)pointsVal;
@@ -381,8 +381,7 @@ public class TileGrid : MonoBehaviour
 
         if (CouldSpawn) StartCoroutine(SpawnGoldenTile());
 
-        CheckFor3LetterWords();
-
+        
         foreach (var tile in Tiles)
             if (tile.type == Type.Disabled)
                 tile.StartActivationCouroutine(0);
@@ -426,7 +425,8 @@ public class TileGrid : MonoBehaviour
             {
                 if (item.Letter == item1.character)
                 {
-                    Points += item.GetPoints(); UIManager.PointsProgress.Points(Points);
+                    Points += item.GetPoints(); 
+                    UIManager.PointsProgress.Points(Points);
 
                     //Debug.Log(item.character);
                     item1.didFunction++;
@@ -468,6 +468,8 @@ public class TileGrid : MonoBehaviour
                     }
                 }
             }
+
+            Debug.Log("RESETING");
 
             foreach (var item in Tiles)
             {
