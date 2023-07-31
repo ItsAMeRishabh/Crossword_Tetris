@@ -229,78 +229,33 @@ public class TileLetter : MonoBehaviour
         if (Initial && parent.InitialSpawns.GetCell(X, Y).Length > 0)
         {
             string cell = parent.InitialSpawns.GetCell(X, Y).ToUpper();
-            switch (cell.Length)
+            type = Type.Normal;
+            bonus = Bonus.None;
+            for (int i = 0; i < cell.Length; i++)
             {
-                case 1:
-                    switch (cell[0])
-                    {
-                        case '%':
-                            type = Type.Debris;
-                            Activate(' ');
-                            break;
-                        default:
-                            Activate(cell[0]);
-                            break;
-                    }
-
-                    break;
-                case 2:
-                    if (SettingsData.IsAlphaNumeric(cell[0]))
-                    {
-                        switch (cell[1])
-                        {
-                            case '@':
-                                type = Type.Bubble;
-                                break;
-
-                            case '#':
-                                type = Type.Frozen;
-                                break;
-                        }
-                        Activate(cell[0]);
-                    }
-                    else
-                    {
-                        switch (cell[0])
-                        {
-                            case '$':
-                                bonus = Bonus.Coin;
-                                break;
-
-                            case '^':
-                                bonus = Bonus.Gem;
-                                break;
-                        }
-                        Activate(cell[1]);
-                    }
-                    break;
-                case 3:
-                    switch (cell[2])
-                    {
-                        case '@':
-                            type = Type.Bubble;
-                            break;
-
-                        case '#':
-                            type = Type.Frozen;
-                            break;
-                    }
-
-                    switch (cell[0])
-                    {
-                        case '$':
-                            bonus = Bonus.Coin;
-                            break;
-
-                        case '^':
-                            bonus = Bonus.Gem;
-                            break;
-                    }
-                    Activate(cell[1]);
-                    break;
-                default:
-                    break;
+                switch (cell[i])
+                {
+                    case '$':
+                        bonus = Bonus.Coin;
+                        break;
+                    case '^':
+                        bonus = Bonus.Gem;
+                        break;
+                    case '@':
+                        type = Type.Bubble;
+                        break;
+                    case '#':
+                        type = Type.Frozen;
+                        break;
+                    case '%':
+                        type = Type.Debris;
+                        break;
+                    default:
+                        break;
+                }
             }
+            Activate(cell[0]);
+
         }
         else
             Activate(parent.GetCharacter());
