@@ -120,6 +120,7 @@ public class TileLetter : MonoBehaviour
 
     void Activate(char character)
     {
+        rb.velocity = Vector2.zero;
         if (parent.TilesNeeded[X] > 0)
         {
 
