@@ -125,10 +125,10 @@ public class TileLetter : MonoBehaviour
 
             if (type != Type.Debris)
             {
-                if (Random.Range(0f, 99f) < parent.ChanceOfGem)
+                if (Random.Range(0f, 100f) < parent.ChanceOfGem)
                     bonus = Bonus.Gem;
 
-                if (Random.Range(0f, 99f) < parent.ChanceOfGem)
+                if (Random.Range(0f, 100f) < parent.ChanceOfGem)
                     bonus = Bonus.Coin;
             }
 

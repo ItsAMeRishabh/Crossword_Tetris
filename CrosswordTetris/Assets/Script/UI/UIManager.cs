@@ -20,7 +20,6 @@ public class UIManager : MonoBehaviour
     [Space(10)]
     public WinScreenManager WinPanel;
     public GameObject LosePanel;
-    public SlidingPanel ObjectivePanel;
 
     private void Awake()
     {

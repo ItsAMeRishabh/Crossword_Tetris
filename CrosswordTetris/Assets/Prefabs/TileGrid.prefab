@@ -61,6 +61,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TilesNeeded: 
+  StarsThreshHolds: 
+  _unstable: 0
   WordHandler: {fileID: 170047489761353746}
   TilePool: {fileID: 1898758228521804192}
   PowerUpManager: {fileID: 5690997121263268912}
@@ -72,6 +74,10 @@ MonoBehaviour:
   Spacing: 0.05
   FlyTileSpawnDelay: 0.1
   ObjectiveDelay: 2
+  Coins: 0
+  Gems: 0
+  bgoffset: 0
+  bgscale: 1.3
 --- !u!114 &170047489761353746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,8 +104,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolablePrefab: {fileID: 1634242576454886057, guid: 16e5dd6481ea22046a943bc27f799b47, type: 3}
-  defaultCapacity: 10
-  maxPoolSize: 15
+  Default: 10
+  Size: 15
 --- !u!114 &5690997121263268912
 MonoBehaviour:
   m_ObjectHideFlags: 0

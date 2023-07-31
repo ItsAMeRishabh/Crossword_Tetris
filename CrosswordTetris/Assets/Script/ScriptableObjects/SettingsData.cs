@@ -85,7 +85,7 @@ public class SettingsData : ScriptableObject
             }
         }
 
-        return LetterMetaData[Random.Range(0, LetterMetaData.Count - 1)].letter;
+        return LetterMetaData[Random.Range(0, LetterMetaData.Count)].letter;
     }
 
 

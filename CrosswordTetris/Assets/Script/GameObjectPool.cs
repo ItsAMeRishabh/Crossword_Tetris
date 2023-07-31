@@ -5,15 +5,15 @@ public class GameObjectPool : MonoBehaviour
 {
     public Poolable poolablePrefab;
 
-    public int defaultCapacity = 10;
-    public int maxPoolSize = 15;
+    public int Default;
+    public int Size;
 
     public IObjectPool<GameObject> Pool { get; private set; }
 
     private void Awake()
     {
         Pool = new ObjectPool<GameObject>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool,
-          OnDestroyPoolObject, true, defaultCapacity, maxPoolSize);
+          OnDestroyPoolObject, true, Default, Size);
     }
 
     private GameObject CreatePooledItem()
