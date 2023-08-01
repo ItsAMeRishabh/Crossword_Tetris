@@ -283,7 +283,7 @@ public class TileLetter : MonoBehaviour
 
     public int GetPoints()
     {
-        foreach (var item in parent.Settings.LetterMetaData)
+        foreach (var item in parent.Lang.LetterMetaData)
         {
             if (item.letter == Letter)
             {
@@ -316,10 +316,10 @@ public class TileLetter : MonoBehaviour
                 bonusRend.sprite = null;
                 break;
             case Bonus.Gem:
-                bonusRend.sprite = parent.Settings.gem;
+                bonusRend.sprite = parent.Theme.gem;
                 break;
             case Bonus.Coin:
-                bonusRend.sprite = parent.Settings.coin;
+                bonusRend.sprite = parent.Theme.coin;
                 break;
         }
 
@@ -330,8 +330,8 @@ public class TileLetter : MonoBehaviour
 
         if (IsSelected())
         {
-            spriteRend.sprite = parent.Settings.selected;
-            characterMesh.color = parent.Settings.selectedFontColor;
+            spriteRend.sprite = parent.Theme.selected;
+            characterMesh.color = parent.Theme.selectedFontColor;
             return;
         }
 
@@ -346,24 +346,24 @@ public class TileLetter : MonoBehaviour
         switch (type)
         {
             case Type.Normal:
-                spriteRend.sprite = parent.Settings.normal;
-                characterMesh.color = parent.Settings.normalFontColor;
+                spriteRend.sprite = parent.Theme.normal;
+                characterMesh.color = parent.Theme.normalFontColor;
                 break;
             case Type.Frozen:
-                spriteRend.sprite = parent.Settings.frozen;
-                characterMesh.color = parent.Settings.frozenFontColor;
+                spriteRend.sprite = parent.Theme.frozen;
+                characterMesh.color = parent.Theme.frozenFontColor;
                 break;
             case Type.Bubble:
                 rb.bodyType = RigidbodyType2D.Static;
-                spriteRend.sprite = parent.Settings.bubble;
-                characterMesh.color = parent.Settings.bubbleFontColor;
+                spriteRend.sprite = parent.Theme.bubble;
+                characterMesh.color = parent.Theme.bubbleFontColor;
                 break;
             case Type.Golden:
-                spriteRend.sprite = parent.Settings.golden;
-                characterMesh.color = parent.Settings.goldenFontColor;
+                spriteRend.sprite = parent.Theme.golden;
+                characterMesh.color = parent.Theme.goldenFontColor;
                 break;
             case Type.Debris:
-                spriteRend.sprite = parent.Settings.debris;
+                spriteRend.sprite = parent.Theme.debris;
                 break;
             case Type.Disabled:
                 rb.simulated = false;

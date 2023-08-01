@@ -19,7 +19,7 @@ public class Tile : MonoBehaviour
     bool isEmpty = true;
     public char character = ' ';
 
-    public SettingsData Settings;
+    public Theme Settings;
     
     public void Awake()
     {

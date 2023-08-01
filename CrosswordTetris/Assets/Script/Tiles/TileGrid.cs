@@ -21,9 +21,8 @@ public class GoldenTileMeta
 
 }
 
-[RequireComponent(typeof(WordSelector))]
 [RequireComponent(typeof(GameObjectPool))]
-[RequireComponent(typeof(GameManager))]
+
 public class TileGrid : MonoBehaviour
 {
     readonly List<TileLetter> Tiles = new();
@@ -72,7 +71,7 @@ public class TileGrid : MonoBehaviour
     public float ChanceOfCoin;
     [NonSerialized]
     public float ChanceOfGem;
-    public WordSelector WordHandler;
+
     public GameObjectPool TilePool;
     public PowerUpManager PowerUpManager;
     [NonSerialized]
@@ -86,7 +85,8 @@ public class TileGrid : MonoBehaviour
     [Space(10)]
     public GameObject prefab;
     public LevelHandler lvl;
-    public SettingsData Settings;
+    public Theme Theme;
+    public LanguagePack Lang;
     [Space(20)]
     public UIManager UIManager;
     [Space(20)]
@@ -108,7 +108,7 @@ public class TileGrid : MonoBehaviour
     public float bgoffset;
     public float bgscale;
 
-    public void GMAwake()
+    public void Awake()
     {
         //Assign stuff
         //WordHandler = GetComponent<WordSelector>();
@@ -139,13 +139,12 @@ public class TileGrid : MonoBehaviour
         //Generate the grid
         GenerateGameObjects();
     }
-    public void GMStart()
+    public void Start()
     {
-        Settings.Caliberate();
         //Set Display Phrase
         for (int i = 0; i < ObjectivePhrase.Length; i++)
         {
-            if (!SettingsData.IsAlphaNumeric(ObjectivePhrase[i]))
+            if (!LanguagePack.IsAlpha(ObjectivePhrase[i]))
                 DisplayPhrase += ObjectivePhrase[i];
             else
                 DisplayPhrase += "_";
@@ -350,7 +349,7 @@ public class TileGrid : MonoBehaviour
         float pointsVal = UpdatePoints();
 
 
-        if (!WordHandler.IsWord(Word))
+        if (!Lang.IsWord(Word))
         {
             UIManager.TextField.ResetTrigger("Incorrect");
             UIManager.TextField.SetTrigger("Incorrect");
@@ -459,7 +458,7 @@ public class TileGrid : MonoBehaviour
                         if (x != y && y != z && z != x)
                         {
                             string s = Tiles[x].Letter + "" + Tiles[y].Letter + "" + Tiles[z].Letter;
-                            if (WordHandler.IsWord(s))
+                            if (Lang.IsWord(s))
                             {
                                 Debug.LogWarning(s);
                                 return;
@@ -482,14 +481,14 @@ public class TileGrid : MonoBehaviour
     {
         if (Random.Range(0, 100) < ChanceOfRandomWords)
         {
-            return Settings.GetRandomChar();
+            return Lang.GetRandomChar();
         }
         else
         {
             string str = ObjectivePhrase.Replace(" ", "").Replace("#", "");
             if (str.Length == 0)
             {
-                return Settings.GetRandomChar();
+                return Lang.GetRandomChar();
             }
             return str[Random.Range(0, str.Length)];
         }

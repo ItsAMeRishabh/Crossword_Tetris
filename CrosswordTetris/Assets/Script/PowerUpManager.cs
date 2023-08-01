@@ -11,7 +11,7 @@ public class PowerUpManager : MonoBehaviour
 
     PowerUp[] powerUps;
 
-    public void GMAwake()
+    public void Awake()
     {
         powerUps = new PowerUp[] { new Shovel(), new Reveal(RevealAmount) };
         foreach (PowerUp p in powerUps)
