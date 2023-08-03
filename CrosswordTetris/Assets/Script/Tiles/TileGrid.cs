@@ -5,7 +5,6 @@ using Random = UnityEngine.Random;
 using System.Linq;
 using System.Collections;
 using Array2DEditor;
-using UnityEngine.UIElements;
 
 public class GoldenTileMeta
 {
@@ -25,19 +24,22 @@ public class GoldenTileMeta
 
 public class TileGrid : MonoBehaviour
 {
-    readonly List<TileLetter> Tiles = new();
-    public List<int> TilesNeeded = new();
-
-    string ObjectiveQuestion = "Something witty here... idk";
-
     int Points = 0;
-    //int Stars = 0;
-    float ChanceOfRandomWords = 40f;
     int Moves;
     bool HasWon = false;
+
+    readonly List<char> Targetted = new();
+    readonly List<int> Suggestion = new();
+    readonly List<int> BestWord = new();
+    readonly List<TileLetter> Tiles = new();
+
+    [NonSerialized]
+    public Array2DString InitialSpawns;
+    [NonSerialized]
+    public List<int> TilesNeeded = new();
+    [NonSerialized]
     public int[] StarsThreshHolds;
-
-
+    [NonSerialized]
     public int _unstable;
     public int Unstable
     {
@@ -48,65 +50,82 @@ public class TileGrid : MonoBehaviour
         set
         {
             _unstable = value;
-            if(_unstable == 0)
+            if (_unstable == 0)
             {
                 StartCoroutine(Win());
                 StartCoroutine(Lose());
-                CheckFor3LetterWords();
+                CheckForIdleWords();
 
             }
         }
     }
-
-
     [NonSerialized]
     public bool Ended = false;
+
+    [NonSerialized]
+    string ObjectiveQuestion = "Something witty here... idk";
     [NonSerialized]
     public string ObjectivePhrase;
-    [NonSerialized]
-    public Array2DString InitialSpawns;
     [NonSerialized]
     public string DisplayPhrase;
     [NonSerialized]
     public float ChanceOfCoin;
     [NonSerialized]
     public float ChanceOfGem;
-
-    public GameObjectPool TilePool;
-    public PowerUpManager PowerUpManager;
     [NonSerialized]
     public int width;
     [NonSerialized]
     public int height;
-
     [SerializeField]
     int MinUserWordSize = 3;
+    [NonSerialized]
+    public int Coins = 0;
+    [NonSerialized]
+    public int Gems = 0;
+
+    public GameObjectPool TilePool;
+    public PowerUpManager PowerUpManager;
+
 
     [Space(10)]
-    public GameObject prefab;
-    public LevelHandler lvl;
+    public GameObject Tile;
+    public LevelHandler LevelHandler;
     public Theme Theme;
     public LanguagePack Lang;
-    [Space(20)]
     public UIManager UIManager;
+
     [Space(20)]
     public float Spacing = 0;
     public float FlyTileSpawnDelay = .3f;
     public float ObjectiveDelay = 1f;
+    public float bgoffset;
+    public float bgscale;
 
-    public int Coins = 0;
-    public int Gems = 0;
+    public float RequiredNoReveals = 2;
 
 
     //Base Functions
+    public float SuggestionDelay = .5f;
+    public float MaxInteractionTime = 4f; // 4 seconds
+    float interactionTimer = 0f;
+    public int consecutiveNoReveals = 0;
 
     private void Update()
     {
-        UIManager.FPSCount.text = "FPS : " + (1 / Time.deltaTime).ToString("0");    
+        UIManager.FPSCount.text = "FPS : " + (1 / Time.deltaTime).ToString("0");
+
+        if (Input.anyKeyDown || Input.GetMouseButtonDown(0))
+            interactionTimer = 0f;
+
+        interactionTimer += Time.deltaTime;
+
+        if (interactionTimer >= MaxInteractionTime)
+        {
+            interactionTimer = 0f;
+            StartCoroutine(Suggest());
+        }
     }
 
-    public float bgoffset;
-    public float bgscale;
 
     public void Awake()
     {
@@ -116,14 +135,13 @@ public class TileGrid : MonoBehaviour
         //PowerUpManager = GetComponent<PowerUpManager>();
 
         //Import level data
-        Level level = lvl.Levels[lvl.Current];
+        Level level = LevelHandler.Levels[LevelHandler.Current];
         ObjectiveQuestion = level.ObjectiveQuestion;
         ObjectivePhrase = level.ObjectivePhrase.ToUpper();
         InitialSpawns = level.InitalLetter;
         Moves = level.Moves;
         ChanceOfCoin = level.ChanceOfCoin;
         ChanceOfGem = level.ChanceOfGem;
-        ChanceOfRandomWords = level.ChanceOfRandomCharacters;
         width = level.InitalLetter.GridSize.x;
         height = level.InitalLetter.GridSize.y;
 
@@ -157,7 +175,7 @@ public class TileGrid : MonoBehaviour
 
         UpdateUI();
         UIManager.QuestionBox.text = ObjectiveQuestion;
-        
+
         //Get all tiles
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -173,13 +191,13 @@ public class TileGrid : MonoBehaviour
         {
             yield return new WaitForSeconds(1);
             UpdateUI();
-            if (lvl.CompletedLevels <= lvl.Current)
-                lvl.SetCompletedLevels(lvl.Current + 1);
-            //lvl.CompletedLevels = 
+            if (LevelHandler.CompletedLevels <= LevelHandler.Current)
+                LevelHandler.SetCompletedLevels(LevelHandler.Current + 1);
+            //LevelHandler.CompletedLevels = 
             HasWon = true;
             int Stars = 0;
 
-            foreach(var threshold in StarsThreshHolds)
+            foreach (var threshold in StarsThreshHolds)
             {
                 if (Points >= threshold)
                     Stars++;
@@ -190,7 +208,7 @@ public class TileGrid : MonoBehaviour
             Debug.Log("Stars: " + Stars);
             //Time.timeScale = 0;
             Ended = true;
-            UIManager.WinPanel.Win(DisplayPhrase,Stars,Points, Coins, Gems);
+            UIManager.WinPanel.Win(DisplayPhrase, Stars, Points, Coins, Gems);
         }
     }
     IEnumerator Lose()
@@ -210,43 +228,65 @@ public class TileGrid : MonoBehaviour
 
         foreach (var tile in Tiles)
             tile.GMAwake(this);
-        
+
+    }
+
+    IEnumerator Suggest()
+    {
+        Debug.Log(BestWord.Count);
+        if (BestWord.Count > 0)
+        {
+            foreach (int i in BestWord)
+            {
+                Tiles[i].Suggest();
+                yield return new WaitForSeconds(SuggestionDelay);
+            }
+
+        }
+        else
+        {
+            foreach (int i in Suggestion)
+            {
+                Tiles[i].Suggest();
+                yield return new WaitForSeconds(SuggestionDelay);
+            }
+        }
     }
 
     //Spawn Functions
-    IEnumerator SpawnGoldenTile()
-    {
-        yield return new WaitForSeconds(1.5f);
+    //IEnumerator SpawnGoldenTile()
+    //{
+    //    yield return new WaitForSeconds(1.5f);
 
-        //Get all tile characters
-        Dictionary<char, int> tiles = new();
-        foreach (var tile in Tiles)
-        {
-            if (tile.type == Type.Normal)
-            {
-                tiles.TryAdd(tile.Letter, 0);
-                tiles[tile.Letter]++;
-            }
-        }
+    //    //Get all tile characters
+    //    Dictionary<char, int> tiles = new();
+    //    foreach (var tile in Tiles)
+    //    {
+    //        if (tile.type == Type.Normal)
+    //        {
+    //            tiles.TryAdd(tile.Letter, 0);
+    //            tiles[tile.Letter]++;
+    //        }
+    //    }
 
-        //Get most common character
-        if (tiles.Count > 0)
-        {
-            char m = tiles.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
+    //    //Get most common character
+    //    if (tiles.Count > 0)
+    //    {
+    //        char m = tiles.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
 
-            //Get all tiles with that character
-            List<TileLetter> list = new();
-            foreach (var tile in Tiles)
-                if (tile.Letter == m)
-                    list.Add(tile);
+    //        //Get all tiles with that character
+    //        List<TileLetter> list = new();
+    //        foreach (var tile in Tiles)
+    //            if (tile.Letter == m)
+    //                list.Add(tile);
 
 
-            //Set a random tile to golden
-            var g  = list[Random.Range(0, list.Count)];
-            g.type = Type.Golden;
-            g.UpdateVisual();
-        }
-    }
+    //        //Set a random tile to golden
+    //        var g  = list[Random.Range(0, list.Count)];
+    //        g.type = Type.Golden;
+    //        g.UpdateVisual();
+    //    }
+    //}
     IEnumerator SpawnFlyTileCour(char character, Vector3 position, Tile destination, int offset)
     {
         yield return new WaitForSeconds(offset * FlyTileSpawnDelay);
@@ -256,13 +296,13 @@ public class TileGrid : MonoBehaviour
         var flypath = fly.GetComponent<FlyPather>();
         flypath.target = destination;
         flypath.Init();
-        
+
         var tile = fly.GetComponent<Tile>();
         tile.SetCharacter(character);
         tile.Activate();
     }
 
-    public bool SpawnFlyTile(TileLetter tile , int offset)
+    public bool SpawnFlyTile(TileLetter tile, int offset)
     {
         bool CouldSpawn = false;
         //StartCoroutine(SpawnFlyTileCour(character, position, destination, offset));
@@ -278,6 +318,25 @@ public class TileGrid : MonoBehaviour
         }
 
         return CouldSpawn;
+    }
+
+    void SpawnFlyTiles(HashSet<char> chars, out bool CouldSpawn)
+    {
+        CouldSpawn = false;
+        int num = 0;
+        foreach (var tile in Tiles)
+        {
+            if (tile.IsSelected() && chars.Contains(tile.Letter))
+            {
+                //chars.Count(c => c == tile.character);
+                if (SpawnFlyTile(tile, num))
+                {
+                    num++;
+                    CouldSpawn = true;
+                    chars.Remove(tile.Letter);
+                }
+            }
+        }
     }
 
 
@@ -301,17 +360,16 @@ public class TileGrid : MonoBehaviour
         return pointsVal;
     }
 
-    private void UpdateUI()
+    void UpdateUI()
     {
 
         UIManager.PointsProgress.Points(Points);
         UIManager.OutputBox.text = "";
         UIManager.PointBox.text = "Points : " + Points;
         UIManager.MovesUsedBox.text = Moves + "";
-        UIManager.Coins.text = (Coins + lvl.Coins) + "";
-        UIManager.Gems.text = (Gems + lvl.Gems) + " Gems";
+        UIManager.Coins.text = (Coins + LevelHandler.Coins) + "";
+        UIManager.Gems.text = (Gems + LevelHandler.Gems) + " Gems";
     }
-
 
 
 
@@ -335,7 +393,7 @@ public class TileGrid : MonoBehaviour
     public void ResetOutput()
     {
         foreach (var tile in Tiles)
-                tile.Deselect();
+            tile.Deselect();
 
         UIManager.OutputBox.text = "";
     }
@@ -349,8 +407,10 @@ public class TileGrid : MonoBehaviour
         float pointsVal = UpdatePoints();
 
 
+        DateTime t = DateTime.Now;
         if (!Lang.IsWord(Word))
         {
+
             UIManager.TextField.ResetTrigger("Incorrect");
             UIManager.TextField.SetTrigger("Incorrect");
             Debug.LogError(Word + " is not a word!");
@@ -358,6 +418,7 @@ public class TileGrid : MonoBehaviour
         }
         if (!(UIManager.OutputBox.text.Length >= MinUserWordSize))
         {
+            Debug.Log("Time taken : " + (DateTime.Now - t).TotalMilliseconds + "ms");
             UIManager.TextField.ResetTrigger("Incorrect");
             UIManager.TextField.SetTrigger("Incorrect");
             Debug.LogError("Word should be longer than " + MinUserWordSize);
@@ -373,100 +434,155 @@ public class TileGrid : MonoBehaviour
         UpdatePhrases(Word, out HashSet<char> chars);
 
         SpawnFlyTiles(chars, out bool CouldSpawn);
-        UseGoldenTiles();
+        if (CouldSpawn)
+            consecutiveNoReveals = 0;
+        else
+            consecutiveNoReveals++;
+
+        SmartSpawner(consecutiveNoReveals >= RequiredNoReveals);
+
+        //UseGoldenTiles();
+        //if (CouldSpawn) StartCoroutine(SpawnGoldenTile());
 
 
-        //StartCoroutine(nameof(SpawnCour));
 
-        if (CouldSpawn) StartCoroutine(SpawnGoldenTile());
-
-        
         foreach (var tile in Tiles)
             if (tile.type == Type.Disabled)
                 tile.StartActivationCouroutine(0);
 
         UpdateUI();
     }
-
-
-    void SpawnFlyTiles(HashSet<char> chars, out bool CouldSpawn)
+    void SmartSpawner(bool v)
     {
-        CouldSpawn = false;
-        int num = 0;
-        foreach (var tile in Tiles)
-        {
-            if (tile.IsSelected() && chars.Contains(tile.Letter))
-            {
-                //chars.Count(c => c == tile.character);
-                if (SpawnFlyTile(tile, num))
-                {
-                    num++;
-                    CouldSpawn = true;
-                    chars.Remove(tile.Letter);
-                }
-            }
-        }
-    }
+        Suggestion.Clear();
+        BestWord.Clear();
 
-
-    //Misc Functions
-    void UseGoldenTiles()
-    {
-        List<GoldenTileMeta> GoldenTiles = new();
-        foreach (var item in Tiles)
-            if (item.IsSelected() && item.type == Type.Golden)
-            {
-                GoldenTiles.Add(new GoldenTileMeta(item.transform.position, item.Letter));
-            }
+        Dictionary<char, int> freq = new();
+        char Target = ' ';
         foreach (var item in Tiles)
         {
-            foreach (var item1 in GoldenTiles)
-            {
-                if (item.Letter == item1.character)
-                {
-                    Points += item.GetPoints(); 
-                    UIManager.PointsProgress.Points(Points);
-
-                    //Debug.Log(item.character);
-                    item1.didFunction++;
-                    item.StartActivationCouroutine(.5f);
-                }
-            }
-
             if (item.IsSelected())
             {
                 item.Deselect();
                 item.StartActivationCouroutine(0);
             }
+            if (v)
+            {
+                if (item.type == Type.Normal || item.type == Type.Bubble || item.type == Type.Golden)
+                    if (freq.ContainsKey(item.Letter))
+                        freq[item.Letter]++;
+                    else
+                        freq.Add(item.Letter, 1);
+            }
         }
+        if (v)
+        {
+            int highestFreq = 0;
+            foreach (char c in ObjectivePhrase)
+                if (c != ' ' && freq.ContainsKey(c))
+                    if (freq[c] >= highestFreq)
+                    {
+                        highestFreq = freq[c];
+                        Target = c;
+                    }
 
-        foreach (var item in GoldenTiles)
-            if (item.didFunction <= 1)
-                RayCast.RectBoom(item.position, 1);
 
+            Targetted.AddRange(Lang.GetOptimumCharacters(Target, freq, out string bestWord));
+            if (bestWord != null)
+            {
+                foreach (char c in bestWord)
+                {
+                    for (int i = 0; i < Tiles.Count; i++)
+                        if (Tiles[i].Letter == c)
+                        {
+                            BestWord.Add(i);
+                            i = Tiles.Count;
+                        }
+                }
+            }
+
+        }
     }
-    async void CheckFor3LetterWords()
+
+
+
+    //Misc Functions
+    //void UseGoldenTiles()
+    //{
+    //List<GoldenTileMeta> GoldenTiles = new();
+    //foreach (var item in Tiles)
+    //    if (item.IsSelected() && item.type == Type.Golden)
+    //    {
+    //        GoldenTiles.Add(new GoldenTileMeta(item.transform.position, item.Letter));
+    //    }
+    //foreach (var item in Tiles)
+    //{
+    //foreach (var item1 in GoldenTiles)
+    //{
+    //    if (item.Letter == item1.character)
+    //    {
+    //        Points += item.GetPoints(); 
+    //        UIManager.PointsProgress.Points(Points);
+
+    //        //Debug.Log(item.character);
+    //        item1.didFunction++;
+    //        item.StartActivationCouroutine(.5f);
+    //    }
+    //}
+
+    //if (item.IsSelected())
+    //{
+    //    item.Deselect();
+    //    item.StartActivationCouroutine(0);
+    //}
+    //}
+
+    //foreach (var item in GoldenTiles)
+    //    if (item.didFunction <= 1)
+    //        RayCast.RectBoom(item.position, 1);
+
+    //}
+    async void CheckForIdleWords()
     {
         await System.Threading.Tasks.Task.Run(() =>
         {
+
+            for (int w = 0; w < Tiles.Count; w++)
+                for (int x = 0; x < Tiles.Count; x++)
+                    for (int y = 0; y < Tiles.Count; y++)
+                        for (int z = 0; z < Tiles.Count; z++)
+                            if (w != x && x != y && y != z && z != w && z != x && w != y)
+                            {
+                                string s = Tiles[w].Letter + "" + Tiles[x].Letter + "" + Tiles[y].Letter + "" + Tiles[z].Letter;
+                                if (Lang.IsWord(s))
+                                {
+                                    Suggestion.Add(w);
+                                    Suggestion.Add(x);
+                                    Suggestion.Add(y);
+                                    Suggestion.Add(z);
+                                    Debug.LogWarning(s);
+                                    return;
+                                }
+                            }
+
+
             for (int x = 0; x < Tiles.Count; x++)
-            {
                 for (int y = 0; y < Tiles.Count; y++)
-                {
                     for (int z = 0; z < Tiles.Count; z++)
-                    {
                         if (x != y && y != z && z != x)
                         {
                             string s = Tiles[x].Letter + "" + Tiles[y].Letter + "" + Tiles[z].Letter;
                             if (Lang.IsWord(s))
                             {
+                                Suggestion.Add(x);
+                                Suggestion.Add(y);
+                                Suggestion.Add(z);
                                 Debug.LogWarning(s);
                                 return;
                             }
                         }
-                    }
-                }
-            }
+
+
 
             Debug.Log("RESETING");
 
@@ -479,21 +595,19 @@ public class TileGrid : MonoBehaviour
     }
     public char GetCharacter()
     {
-        if (Random.Range(0, 100) < ChanceOfRandomWords)
+        if (consecutiveNoReveals >= RequiredNoReveals)
         {
+            if (Targetted.Count > 0)
+            {
+                char t = Targetted[0];
+                Targetted.RemoveAt(0);
+                return t;
+            }
             return Lang.GetRandomChar();
         }
-        else
-        {
-            string str = ObjectivePhrase.Replace(" ", "").Replace("#", "");
-            if (str.Length == 0)
-            {
-                return Lang.GetRandomChar();
-            }
-            return str[Random.Range(0, str.Length)];
-        }
+        return Lang.GetRandomChar();
     }
-    public void UpdatePhrases(string Word, out HashSet<char>  chars)
+    public void UpdatePhrases(string Word, out HashSet<char> chars)
     {
         chars = new();
         for (int i = 0; i < ObjectivePhrase.Length; i++)
@@ -513,23 +627,23 @@ public class TileGrid : MonoBehaviour
     //Gameobject Functions
     void InstantiatePrefab(Vector3 position, int X, int Y)
     {
-        GameObject instantiatedPrefab = Instantiate(prefab, transform);
+        GameObject instantiatedPrefab = Instantiate(Tile, transform);
         instantiatedPrefab.transform.SetLocalPositionAndRotation(position, Quaternion.identity);
         instantiatedPrefab.transform.localScale = Vector3.one;
-        instantiatedPrefab.GetComponent<TileLetter>().SetCoords(X,Y);
+        instantiatedPrefab.GetComponent<TileLetter>().SetCoords(X, Y);
     }
     void GenerateGameObjects()
     {
         float scale = 4f;
         RemoveGameObjects();
-        for (int y = height-1; y >= 0; y--)
+        for (int y = height - 1; y >= 0; y--)
         {
             for (int x = 0; x < width; x++)
             {
                 InstantiatePrefab(new Vector3(
                 ((x * transform.localScale.x * scale) + transform.position.x - ((width - 1) * transform.localScale.x * scale / 2)) * (.85f + Spacing),
-                (y * transform.localScale.y * scale) ,
-                5), x,height-y-1 );
+                (y * transform.localScale.y * scale),
+                5), x, height - y - 1);
             }
         }
     }

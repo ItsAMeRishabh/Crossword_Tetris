@@ -20,5 +20,4 @@ public class Level : ScriptableObject
 
     public float ChanceOfCoin = 15;
     public float ChanceOfGem = 1;
-    public int ChanceOfRandomCharacters = 70;
 }

@@ -29,6 +29,7 @@ public class TileLetter : MonoBehaviour
     public Type type = Type.Normal;
     public Bonus bonus = Bonus.None;
 
+    public Animator animator;
 
     //public float multiplier = 1;
 
@@ -120,6 +121,8 @@ public class TileLetter : MonoBehaviour
 
     void Activate(char character)
     {
+        if(character == ' ')
+            character = '_';
         rb.velocity = Vector2.zero;
         if (parent.TilesNeeded[X] > 0)
         {
@@ -303,7 +306,11 @@ public class TileLetter : MonoBehaviour
         selectedIndex = i;
     }
 
-
+    public void Suggest()
+    {
+        animator.ResetTrigger("Suggest");
+        animator.SetTrigger("Suggest");
+    }
 
 
     //Prop Edits

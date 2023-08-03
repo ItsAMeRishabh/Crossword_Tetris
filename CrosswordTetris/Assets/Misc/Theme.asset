@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6bcac9d5da02e7429beb024d5d2e59e, type: 3}
-  m_Name: SettingsData
+  m_Name: Theme
   m_EditorClassIdentifier: 
   displayInactive: {fileID: 21300000, guid: 44dc295e7d464904dae35768baef7016, type: 3}
   display: {fileID: 21300000, guid: 44dc295e7d464904dae35768baef7016, type: 3}

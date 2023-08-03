@@ -46,22 +46,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad827083d69122b449758f95b561944b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TilesNeeded: 
-  StarsThreshHolds: 
-  _unstable: 0
+  MinUserWordSize: 3
   TilePool: {fileID: 1898758228521804192}
   PowerUpManager: {fileID: 5690997121263268912}
-  MinUserWordSize: 3
-  prefab: {fileID: 3427492216621710294, guid: 2942b7b0087751c4d9d35a0843546651, type: 3}
-  lvl: {fileID: 11400000, guid: cd889b9908fd803498d7c221c95e0c47, type: 2}
+  Tile: {fileID: 3427492216621710294, guid: 2942b7b0087751c4d9d35a0843546651, type: 3}
+  LevelHandler: {fileID: 11400000, guid: cd889b9908fd803498d7c221c95e0c47, type: 2}
   Theme: {fileID: 11400000, guid: 5f0ca2d3efc412e40aeec6263ba7007c, type: 2}
   Lang: {fileID: 11400000, guid: 2250b29058004e641aa3a16b4a068572, type: 2}
   UIManager: {fileID: 0}
   Spacing: 0.05
   FlyTileSpawnDelay: 0.1
   ObjectiveDelay: 2
-  Coins: 0
-  Gems: 0
   bgoffset: 0
   bgscale: 1.3
 --- !u!114 &1898758228521804192

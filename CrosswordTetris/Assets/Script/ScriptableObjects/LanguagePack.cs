@@ -17,10 +17,10 @@ public class LetterMeta
 public class LanguagePack : ScriptableObject
 {
     public TextAsset MainDictionary;
-    public TextAsset ShortDictionary;
     public TextAsset CommonDictionary;
 
-    HashSet<string> dictionary;
+    HashSet<string> Common = new();
+    HashSet<string> Main = new();
 
     [Space(20)]
     [Header("1 means the probability is same as weightage, 0 means all letters are equally likely")]
@@ -60,16 +60,24 @@ public class LanguagePack : ScriptableObject
     {
         Caliberate();
 
-        dictionary = new HashSet<string>();
+        Main.Clear();
+        Common.Clear();
+        
+        LoadDictionary(MainDictionary, ref Main);
+        LoadDictionary(CommonDictionary, ref Common);   
+    }
 
-        string fileContent = MainDictionary.text;
-        string[] lines = fileContent.Split('\n');
-
-        foreach (string line in lines)
+    void LoadDictionary(TextAsset asset, ref HashSet<string> set)
+    {
+        string[] lines = asset.text.Split('\n');
+        foreach (var line in lines)
         {
-            dictionary.Add(line.Trim().ToUpper());
+            string word = line.Trim().ToUpper();
+            if (word.Length > 1)
+            {
+                set.Add(word);
+            }
         }
-
     }
 
     void Caliberate()
@@ -108,13 +116,81 @@ public class LanguagePack : ScriptableObject
 
         return LetterMetaData[Random.Range(0, LetterMetaData.Length)].letter;
     }
+    public bool IsWord(string word)
+    {
+        return Main.Contains(word);
+    }
+
+    public char[] GetOptimumCharacters(char Target, Dictionary<char, int> frequency, out string bestWord)
+    {
+        bestWord = null;
+        if (Target != ' ')
+        {
+            int minDifference = int.MaxValue;
+            foreach (string word in Common)
+            {
+                if (word.Contains(Target))
+                {
+                    frequencycopy = new(frequency);
+                    int difference = CalculateCharacterDifference(word);
+                    if (difference < minDifference && difference != 0)
+                    {
+                        minDifference = difference;
+                        bestWord = word;
+                    }
+                }
+            }
+            Debug.Log(bestWord + " needed " + minDifference + " Changes");
+            frequencycopy = new(frequency);
+            return CalculateCharacterRequirement(bestWord);
+        }
+        return new char[] { GetRandomChar()};
+    }
+    private int CalculateCharacterDifference(string word)
+    {
+        int difference = 0;
+        foreach (char c in word)
+        {
+            if (frequencycopy.ContainsKey(c))
+            {
+                frequencycopy[c]--;
+                if (frequencycopy[c] < 0)
+                {
+                    difference++;
+                }
+            }
+            else
+            {
+                difference++;
+            }
+        }
+        return difference;
+    }
+    Dictionary<char, int> frequencycopy;
+    private char[] CalculateCharacterRequirement(string word)
+    {
+        List<char> result = new ();
+        foreach (char c in word)
+        {
+            if (frequencycopy.ContainsKey(c))
+            {
+                frequencycopy[c]--;
+                if (frequencycopy[c] < 0)
+                {
+                    result.Add(c);
+                }
+            }
+            else
+            {
+                result.Add(c);
+            }
+        }
+        return result.ToArray();
+    }
+
     public static bool IsAlpha(char v)
     {
         return (v >= 'a' && v <= 'z') || (v >= 'A' && v <= 'Z');
-    }
-    public bool IsWord(string word)
-    {
-        return dictionary.Contains(word);
     }
 
 }
