@@ -20,4 +20,14 @@ public class Level : ScriptableObject
 
     public float ChanceOfCoin = 15;
     public float ChanceOfGem = 1;
+
+
+    public float CompletionForSmart = 70;
+    //public float RequiredNoReveals = 2;
+    public float ChanceForRandom = 75;
+
+    public float InitialSuggestTime = 7;
+    public float LoopSuggestTime = 4;
+
+
 }

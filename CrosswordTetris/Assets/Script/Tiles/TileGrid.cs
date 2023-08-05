@@ -30,8 +30,10 @@ public class TileGrid : MonoBehaviour
 
     readonly List<char> Targetted = new();
     readonly List<int> Suggestion = new();
+    string bestWord = "";
     readonly List<int> BestWord = new();
     readonly List<TileLetter> Tiles = new();
+    readonly List<char> Uniques = new();
 
     [NonSerialized]
     public Array2DString InitialSpawns;
@@ -95,33 +97,40 @@ public class TileGrid : MonoBehaviour
     public UIManager UIManager;
 
     [Space(20)]
+    [Header("Visual Spacings")]
     public float Spacing = 0;
-    public float FlyTileSpawnDelay = .3f;
-    public float ObjectiveDelay = 1f;
     public float bgoffset;
     public float bgscale;
 
-    public float RequiredNoReveals = 2;
+    [Header("Timings")]
+    public float FlyTileSpawnDelay ;
+    public float InitialWait;
+    public float SuggestionDelay;
+    float InitialSuggestTime; // 4 seconds
+    float LoopSuggestTime;
 
+    float RequiredCompletion;
+    float RequiredNoReveals;
+    float ChanceToSpawnRandom;
 
-    //Base Functions
-    public float SuggestionDelay = .5f;
-    public float MaxInteractionTime = 4f; // 4 seconds
+    int consecutiveNoReveals = 0;
     float interactionTimer = 0f;
-    public int consecutiveNoReveals = 0;
+    float interactionTimer2 = 0f;
+    //Base Functions
 
     private void Update()
     {
         UIManager.FPSCount.text = "FPS : " + (1 / Time.deltaTime).ToString("0");
 
-        if (Input.anyKeyDown || Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
             interactionTimer = 0f;
 
         interactionTimer += Time.deltaTime;
+        interactionTimer2 += Time.deltaTime;
 
-        if (interactionTimer >= MaxInteractionTime)
+        if (interactionTimer >= InitialSuggestTime && interactionTimer2 >= LoopSuggestTime)
         {
-            interactionTimer = 0f;
+            interactionTimer2 = 0f;
             StartCoroutine(Suggest());
         }
     }
@@ -136,6 +145,11 @@ public class TileGrid : MonoBehaviour
 
         //Import level data
         Level level = LevelHandler.Levels[LevelHandler.Current];
+        InitialSuggestTime = level.InitialSuggestTime;
+        LoopSuggestTime = level.LoopSuggestTime;
+        RequiredCompletion = level.CompletionForSmart;
+        //RequiredNoReveals = level.RequiredNoReveals;
+        ChanceToSpawnRandom = level.ChanceForRandom;
         ObjectiveQuestion = level.ObjectiveQuestion;
         ObjectivePhrase = level.ObjectivePhrase.ToUpper();
         InitialSpawns = level.InitalLetter;
@@ -172,6 +186,9 @@ public class TileGrid : MonoBehaviour
         UpdateDisplayTile(true);
         DisplayPhrase = DisplayPhrase.Replace("#", "");
         ObjectivePhrase = ObjectivePhrase.Replace("#", "");
+        
+        Uniques.AddRange(ObjectivePhrase.Distinct().ToList());
+        Uniques.AddRange(Uniques);
 
         UpdateUI();
         UIManager.QuestionBox.text = ObjectiveQuestion;
@@ -224,7 +241,7 @@ public class TileGrid : MonoBehaviour
 
     IEnumerator ShowObjective()
     {
-        yield return new WaitForSeconds(ObjectiveDelay);
+        yield return new WaitForSeconds(InitialWait);
 
         foreach (var tile in Tiles)
             tile.GMAwake(this);
@@ -233,13 +250,26 @@ public class TileGrid : MonoBehaviour
 
     IEnumerator Suggest()
     {
-        Debug.Log(BestWord.Count);
+        if (bestWord != null && BestWord.Count == 0)
+        {
+            foreach (char c in bestWord)
+            {
+                for (int i = 0; i < Tiles.Count; i++)
+                    if (Tiles[i].Letter == c && !BestWord.Contains(i))
+                    {
+                        BestWord.Add(i);
+                        i = Tiles.Count;
+                    }
+            }
+        }
+
         if (BestWord.Count > 0)
         {
             foreach (int i in BestWord)
             {
-                Tiles[i].Suggest();
                 yield return new WaitForSeconds(SuggestionDelay);
+                Tiles[i].Suggest();
+                yield return null;
             }
 
         }
@@ -247,8 +277,9 @@ public class TileGrid : MonoBehaviour
         {
             foreach (int i in Suggestion)
             {
-                Tiles[i].Suggest();
                 yield return new WaitForSeconds(SuggestionDelay);
+                Tiles[i].Suggest();
+                yield return null;
             }
         }
     }
@@ -439,8 +470,6 @@ public class TileGrid : MonoBehaviour
         else
             consecutiveNoReveals++;
 
-        SmartSpawner(consecutiveNoReveals >= RequiredNoReveals);
-
         //UseGoldenTiles();
         //if (CouldSpawn) StartCoroutine(SpawnGoldenTile());
 
@@ -450,12 +479,15 @@ public class TileGrid : MonoBehaviour
             if (tile.type == Type.Disabled)
                 tile.StartActivationCouroutine(0);
 
+        SmartSpawner(/*consecutiveNoReveals >= RequiredNoReveals &&*/ (100.0f * DisplayPhrase.Count(c => c == '_') / DisplayPhrase.Length) < (100-RequiredCompletion));
+        
         UpdateUI();
     }
     void SmartSpawner(bool v)
     {
         Suggestion.Clear();
         BestWord.Clear();
+        bestWord = null;
 
         Dictionary<char, int> freq = new();
         char Target = ' ';
@@ -466,7 +498,7 @@ public class TileGrid : MonoBehaviour
                 item.Deselect();
                 item.StartActivationCouroutine(0);
             }
-            if (v)
+            else if (v)
             {
                 if (item.type == Type.Normal || item.type == Type.Bubble || item.type == Type.Golden)
                     if (freq.ContainsKey(item.Letter))
@@ -487,20 +519,7 @@ public class TileGrid : MonoBehaviour
                     }
 
 
-            Targetted.AddRange(Lang.GetOptimumCharacters(Target, freq, out string bestWord));
-            if (bestWord != null)
-            {
-                foreach (char c in bestWord)
-                {
-                    for (int i = 0; i < Tiles.Count; i++)
-                        if (Tiles[i].Letter == c)
-                        {
-                            BestWord.Add(i);
-                            i = Tiles.Count;
-                        }
-                }
-            }
-
+            Targetted.AddRange(Lang.GetOptimumCharacters(Target, freq, out bestWord));
         }
     }
 
@@ -605,7 +624,25 @@ public class TileGrid : MonoBehaviour
             }
             return Lang.GetRandomChar();
         }
-        return Lang.GetRandomChar();
+        else
+        {
+            if(Random.Range(0,99) < ChanceToSpawnRandom)
+            {
+                return Lang.GetRandomChar();
+            }
+            else
+            {
+                for (int i = 0; i < Uniques.Count; i++)
+                {
+                    if (!ObjectivePhrase.Contains(Uniques[i]))
+                        Uniques.RemoveAt(i);
+                }
+                int idx = Random.Range(0, Uniques.Count);
+                char c = Uniques[idx];
+                Uniques.RemoveAt(idx);
+                return c;
+            }
+        }
     }
     public void UpdatePhrases(string Word, out HashSet<char> chars)
     {
