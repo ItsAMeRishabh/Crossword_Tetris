@@ -76,14 +76,14 @@ public class TileLetter : MonoBehaviour
 
     }
 
-    public void GMPreAwake()
+    public void Awake()
     {
         characterMesh.text = "";
         spriteRend.sprite = null;
         bonusRend.sprite = null;
     }
 
-    public void GMAwake(TileGrid tg)
+    public void Init(TileGrid tg)
     {
         InitialX = transform.position.x;
         TopY = transform.position.y + 10;

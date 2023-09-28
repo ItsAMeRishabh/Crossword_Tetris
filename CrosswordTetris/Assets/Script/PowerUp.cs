@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,11 +23,9 @@ public class Shovel : PowerUp
 {
     public override void Activate(TileLetter tile)
     {
-        tile.parent.UpdatePhrases(tile.Letter.ToString(),out HashSet<char> hs);
-        bool b = hs.Contains(tile.Letter);
+        tile.parent.UpdatePhrases(tile.Letter.ToString());
         tile.StartActivationCouroutine(0);
-        if (b)
-            tile.parent.SpawnFlyTile(tile,0);
+        tile.parent.SpawnFlyTile(tile,0);
 
     }
 }
@@ -40,27 +39,28 @@ public class Reveal : PowerUp
 
     public override void Activate(TileLetter tile)
     {
-        TileGrid tileGrid = tile.GetComponentInParent<TileGrid>();
-        List<int> keyValuePairs = new();
+        Debug.LogError("Redo this code");
+        //TileGrid tileGrid = tile.GetComponentInParent<TileGrid>();
+        //List<int> keyValuePairs = new();
 
-        for (int i = 0; i < tileGrid.ObjectivePhrase.Length; i++)
-            if (LanguagePack.IsAlpha(tileGrid.ObjectivePhrase[i]))
-                keyValuePairs.Add(i);
+        //for (int i = 0; i < tileGrid.ObjectivePhrase.Length; i++)
+        //    if (LanguagePack.IsAlpha(tileGrid.ObjectivePhrase[i]))
+        //        keyValuePairs.Add(i);
 
 
 
-        for (int i = 0; i < RevealAmount; i++) 
-            if (keyValuePairs.Count != 0)
-            {
+        //for (int i = 0; i < RevealAmount; i++) 
+        //    if (keyValuePairs.Count != 0)
+        //    {
 
-                int rand = keyValuePairs[UnityEngine.Random.Range(0, keyValuePairs.Count)];
+        //        int rand = keyValuePairs[UnityEngine.Random.Range(0, keyValuePairs.Count)];
 
-                tileGrid.DisplayPhrase = tileGrid.DisplayPhrase.Remove(rand, 1).Insert(rand, tileGrid.ObjectivePhrase[rand] + "");
-                tileGrid.ObjectivePhrase = tileGrid.ObjectivePhrase.Remove(rand, 1).Insert(rand, " ");
+        //        tileGrid.DisplayPhrase = tileGrid.DisplayPhrase.Remove(rand, 1).Insert(rand, tileGrid.ObjectivePhrase[rand] + "");
+        //        tileGrid.ObjectivePhrase = tileGrid.ObjectivePhrase.Remove(rand, 1).Insert(rand, " ");
 
-                keyValuePairs.Remove(rand);
-            }
-        tileGrid.UpdateDisplayTile(tileGrid);
+        //        keyValuePairs.Remove(rand);
+        //    }
+        //tileGrid.UpdateDisplayTile(tileGrid);
     }
 }
 public static class RayCast

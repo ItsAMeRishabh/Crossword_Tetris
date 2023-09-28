@@ -22,7 +22,7 @@ public class Level : ScriptableObject
     public float ChanceOfGem = 1;
 
 
-    public float CompletionForSmart = 70;
+    //public float CompletionForSmart = 70;
     //public float RequiredNoReveals = 2;
     public float ChanceForRandom = 75;
 

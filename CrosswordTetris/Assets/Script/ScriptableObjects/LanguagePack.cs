@@ -9,24 +9,15 @@ public class LetterMeta
     public char letter;
     public float value;
     public float weightage;
-    [NonSerialized]
-    public float chance;
 }
 
 [CreateAssetMenu(fileName = "Language", menuName = "Config/LanguagePack")]
 public class LanguagePack : ScriptableObject
 {
     public TextAsset MainDictionary;
-    public TextAsset CommonDictionary;
-
-    HashSet<string> Common = new();
+    public float totalWeight = 0;
     HashSet<string> Main = new();
 
-    [Space(20)]
-    [Header("1 means the probability is same as weightage, 0 means all letters are equally likely")]
-    public float scaler = 1f;
-
-    //[NonSerialized]
     public LetterMeta[] LetterMetaData = new LetterMeta[] {
         new LetterMeta{ letter = 'A', value = 100, weightage = 8 },
         new LetterMeta{ letter = 'B', value = 300, weightage = 2 },
@@ -61,10 +52,10 @@ public class LanguagePack : ScriptableObject
         Caliberate();
 
         Main.Clear();
-        Common.Clear();
+        //Common.Clear();
         
         LoadDictionary(MainDictionary, ref Main);
-        LoadDictionary(CommonDictionary, ref Common);   
+        //LoadDictionary(CommonDictionary, ref Common);   
     }
 
     void LoadDictionary(TextAsset asset, ref HashSet<string> set)
@@ -83,31 +74,21 @@ public class LanguagePack : ScriptableObject
     void Caliberate()
     {
         totalWeight = 0;
-        totalChance = 0;
         foreach (var item in LetterMetaData)
         { 
             totalWeight += item.weightage;
         }
-
-        float median = totalWeight/LetterMetaData.Length;
-        foreach (var item in LetterMetaData)
-        {
-            item.chance = Mathf.Lerp(median,item.weightage,scaler);
-            totalChance += item.chance;
-        }
     }
     //readonly char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
-    float totalChance = 0;
-    float totalWeight = 0;
     public char GetRandomChar()
     {
 
-        float random = Random.Range(0, totalChance);
+        float random = Random.Range(0, totalWeight);
         float current = 0;
         foreach (var item in LetterMetaData)
         {
-            current += item.chance;
+            current += item.weightage;
             if (current >= random)
             {
                 return item.letter;
@@ -121,72 +102,72 @@ public class LanguagePack : ScriptableObject
         return Main.Contains(word);
     }
 
-    public char[] GetOptimumCharacters(char Target, Dictionary<char, int> frequency, out string bestWord)
-    {
-        bestWord = null;
-        if (Target != ' ')
-        {
-            int minDifference = int.MaxValue;
-            foreach (string word in Common)
-            {
-                if (word.Contains(Target))
-                {
-                    frequencycopy = new(frequency);
-                    int difference = CalculateCharacterDifference(word);
-                    if (difference < minDifference && difference != 0)
-                    {
-                        minDifference = difference;
-                        bestWord = word;
-                    }
-                }
-            }
-            Debug.Log(bestWord + " needed " + minDifference + " Changes");
-            frequencycopy = new(frequency);
-            return CalculateCharacterRequirement(bestWord);
-        }
-        return new char[] { GetRandomChar()};
-    }
-    private int CalculateCharacterDifference(string word)
-    {
-        int difference = 0;
-        foreach (char c in word)
-        {
-            if (frequencycopy.ContainsKey(c))
-            {
-                frequencycopy[c]--;
-                if (frequencycopy[c] < 0)
-                {
-                    difference++;
-                }
-            }
-            else
-            {
-                difference++;
-            }
-        }
-        return difference;
-    }
-    Dictionary<char, int> frequencycopy;
-    private char[] CalculateCharacterRequirement(string word)
-    {
-        List<char> result = new ();
-        foreach (char c in word)
-        {
-            if (frequencycopy.ContainsKey(c))
-            {
-                frequencycopy[c]--;
-                if (frequencycopy[c] < 0)
-                {
-                    result.Add(c);
-                }
-            }
-            else
-            {
-                result.Add(c);
-            }
-        }
-        return result.ToArray();
-    }
+    //public char[] GetOptimumCharacters(char Target, Dictionary<char, int> frequency, out string bestWord)
+    //{
+    //    bestWord = null;
+    //    if (Target != ' ')
+    //    {
+    //        int minDifference = int.MaxValue;
+    //        foreach (string word in Common)
+    //        {
+    //            if (word.Contains(Target))
+    //            {
+    //                frequencycopy = new(frequency);
+    //                int difference = CalculateCharacterDifference(word);
+    //                if (difference < minDifference && difference != 0)
+    //                {
+    //                    minDifference = difference;
+    //                    bestWord = word;
+    //                }
+    //            }
+    //        }
+    //        Debug.Log(bestWord + " needed " + minDifference + " Changes");
+    //        frequencycopy = new(frequency);
+    //        return CalculateCharacterRequirement(bestWord);
+    //    }
+    //    return new char[] { GetRandomChar()};
+    //}
+    //private int CalculateCharacterDifference(string word)
+    //{
+    //    int difference = 0;
+    //    foreach (char c in word)
+    //    {
+    //        if (frequencycopy.ContainsKey(c))
+    //        {
+    //            frequencycopy[c]--;
+    //            if (frequencycopy[c] < 0)
+    //            {
+    //                difference++;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            difference++;
+    //        }
+    //    }
+    //    return difference;
+    //}
+    //Dictionary<char, int> frequencycopy;
+    //private char[] CalculateCharacterRequirement(string word)
+    //{
+    //    List<char> result = new ();
+    //    foreach (char c in word)
+    //    {
+    //        if (frequencycopy.ContainsKey(c))
+    //        {
+    //            frequencycopy[c]--;
+    //            if (frequencycopy[c] < 0)
+    //            {
+    //                result.Add(c);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            result.Add(c);
+    //        }
+    //    }
+    //    return result.ToArray();
+    //}
 
     public static bool IsAlpha(char v)
     {
