@@ -8628,18 +8628,6 @@ PrefabInstance:
       propertyPath: UIManager
       value: 
       objectReference: {fileID: 1839822391565999272}
-    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
-      propertyPath: SuggestionDelay
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
-      propertyPath: MaxInteractionTime
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 170047489761353836, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
-      propertyPath: ChanceToSpawnRandom
-      value: 75
-      objectReference: {fileID: 0}
     - target: {fileID: 170047489761353837, guid: 0008b688da743d0489206ac25e7f918e, type: 3}
       propertyPath: m_RootOrder
       value: 6

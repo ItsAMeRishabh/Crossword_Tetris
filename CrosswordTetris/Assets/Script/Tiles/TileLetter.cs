@@ -286,7 +286,15 @@ public class TileLetter : MonoBehaviour
 
     public int GetPoints()
     {
-        foreach (var item in parent.Lang.LetterMetaData)
+        foreach (var item in parent.Lang.LetterVowelData)
+        {
+            if (item.letter == Letter)
+            {
+                return (int)item.value;
+            }
+        }
+
+        foreach (var item in parent.Lang.LetterConsonantData)
         {
             if (item.letter == Letter)
             {

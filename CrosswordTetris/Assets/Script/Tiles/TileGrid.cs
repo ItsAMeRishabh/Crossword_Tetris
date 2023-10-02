@@ -65,18 +65,23 @@ public class TileGrid : MonoBehaviour
 
     string ObjectiveQuestion = "Something witty here... idk";
     string ObjectivePhrase;
-    public string ObjectivePhraseCopy;
     string DisplayPhrase;
+    readonly Dictionary<char, int> ObjectiveFreq = new();
+    int Freq = 0;
 
 
+    int width;
+    int height;
+    readonly int MinUserWordSize = 3;
 
-    public int width;
-    public int height;
-    public int MinUserWordSize = 3;
+    [NonSerialized]
     public int Coins = 0;
+    [NonSerialized]
     public int Gems = 0;
-    
+
+    [NonSerialized]
     public float ChanceOfGem;
+    [NonSerialized]
     public float ChanceOfCoin;
 
     public GameObjectPool TilePool;
@@ -100,8 +105,10 @@ public class TileGrid : MonoBehaviour
     public float FlyTileSpawnDelay ;
     public float InitialWait;
     public float SuggestionDelay;
-    float InitialSuggestTime; // 4 seconds
-    float LoopSuggestTime;
+    public float VowelConstant = .3f;
+
+    readonly float InitialSuggestTime = 7f; // 4 seconds
+    readonly float LoopSuggestTime = 4f;
 
     float interactionTimer = 0f;
     float interactionTimer2 = 0f;
@@ -128,11 +135,20 @@ public class TileGrid : MonoBehaviour
     public void Awake()
     {
         Level level = LevelHandler.Levels[LevelHandler.Current];
-        InitialSuggestTime = level.InitialSuggestTime;
-        LoopSuggestTime = level.LoopSuggestTime;
+
         ObjectiveQuestion = level.ObjectiveQuestion;
         ObjectivePhrase = level.ObjectivePhrase.ToUpper();
-        ObjectivePhraseCopy = ObjectivePhrase;
+
+        foreach(char c in ObjectivePhrase)
+            if(ObjectiveFreq.ContainsKey(c))
+                ObjectiveFreq[c] = 2;
+            else
+                ObjectiveFreq.Add(c, 1);
+
+        foreach (var item in ObjectiveFreq)
+            Freq += item.Value;
+
+
         Moves = level.Moves;
         width = level.InitalLetter.GridSize.x;
         height = level.InitalLetter.GridSize.y;
@@ -241,8 +257,9 @@ public class TileGrid : MonoBehaviour
     {
         foreach(int i in Suggestions)
         {
-            yield return new WaitForSeconds(SuggestionDelay);
+            yield return new WaitForSeconds(SuggestionDelay/2);
             Tiles[i].Suggest();
+            yield return new WaitForSeconds(SuggestionDelay / 2);
         }
     }
 
@@ -352,6 +369,10 @@ public class TileGrid : MonoBehaviour
 
     public void CheckTextBoxes()
     {
+        //for(int i = 0; i < ObjectiveFreq.Count; i++)
+        //{
+        //    Debug.Log(ObjectiveFreq.ElementAt(i).Key + " : " + ObjectiveFreq.ElementAt(i).Value);
+        //}
 
         string Word = UIManager.OutputBox.text.ToUpper();
         float pointsVal = UpdatePoints();
@@ -469,18 +490,39 @@ public class TileGrid : MonoBehaviour
     
     public char GetCharacter()
     {
-        float s = 1;
-        if(Random.Range(1,Lang.totalWeight + (ObjectivePhraseCopy.Length * s)) < Lang.totalWeight)
+        int t = Tiles.Count;
+        int v = 0;
+
+        foreach (var item in Tiles)
         {
-            return Lang.GetRandomChar();
+            if(item.Letter == 'A' || item.Letter == 'E' || item.Letter == 'I' || item.Letter == 'O' || item.Letter == 'U')
+            {
+                v++;
+            }
         }
-        else
+
+        float s = 1.4f;
+        if(Random.Range(1,Lang.totalWeight + (Freq * s)) > Lang.totalWeight)
         {
-            char c = ObjectivePhraseCopy[Random.Range(0, ObjectivePhraseCopy.Length)];
-            ObjectivePhraseCopy = ObjectivePhraseCopy.Remove(ObjectivePhraseCopy.IndexOf(c), 1);
-            return c;
+            int r = Random.Range(0, Freq);
+
+            foreach (var item in ObjectiveFreq)
+            {
+                r -= item.Value;
+                if (r <= 0)
+                {
+                    char ch = item.Key;
+                    ObjectiveFreq[item.Key]--;
+                    if (ObjectiveFreq[item.Key] == 0)
+                        ObjectiveFreq.Remove(item.Key);
+                    return ch;
+                }
+            }
         }
+
+        return Lang.GetRandomChar((float)v / t < VowelConstant);
     }
+
     public List<char> UpdatePhrases(string Word)
     {
         HashSet<char> chars = new();
@@ -536,6 +578,72 @@ public class TileGrid : MonoBehaviour
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //Spawn Functions
 //IEnumerator SpawnGoldenTile()
 //{

@@ -26,8 +26,4 @@ public class Level : ScriptableObject
     //public float RequiredNoReveals = 2;
     public float ChanceForRandom = 75;
 
-    public float InitialSuggestTime = 7;
-    public float LoopSuggestTime = 4;
-
-
 }
