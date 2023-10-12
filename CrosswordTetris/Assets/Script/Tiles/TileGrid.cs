@@ -257,9 +257,8 @@ public class TileGrid : MonoBehaviour
     {
         foreach(int i in Suggestions)
         {
-            yield return new WaitForSeconds(SuggestionDelay/2);
+            yield return new WaitForSeconds(SuggestionDelay);
             Tiles[i].Suggest();
-            yield return new WaitForSeconds(SuggestionDelay / 2);
         }
     }
 
